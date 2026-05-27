@@ -1,0 +1,60 @@
+/* Componentes específicos: acordeones, animaciones y microestilos */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.28s ease, padding 0.18s ease;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.accordion-content.open {
+  max-height: 520px; /* suficiente para contenido razonable */
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.chevron {
+  display: inline-block;
+  transition: transform 0.22s ease;
+}
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Small helpers for subtle reveal */
+.fade-in {
+  animation: fadeIn 260ms ease both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Smooth progress bar transition */
+.progress-transition {
+  transition: width 420ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* Tiny card lift on hover for interactive panels */
+.card-lift:hover {
+  transform: translateY(-4px);
+  transition: transform 220ms ease;
+}
+
+/* Modal backdrop subtle blur fallback */
+.modal-backdrop {
+  backdrop-filter: blur(6px);
+}
+
+/* Utility: visually-hidden for accessibility */
+.visually-hidden { 
+  position: absolute !important; 
+  height: 1px; width: 1px; 
+  overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; 
+}

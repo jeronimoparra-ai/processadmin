@@ -1,0 +1,330 @@
+// ═══════════════════════════════════════════════════════════════════════
+// ORGANIZADOR.JS - Planificación y Estructura de Investigación
+// ═══════════════════════════════════════════════════════════════════════
+
+function buildOrganizador() {
+  const organizerSteps = {
+    ensayo: [
+      { key: 'tema', label: 'Tema del trabajo', hint: 'Define el eje central de tu ensayo.' },
+      { key: 'problema', label: 'Problema de investigación', hint: 'Formula la tensión o debate principal.' },
+      { key: 'pregunta', label: 'Pregunta de investigación', hint: 'Redacta una pregunta clara y discutible.' },
+      { key: 'objetivo_general', label: 'Objetivo general', hint: 'Indica qué pretendes demostrar o analizar.' },
+      { key: 'objetivos_especificos', label: 'Objetivos específicos', hint: 'Lista acciones concretas para desarrollar el trabajo.' },
+      { key: 'justificacion', label: 'Justificación', hint: 'Explica por qué el tema merece estudiarse.' },
+      { key: 'conclusiones_esperadas', label: 'Conclusiones esperadas', hint: 'Anticipa el aporte que esperas obtener.' }
+    ],
+    monografia: [
+      { key: 'tema', label: 'Tema del trabajo', hint: 'Delimita con precisión el objeto de estudio.' },
+      { key: 'problema', label: 'Problema de investigación', hint: 'Señala la necesidad de investigación.' },
+      { key: 'pregunta', label: 'Pregunta de investigación', hint: 'Formula la pregunta guía del texto.' },
+      { key: 'objetivo_general', label: 'Objetivo general', hint: 'Expresa el propósito del estudio.' },
+      { key: 'objetivos_especificos', label: 'Objetivos específicos', hint: 'Desglosa metas medibles.' },
+      { key: 'justificacion', label: 'Justificación', hint: 'Argumenta la relevancia académica.' },
+      { key: 'conclusiones_esperadas', label: 'Conclusiones esperadas', hint: 'Indica los resultados conceptuales esperados.' }
+    ],
+    informe: [
+      { key: 'tema', label: 'Tema del trabajo', hint: 'Indica el fenómeno o práctica analizada.' },
+      { key: 'problema', label: 'Problema de investigación', hint: 'Describe qué se quiere comprobar.' },
+      { key: 'objetivo_general', label: 'Objetivo general', hint: 'Resume el propósito del informe.' },
+      { key: 'objetivos_especificos', label: 'Objetivos específicos', hint: 'Enumera los pasos a lograr.' },
+      { key: 'justificacion', label: 'Justificación', hint: 'Explica el valor del informe.' },
+      { key: 'conclusiones_esperadas', label: 'Conclusiones esperadas', hint: 'Anticipa los hallazgos esperados.' }
+    ],
+    investigacion: [
+      { key: 'tema', label: 'Tema del trabajo', hint: 'Delimita el foco de investigación.' },
+      { key: 'problema', label: 'Problema de investigación', hint: 'Formula la situación a resolver.' },
+      { key: 'pregunta', label: 'Pregunta de investigación', hint: 'Traduce el problema en pregunta.' },
+      { key: 'objetivo_general', label: 'Objetivo general', hint: 'Describe la meta principal.' },
+      { key: 'objetivos_especificos', label: 'Objetivos específicos', hint: 'Desglosa metas operativas.' },
+      { key: 'hipotesis', label: 'Hipótesis o supuesto', hint: 'Redacta la idea que vas a contrastar.' },
+      { key: 'justificacion', label: 'Justificación', hint: 'Sustenta la utilidad del estudio.' },
+      { key: 'conclusiones_esperadas', label: 'Conclusiones esperadas', hint: 'Anticipa el cierre de la investigación.' }
+    ],
+    anteproyecto: [
+      { key: 'tema', label: 'Tema del trabajo', hint: 'Define la idea central del anteproyecto.' },
+      { key: 'problema', label: 'Problema de investigación', hint: 'Explica la necesidad de intervenir.' },
+      { key: 'pregunta', label: 'Pregunta de investigación', hint: 'Plantea la pregunta principal.' },
+      { key: 'objetivo_general', label: 'Objetivo general', hint: 'Señala el objetivo principal.' },
+      { key: 'objetivos_especificos', label: 'Objetivos específicos', hint: 'Enumera objetivos medibles.' },
+      { key: 'justificacion', label: 'Justificación', hint: 'Argumenta la pertinencia del proyecto.' },
+      { key: 'conclusiones_esperadas', label: 'Conclusiones esperadas', hint: 'Indica el resultado previsto.' }
+    ]
+  };
+
+  const workTypeLabels = {
+    ensayo: 'Ensayo argumentativo',
+    monografia: 'Monografía',
+    informe: 'Informe de laboratorio',
+    investigacion: 'Trabajo de investigación',
+    anteproyecto: 'Anteproyecto'
+  };
+
+  const savedType = localStorage.getItem('organizer_work_type') || 'investigacion';
+
+  const html = \`
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+          <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3"><span>🧠</span> Organizador de Ideas</h2>
+          <p class="text-gray-600 mb-6">Define tu investigación paso a paso y guarda cada avance automáticamente.</p>
+
+          <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-lg p-8 space-y-6">
+            <div>
+              <label class="block text-sm font-bold text-slate-900 mb-3">Selecciona tipo de trabajo:</label>
+              <select id="work-type" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                \${Object.entries(workTypeLabels).map(([value, label]) => \`<option value="\${value}" \${value === savedType ? 'selected' : ''}>\${label}</option>\`).join('')}
+              </select>
+            </div>
+
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200 p-4">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="font-bold text-slate-900">Progreso del organizador</h3>
+                <span id="organizer-progress-label" class="text-sm font-bold text-blue-700">0%</span>
+              </div>
+              <div class="h-3 bg-slate-200 rounded-full overflow-hidden">
+                <div id="organizer-progress-bar" class="h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transition-all" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div id="outline-form" class="space-y-4"></div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button id="save-outline-btn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors">💾 Guardar avance</button>
+              <button id="create-version-btn" class="flex-1 bg-purple-600 text-white rounded-lg py-3 font-bold hover:bg-purple-700 transition-colors">📸 Guardar versión</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg border-2 border-purple-300 p-6">
+            <h3 class="font-bold text-purple-900 mb-4 flex items-center gap-2"><span>⏱️</span> Historial de versiones</h3>
+            <div id="versions-list" class="space-y-2 max-h-64 overflow-y-auto text-xs"></div>
+            <div id="version-preview" class="hidden mt-4 bg-white rounded-lg border border-purple-200 p-4 text-xs"></div>
+          </div>
+
+          <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg border-2 border-yellow-300 p-6">
+            <h3 class="font-bold text-yellow-900 mb-4 flex items-center gap-2"><span>📌</span> Notas de sección</h3>
+            <div id="section-notes-list" class="space-y-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  \`;
+
+  document.getElementById('main-workspace').innerHTML = html;
+  stopCountdown();
+
+  const workTypeSelect = document.getElementById('work-type');
+  const outlineForm = document.getElementById('outline-form');
+  const notesList = document.getElementById('section-notes-list');
+  const versionPreview = document.getElementById('version-preview');
+  const storedOutline = loadJSON('organizer_outline', {});
+  const rawNotes = localStorage.getItem('organizer_notes');
+  let notesStore = {};
+
+  if (rawNotes) {
+    try {
+      const parsedNotes = JSON.parse(rawNotes);
+      notesStore = parsedNotes && typeof parsedNotes === 'object' && !Array.isArray(parsedNotes) ? parsedNotes : {};
+    } catch (error) {
+      notesStore = {};
+    }
+  }
+
+  function getCurrentSteps() {
+    return organizerSteps[workTypeSelect.value] || [];
+  }
+
+  function getOutlineData() {
+    const outline = {};
+    document.querySelectorAll('.outline-field').forEach(field => {
+      if (field.dataset.field === 'objetivos_especificos') {
+        outline[field.dataset.field] = field.value.split('\n').map(line => line.trim()).filter(Boolean);
+      } else {
+        outline[field.dataset.field] = field.value;
+      }
+    });
+    return outline;
+  }
+
+  function getSnapshotFromForm() {
+    const outline = getOutlineData();
+    const noteValues = {};
+    document.querySelectorAll('.section-note-input').forEach(input => {
+      noteValues[input.dataset.noteKey] = input.value;
+    });
+    return { outline, notes: noteValues };
+  }
+
+  function renderProgress() {
+    const steps = getCurrentSteps();
+    const completed = steps.filter(step => {
+      const field = document.querySelector(\`[data-field="\${step.key}"]\`);
+      return field && field.value.trim().length > 0;
+    }).length;
+    const percent = steps.length > 0 ? Math.round((completed / steps.length) * 100) : 0;
+    const bar = document.getElementById('organizer-progress-bar');
+    const label = document.getElementById('organizer-progress-label');
+    if (bar) bar.style.width = \`\${percent}%\`;
+    if (label) label.textContent = \`\${completed}/\${steps.length} (\${percent}%)\`;
+  }
+
+  function renderNotes() {
+    const steps = getCurrentSteps();
+    notesList.innerHTML = steps.map(step => \`
+      <div class="bg-white/80 rounded-lg border border-yellow-200 p-3">
+        <div class="flex justify-between items-center gap-2 mb-2">
+          <p class="text-xs font-bold text-yellow-900">\${step.label}</p>
+          <button class="text-xs font-bold text-yellow-700 hover:text-yellow-900 toggle-note-panel" data-note-key="\${step.key}">📌 Nota</button>
+        </div>
+        <textarea rows="2" class="section-note-input hidden w-full border border-yellow-300 rounded px-3 py-2 text-xs resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-note-key="\${step.key}" placeholder="Recordatorio privado...">\${escapeHtml(notesStore[workTypeSelect.value]?.[step.key] || '')}</textarea>
+      </div>
+    \`).join('');
+
+    notesList.querySelectorAll('.toggle-note-panel').forEach(button => {
+      button.addEventListener('click', () => {
+        const key = button.dataset.noteKey;
+        const field = notesList.querySelector(\`[data-note-key="\${key}"]\`);
+        field.classList.toggle('hidden');
+        if (!field.classList.contains('hidden')) field.focus();
+      });
+    });
+
+    notesList.querySelectorAll('.section-note-input').forEach(input => {
+      input.addEventListener('input', () => {
+        if (!notesStore[workTypeSelect.value]) notesStore[workTypeSelect.value] = {};
+        notesStore[workTypeSelect.value][input.dataset.noteKey] = input.value;
+        saveJSON('organizer_notes', notesStore);
+      });
+    });
+  }
+
+  function renderForm() {
+    const steps = getCurrentSteps();
+    const outlineValues = storedOutline.type === workTypeSelect.value ? (storedOutline.values || storedOutline) : {};
+
+    outlineForm.innerHTML = steps.map((step, index) => {
+      const value = step.key === 'objetivos_especificos'
+        ? (Array.isArray(outlineValues[step.key]) ? outlineValues[step.key].join('\n') : (outlineValues[step.key] || ''))
+        : (outlineValues[step.key] || '');
+
+      return \`
+        <div class="bg-slate-50 rounded-lg border border-slate-200 p-4">
+          <label class="block text-sm font-bold text-slate-900 mb-2">Paso \${index + 1}: \${step.label}</label>
+          <p class="text-xs text-slate-500 mb-2">\${step.hint}</p>
+          \${step.key === 'objetivos_especificos'
+            ? \`<textarea rows="4" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="\${step.key}" placeholder="Escribe un objetivo por línea...">\${escapeHtml(value)}</textarea>\`
+            : \`<textarea rows="3" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="\${step.key}" placeholder="Escribe aquí...">\${escapeHtml(value)}</textarea>\`}
+        </div>
+      \`;
+    }).join('');
+
+    renderProgress();
+    renderNotes();
+  }
+
+  function saveCurrentOutline(createVersion = false, source = 'manual') {
+    const snapshot = getSnapshotFromForm();
+    const payload = {
+      type: workTypeSelect.value,
+      values: snapshot.outline,
+      savedAt: new Date().toISOString(),
+      source
+    };
+
+    saveJSON('organizer_outline', payload);
+    if (createVersion) {
+      state.organizerVersions.unshift({
+        date: formatDateTimeValue(new Date()),
+        type: workTypeSelect.value,
+        content: payload.values,
+        notes: snapshot.notes,
+        source
+      });
+      state.organizerVersions = state.organizerVersions.slice(0, 20);
+      saveJSON('organizer_versions', state.organizerVersions);
+      renderVersions();
+    }
+  }
+
+  function renderVersions() {
+    const list = document.getElementById('versions-list');
+    if (state.organizerVersions.length === 0) {
+      list.innerHTML = '<p class="text-purple-700 italic">Sin versiones guardadas</p>';
+      versionPreview.classList.add('hidden');
+      return;
+    }
+
+    list.innerHTML = state.organizerVersions.map((version, index) => \`
+      <div class="bg-purple-200 rounded p-2 text-purple-900 text-xs font-semibold space-y-2">
+        <div class="flex justify-between items-center gap-2">
+          <div>
+            <div>v\${index + 1}</div>
+            <div class="text-purple-700 text-xs">\${version.date}</div>
+          </div>
+          <span class="text-[10px] uppercase tracking-wide text-purple-700">\${workTypeLabels[version.type] || version.type}</span>
+        </div>
+        <div class="flex gap-2">
+          <button class="flex-1 bg-purple-300 hover:bg-purple-400 rounded px-2 py-1 preview-version" data-idx="\${index}">Vista previa</button>
+          <button class="flex-1 bg-purple-500 text-white hover:bg-purple-600 rounded px-2 py-1 restore-version" data-idx="\${index}">Restaurar</button>
+        </div>
+      </div>
+    \`).join('');
+
+    list.querySelectorAll('.preview-version').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const version = state.organizerVersions[parseInt(btn.dataset.idx, 10)];
+        versionPreview.classList.remove('hidden');
+        versionPreview.innerHTML = \`
+          <p class="font-bold text-purple-900 mb-2">Vista previa: \${version.date}</p>
+          <pre class="whitespace-pre-wrap text-slate-700 font-mono">\${escapeHtml(JSON.stringify(version.content, null, 2))}</pre>
+        \`;
+      });
+    });
+
+    list.querySelectorAll('.restore-version').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const version = state.organizerVersions[parseInt(btn.dataset.idx, 10)];
+        workTypeSelect.value = version.type || 'investigacion';
+        saveJSON('organizer_outline', { type: workTypeSelect.value, values: version.content, savedAt: new Date().toISOString(), source: 'restore' });
+        renderForm();
+      });
+    });
+  }
+
+  document.getElementById('work-type').addEventListener('change', () => {
+    saveJSON('organizer_work_type', workTypeSelect.value);
+    renderForm();
+  });
+
+  document.getElementById('save-outline-btn').addEventListener('click', () => {
+    saveCurrentOutline(true, 'manual');
+    const btn = document.getElementById('save-outline-btn');
+    btn.textContent = '✅ Guardado';
+    setTimeout(() => {
+      btn.textContent = '💾 Guardar avance';
+    }, 2000);
+  });
+
+  document.getElementById('create-version-btn').addEventListener('click', () => {
+    saveCurrentOutline(true, 'manual');
+    const btn = document.getElementById('create-version-btn');
+    btn.textContent = '✅ Versión guardada';
+    setTimeout(() => {
+      btn.textContent = '📸 Guardar versión';
+    }, 2000);
+  });
+
+  document.getElementById('outline-form').addEventListener('input', () => {
+    renderProgress();
+  });
+
+  renderForm();
+  renderVersions();
+  saveJSON('organizer_work_type', workTypeSelect.value);
+
+  if (state.organizerSnapshotInterval) clearInterval(state.organizerSnapshotInterval);
+  state.organizerSnapshotInterval = setInterval(() => {
+    saveCurrentOutline(true, 'auto');
+  }, 600000);
+}
