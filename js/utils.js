@@ -157,16 +157,28 @@ function createZipBlob(files) {
   return new Blob([...fileParts, ...centralParts, eocd], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }
 
+async function writeClipboardText(text) {
+  if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
+    return false;
+  }
+
+  try {
+    await navigator.clipboard.writeText(String(text || ''));
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 function copyToClipboard(text, event) {
-  navigator.clipboard.writeText(String(text || '')).then(() => {
+  writeClipboardText(text).then((copied) => {
+    if (!copied) return;
     const btn = event && event.target ? event.target : document.activeElement;
     const original = btn && btn.textContent ? btn.textContent : '';
     if (btn && btn.textContent !== undefined) btn.textContent = '✅ ¡Copiado!';
     setTimeout(() => {
       if (btn && btn.textContent !== undefined) btn.textContent = original;
     }, 2000);
-  }).catch(err => {
-    console.error('Clipboard write failed', err);
   });
 }
 

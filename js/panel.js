@@ -136,7 +136,7 @@ function buildPanel() {
           <span class="text-3xl">🎯</span> Guía de Inicio Rápido
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="relative p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 hover:shadow-lg transition-all cursor-pointer" onclick="document.querySelector('[data-view=organizador]')?.click() || false">
+            <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 hover:shadow-lg transition-all cursor-pointer" data-view="organizador">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
             <h3 class="text-lg font-bold text-blue-900 mb-3">Planifica tu Investigación</h3>
             <p class="text-slate-700 text-sm leading-relaxed">
@@ -144,7 +144,7 @@ function buildPanel() {
             </p>
           </div>
 
-          <div class="relative p-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border-l-4 border-purple-600 hover:shadow-lg transition-all cursor-pointer" onclick="document.querySelector('[data-view=redactor]')?.click() || false">
+          <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border-l-4 border-purple-600 hover:shadow-lg transition-all cursor-pointer" data-view="redactor">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">2</div>
             <h3 class="text-lg font-bold text-purple-900 mb-3">Redacta tu Contenido</h3>
             <p class="text-slate-700 text-sm leading-relaxed">
@@ -152,7 +152,7 @@ function buildPanel() {
             </p>
           </div>
 
-          <div class="relative p-6 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 border-l-4 border-pink-600 hover:shadow-lg transition-all cursor-pointer" onclick="document.querySelector('[data-view=exportar]')?.click() || false">
+          <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 border-l-4 border-pink-600 hover:shadow-lg transition-all cursor-pointer" data-view="exportar">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold">3</div>
             <h3 class="text-lg font-bold text-pink-900 mb-3">Exporta a Word</h3>
             <p class="text-slate-700 text-sm leading-relaxed">
@@ -268,6 +268,17 @@ function buildPanel() {
   document.querySelectorAll('.pending-nav').forEach(button => {
     button.addEventListener('click', () => navigate(button.dataset.view));
   });
+  document.querySelectorAll('.quick-start-card').forEach(card => {
+    card.addEventListener('click', () => navigate(card.dataset.view));
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        navigate(card.dataset.view);
+      }
+    });
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+  });
   startCountdown();
 
   // Restore checklist
@@ -289,7 +300,7 @@ function buildPanel() {
 function updateSectionProgress(checks) {
   const count = checks.filter(c => c).length;
   const total = checks.length;
-  const percent = (count / total) * 100;
+  const percent = total > 0 ? (count / total) * 100 : 0;
 
   const bar = document.getElementById('section-progress');
   const counter = document.getElementById('section-count');
@@ -300,10 +311,10 @@ function updateSectionProgress(checks) {
 
 function updateSectionCompleteness() {
   const fields = {
-    planeacion: localStorage.getItem('ws_planeacion') || '',
-    organizacion: localStorage.getItem('ws_organizacion') || '',
-    direccion: localStorage.getItem('ws_direccion') || '',
-    control: localStorage.getItem('ws_control') || ''
+    planeacion: safeStorageGet('ws_planeacion', ''),
+    organizacion: safeStorageGet('ws_organizacion', ''),
+    direccion: safeStorageGet('ws_direccion', ''),
+    control: safeStorageGet('ws_control', '')
   };
 
   const targetWords = { planeacion: 250, organizacion: 150, direccion: 150, control: 150 };
@@ -331,7 +342,9 @@ function updateSectionCompleteness() {
   const statWords = document.getElementById('stat-content-words');
   if (statWords) statWords.textContent = totalWords;
 
-  const workStartTime = localStorage.getItem('ws_work_start') ? new Date(parseInt(localStorage.getItem('ws_work_start'))) : null;
+  const workStartRaw = safeStorageGet('ws_work_start', '');
+  const parsedWorkStart = parseInt(workStartRaw, 10);
+  const workStartTime = Number.isFinite(parsedWorkStart) ? new Date(parsedWorkStart) : null;
   const workMinutes = workStartTime ? Math.round((Date.now() - workStartTime.getTime()) / 1000 / 60) : 0;
   const statTime = document.getElementById('stat-work-time');
   if (statTime) statTime.textContent = workMinutes + ' min';

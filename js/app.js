@@ -19,9 +19,10 @@ function cleanupView() {
     if (state.organizerSnapshotInterval) { clearInterval(state.organizerSnapshotInterval); state.organizerSnapshotInterval = null; }
     if (state.checklistDeadlineInterval) { clearInterval(state.checklistDeadlineInterval); state.checklistDeadlineInterval = null; }
     if (state.saveTimer) { clearTimeout(state.saveTimer); state.saveTimer = null; }
+    if (state.exportValidationTimer) { clearTimeout(state.exportValidationTimer); state.exportValidationTimer = null; }
     if (state.animationId) { cancelAnimationFrame(state.animationId); state.animationId = null; }
   } catch (err) {
-    console.error('cleanupView error', err);
+    state.lastCleanupError = err;
   }
 }
 
@@ -53,8 +54,8 @@ function navigate(viewId) {
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    if (!localStorage.getItem('ws_work_start')) {
-      try { saveField('ws_work_start', Date.now().toString()); } catch (err) { console.error('ws_work_start save failed', err); }
+    if (!safeStorageGet('ws_work_start', '')) {
+      safeStorageSet('ws_work_start', Date.now().toString());
     }
 
     document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -66,8 +67,8 @@ if (document.readyState === 'loading') {
     navigate('panel');
   });
 } else {
-  if (!localStorage.getItem('ws_work_start')) {
-    try { saveField('ws_work_start', Date.now().toString()); } catch (err) { console.error('ws_work_start save failed', err); }
+  if (!safeStorageGet('ws_work_start', '')) {
+    safeStorageSet('ws_work_start', Date.now().toString());
   }
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {

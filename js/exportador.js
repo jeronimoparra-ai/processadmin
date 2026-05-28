@@ -13,31 +13,31 @@ function buildExportador() {
           <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-lg p-8 space-y-5">
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Nombre completo *</label>
-              <input id="export-nombre" type="text" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input id="export-nombre" type="text" aria-label="Nombre completo" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Código estudiantil</label>
-              <input id="export-codigo" type="text" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input id="export-codigo" type="text" aria-label="Código estudiantil" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Nombre del curso</label>
-              <input id="export-curso" type="text" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input id="export-curso" type="text" aria-label="Nombre del curso" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Nombre del docente</label>
-              <input id="export-docente" type="text" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input id="export-docente" type="text" aria-label="Nombre del docente" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Institución</label>
-              <input id="export-institucion" type="text" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input id="export-institucion" type="text" aria-label="Institución" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Ciudad</label>
-              <input id="export-ciudad" type="text" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input id="export-ciudad" type="text" aria-label="Ciudad" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Fecha de entrega</label>
-              <input id="export-fecha" type="date" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <input id="export-fecha" type="date" aria-label="Fecha de entrega" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pt-2">
@@ -88,7 +88,7 @@ function buildExportador() {
       element.addEventListener('input', () => {
         savedData[field] = element.value;
         persistData();
-        updateValidation();
+        scheduleValidation();
       });
     }
   });
@@ -96,7 +96,7 @@ function buildExportador() {
   function buildDocumentPreview(data) {
     const outline = loadJSON('organizer_outline', {});
     const outlineValues = outline.values || outline;
-    const redactorContent = localStorage.getItem('redactor_content') || '';
+    const redactorContent = safeStorageGet('redactor_content', '');
     const references = state.generatedCitations.map(ref => ref.replace(/<\/?em>/g, ''));
 
     return `
@@ -190,16 +190,7 @@ function buildExportador() {
     const references = state.generatedCitations.map(ref => ref.replace(/<\/?em>/g, ''));
     const outline = loadJSON('organizer_outline', {});
     const outlineValues = outline.values || outline;
-    const title = escapeHtml(data.titulo || data.curso || 'Trabajo académico');
-    const coverLines = [
-      data.institucion || 'Institución',
-      data.curso || 'Nombre del curso',
-      data.docente || 'Nombre del docente',
-      data.nombre || 'Nombre completo',
-      data.codigo || 'Código estudiantil',
-      data.ciudad || 'Ciudad',
-      data.fecha || 'Fecha de entrega'
-    ];
+    const title = data.titulo || data.curso || 'Trabajo académico';
 
     const paragraphs = [];
     const p = (text, options = {}) => {
@@ -227,7 +218,7 @@ function buildExportador() {
     });
     paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
     paragraphs.push(p('Introducción', { style: 'Heading1', bold: true, size: 28 }));
-    (localStorage.getItem('redactor_content') || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
+    (safeStorageGet('redactor_content', '') || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
       if (paragraph.trim()) paragraphs.push(p(paragraph.trim(), { size: 24, double: true }));
     });
     paragraphs.push(p('Referencias', { style: 'Heading1', bold: true, size: 28 }));
@@ -335,6 +326,14 @@ function buildExportador() {
   }
 
   updateValidation();
+
+  function scheduleValidation() {
+    if (state.exportValidationTimer) clearTimeout(state.exportValidationTimer);
+    state.exportValidationTimer = setTimeout(() => {
+      state.exportValidationTimer = null;
+      updateValidation();
+    }, 150);
+  }
 
   document.getElementById('generate-docx-btn').addEventListener('click', () => exportWordFile(false));
   document.getElementById('export-anyway-btn').addEventListener('click', () => exportWordFile(true));

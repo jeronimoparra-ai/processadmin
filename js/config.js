@@ -2,15 +2,81 @@
 // CONFIG.JS - Estado global y constantes de configuración
 // ═══════════════════════════════════════════════════════════════════════
 
-function safeParse(key, fallback) {
+function validateStoredValue(value, fallback) {
+  if (Array.isArray(fallback)) {
+    return Array.isArray(value) ? value : fallback;
+  }
+
+  if (fallback && typeof fallback === 'object') {
+    return value && typeof value === 'object' && !Array.isArray(value) ? value : fallback;
+  }
+
+  if (typeof fallback === 'string') {
+    return typeof value === 'string' ? value : fallback;
+  }
+
+  if (typeof fallback === 'number') {
+    const numberValue = Number(value);
+    return Number.isFinite(numberValue) ? numberValue : fallback;
+  }
+
+  if (typeof fallback === 'boolean') {
+    return typeof value === 'boolean' ? value : fallback;
+  }
+
+  return value ?? fallback;
+}
+
+function safeStorageGet(key, fallback = null) {
   try {
-    const v = localStorage.getItem(key);
-    return v ? JSON.parse(v) : fallback;
+    const value = localStorage.getItem(key);
+    return value === null ? fallback : value;
   } catch (err) {
-    console.error('safeParse failed for', key, err);
     return fallback;
   }
 }
+
+function safeStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, String(value));
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+function safeStorageSetJSON(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+function loadStoredString(key, fallback = '') {
+  const value = safeStorageGet(key, null);
+  if (value === null) return fallback;
+
+  try {
+    const parsed = JSON.parse(value);
+    return typeof parsed === 'string' ? parsed : value;
+  } catch (err) {
+    return value;
+  }
+}
+
+function safeParse(key, fallback) {
+  try {
+    const v = safeStorageGet(key, null);
+    return v ? validateStoredValue(JSON.parse(v), fallback) : fallback;
+  } catch (err) {
+    return fallback;
+  }
+}
+
+const workStartRaw = safeStorageGet('ws_work_start', '');
+const parsedWorkStart = parseInt(workStartRaw, 10);
 
 const state = {
   activeView: 'panel',
@@ -21,7 +87,7 @@ const state = {
   generatedCitations: safeParse('apa_generated_citations', []),
   countdownInterval: null,
   simulationHistory: [],
-  workStartTime: localStorage.getItem('ws_work_start') ? parseInt(localStorage.getItem('ws_work_start')) : Date.now(),
+  workStartTime: Number.isFinite(parsedWorkStart) ? parsedWorkStart : Date.now(),
   lastSaveTime: null,
   focusMode: false,
   rubricTemplates: safeParse('rubrica_templates', {}),
@@ -29,7 +95,9 @@ const state = {
   organizerVersions: safeParse('organizer_versions', []),
   organizerNotes: safeParse('organizer_notes', {}),
   organizerSnapshots: safeParse('organizer_snapshots', []),
-  organizerSnapshotInterval: null
+  organizerSnapshotInterval: null,
+  checklistDeadlineInterval: null,
+  exportValidationTimer: null
 };
 
 const DELIVERY_DATE = new Date('2026-05-31T23:59:00');

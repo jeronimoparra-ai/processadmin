@@ -9,9 +9,9 @@ function buildApaEnhanced() {
         <div class="bg-white rounded-lg border-2 border-green-200 p-6 shadow-md">
           <h3 class="font-bold text-green-900 mb-4 flex items-center gap-2"><span>📝</span> Generador de citas en texto</h3>
           <div class="space-y-3">
-            <input id="cita-autor" type="text" placeholder="Apellido del autor" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
-            <input id="cita-anio" type="number" placeholder="Año" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
-            <input id="cita-pagina" type="text" placeholder="Página (opcional)" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+            <input id="cita-autor" type="text" placeholder="Apellido del autor" aria-label="Apellido del autor" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+            <input id="cita-anio" type="number" placeholder="Año" aria-label="Año de publicación" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+            <input id="cita-pagina" type="text" placeholder="Página (opcional)" aria-label="Página opcional" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
             <button id="gen-cita-btn" class="w-full bg-green-600 text-white rounded px-4 py-2 font-bold hover:bg-green-700 transition-colors text-sm">Generar cita en texto</button>
             <div class="flex items-center gap-2">
               <div id="cita-resultado" class="hidden flex-1 bg-green-50 border border-green-300 p-3 rounded text-sm font-mono"></div>
@@ -22,7 +22,7 @@ function buildApaEnhanced() {
 
         <div class="bg-white rounded-lg border-2 border-orange-200 p-6 shadow-md">
           <h3 class="font-bold text-orange-900 mb-4 flex items-center gap-2"><span>✔️</span> Validador de referencias</h3>
-          <textarea id="ref-validator" rows="4" placeholder="Pega una referencia aquí..." class="w-full border border-orange-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400 mb-2"></textarea>
+          <textarea id="ref-validator" rows="4" placeholder="Pega una referencia aquí..." aria-label="Referencia para validar" class="w-full border border-orange-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400 mb-2"></textarea>
           <button id="validate-ref-btn" class="w-full bg-orange-600 text-white rounded px-4 py-2 font-bold hover:bg-orange-700 transition-colors text-sm">Validar referencia</button>
           <div id="validator-resultado" class="hidden mt-3 space-y-2 text-xs"></div>
         </div>
@@ -30,11 +30,11 @@ function buildApaEnhanced() {
         <div class="bg-white rounded-lg border-2 border-purple-200 p-6 shadow-md">
           <h3 class="font-bold text-purple-900 mb-4 flex items-center gap-2"><span>📚</span> Rastreador de fuentes</h3>
           <div class="space-y-2 text-sm mb-3">
-            <input id="source-titulo" type="text" placeholder="Título" class="w-full border border-purple-300 rounded px-3 py-2">
-            <input id="source-autor" type="text" placeholder="Autor/Institución" class="w-full border border-purple-300 rounded px-3 py-2">
-            <input id="source-url" type="text" placeholder="URL o libro" class="w-full border border-purple-300 rounded px-3 py-2">
-            <input id="source-fecha" type="date" class="w-full border border-purple-300 rounded px-3 py-2">
-            <textarea id="source-notas" rows="2" placeholder="Notas..." class="w-full border border-purple-300 rounded px-3 py-2 resize-none"></textarea>
+            <input id="source-titulo" type="text" placeholder="Título" aria-label="Título de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
+            <input id="source-autor" type="text" placeholder="Autor/Institución" aria-label="Autor o institución de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
+            <input id="source-url" type="text" placeholder="URL o libro" aria-label="URL o libro de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
+            <input id="source-fecha" type="date" aria-label="Fecha de consulta de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
+            <textarea id="source-notas" rows="2" placeholder="Notas..." aria-label="Notas de la fuente" class="w-full border border-purple-300 rounded px-3 py-2 resize-none"></textarea>
           </div>
           <button id="add-source-btn" class="w-full bg-purple-600 text-white rounded px-4 py-2 font-bold hover:bg-purple-700 transition-colors text-sm">Registrar fuente</button>
           <div id="sources-list" class="mt-4 space-y-2 max-h-40 overflow-y-auto text-xs"></div>
@@ -55,11 +55,11 @@ function buildApaEnhanced() {
         <div class="bg-white rounded-lg border-2 border-blue-200 p-6 shadow-md">
           <h3 class="font-bold text-blue-900 mb-4">📖 Generador de referencia completa</h3>
           <div class="space-y-2 text-sm mb-3">
-            <input id="apa-autor-full" type="text" placeholder="Autor/Institución" class="w-full border border-blue-300 rounded px-3 py-2">
-            <input id="apa-anio-full" type="number" placeholder="Año" class="w-full border border-blue-300 rounded px-3 py-2">
-            <input id="apa-titulo-full" type="text" placeholder="Título" class="w-full border border-blue-300 rounded px-3 py-2">
-            <input id="apa-fuente-full" type="text" placeholder="Editorial/Revista" class="w-full border border-blue-300 rounded px-3 py-2">
-            <input id="apa-url-full" type="url" placeholder="URL (opcional)" class="w-full border border-blue-300 rounded px-3 py-2">
+            <input id="apa-autor-full" type="text" placeholder="Autor/Institución" aria-label="Autor o institución de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
+            <input id="apa-anio-full" type="number" placeholder="Año" aria-label="Año de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
+            <input id="apa-titulo-full" type="text" placeholder="Título" aria-label="Título de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
+            <input id="apa-fuente-full" type="text" placeholder="Editorial/Revista" aria-label="Editorial o revista de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
+            <input id="apa-url-full" type="url" placeholder="URL (opcional)" aria-label="URL opcional de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
           </div>
           <button id="gen-ref-btn" class="w-full bg-blue-600 text-white rounded px-4 py-2 font-bold hover:bg-blue-700 transition-colors text-sm">Generar referencia</button>
           <div id="ref-resultado" class="hidden mt-3 bg-blue-50 border border-blue-300 p-3 rounded text-xs font-mono"></div>
@@ -110,7 +110,7 @@ function buildApaEnhanced() {
     citationResult.textContent = citation;
     citationResult.classList.remove('hidden');
     copyCitationBtn.classList.remove('hidden');
-    await navigator.clipboard.writeText(citation);
+    await writeClipboardText(citation);
     document.getElementById('gen-cita-btn').textContent = '✅ Copiado';
     setTimeout(() => {
       document.getElementById('gen-cita-btn').textContent = 'Generar cita en texto';
@@ -119,7 +119,7 @@ function buildApaEnhanced() {
 
   copyCitationBtn.addEventListener('click', async () => {
     if (!citationResult.textContent) return;
-    await navigator.clipboard.writeText(citationResult.textContent);
+    await writeClipboardText(citationResult.textContent);
     copyCitationBtn.textContent = 'Copiado';
     setTimeout(() => { copyCitationBtn.textContent = 'Copiar'; }, 1500);
   });
@@ -197,9 +197,9 @@ function buildApaEnhanced() {
       return;
     }
 
-    let reference = `${autor} (${anio}). <em>${titulo}</em>`;
-    if (fuente) reference += `. ${fuente}`;
-    if (url) reference += `. Recuperado de ${url}`;
+    let reference = `${escapeHtml(autor)} (${escapeHtml(anio)}). <em>${escapeHtml(titulo)}</em>`;
+    if (fuente) reference += `. ${escapeHtml(fuente)}`;
+    if (url) reference += `. Recuperado de ${escapeHtml(url)}`;
 
     state.generatedCitations.push(reference);
     saveCitations();
@@ -228,7 +228,7 @@ function buildApaEnhanced() {
 
     list.innerHTML = state.generatedCitations.map((reference, index) => `
       <div class="bg-slate-50 border border-slate-300 p-2 rounded text-xs">
-        <div>${reference.replace(/<\/?em>/g, '')}</div>
+        <div>${escapeHtml(reference.replace(/<\/?em>/g, ''))}</div>
         <button class="text-red-600 text-xs hover:text-red-700 mt-1 delete-ref" data-idx="${index}">Eliminar</button>
       </div>
     `).join('');
@@ -253,7 +253,7 @@ function buildApaEnhanced() {
   });
 
   document.getElementById('check-consistency-btn').addEventListener('click', () => {
-    const content = localStorage.getItem('redactor_content') || '';
+    const content = safeStorageGet('redactor_content', '');
     const inTextMatches = [...content.matchAll(/\(([^)]+)\)/g)].map(match => match[1]);
     const citedAuthors = inTextMatches.map(text => text.split(',')[0].trim()).filter(Boolean);
     const referenceAuthors = state.generatedCitations.map(getReferenceAuthor).filter(Boolean);

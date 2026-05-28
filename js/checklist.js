@@ -80,7 +80,7 @@ function buildChecklist() {
 
             <div class="border-t border-blue-300 pt-4">
               <h3 class="font-bold text-blue-900 mb-3">⏰ Entrega</h3>
-              <input id="deadline-date" type="datetime-local" class="w-full border border-blue-300 rounded px-3 py-2 text-sm mb-2">
+              <input id="deadline-date" type="datetime-local" aria-label="Fecha de entrega" class="w-full border border-blue-300 rounded px-3 py-2 text-sm mb-2">
               <div id="countdown-display" class="text-center py-3 bg-white rounded border border-blue-300 transition-colors">
                 <p class="text-sm font-bold text-blue-900">Faltan días</p>
               </div>
@@ -103,26 +103,21 @@ function buildChecklist() {
   const storedFormato = loadJSON('checklist_formato', defaultItems.formato.map(text => ({ id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, text, checked: false })));
   const rubricCriteria = loadJSON('rubrica_current', []);
   const storedCriteria = loadJSON('checklist_criterios', []);
+  const storedCriteriaById = new Map(storedCriteria.map(item => [item.id, item.checked]));
+  const storedCriteriaByText = new Map(storedCriteria.map(item => [item.text, item.checked]));
 
   const checklists = {
     estructura: storedStructure,
     formato: storedFormato,
-    criterios: rubricCriteria.length
-      ? rubricCriteria.map((criterion, index) => ({
-          id: storedCriteria[index]?.id || `${criterion.name}-${index}`,
-          text: criterion.name,
-          checked: storedCriteria[index]?.checked || false
-        }))
-      : storedCriteria
+    criterios: rubricCriteria.map((criterion, index) => {
+      const id = criterion.id || `rubric-${index}-${criterion.name}`;
+      return {
+        id,
+        text: criterion.name || 'Nuevo criterio',
+        checked: storedCriteriaById.get(id) ?? storedCriteriaByText.get(criterion.name) ?? false
+      };
+    })
   };
-
-  if (!checklists.criterios.length && rubricCriteria.length) {
-    checklists.criterios = rubricCriteria.map((criterion, index) => ({
-      id: `${criterion.name}-${index}`,
-      text: criterion.name,
-      checked: false
-    }));
-  }
 
   function persistChecklist(tab) {
     saveJSON(`checklist_${tab}`, checklists[tab]);
@@ -145,11 +140,11 @@ function buildChecklist() {
 
     container.innerHTML = items.map((item, idx) => `
       <div class="flex items-center gap-2 p-3 bg-slate-50 rounded border border-slate-200 hover:bg-slate-100 transition-colors group">
-        <input type="checkbox" ${item.checked ? 'checked' : ''} class="w-4 h-4 accent-blue-600 checklist-input" data-tab="${tab}" data-idx="${idx}">
-        <input type="text" value="${escapeHtml(item.text)}" class="flex-1 bg-transparent text-sm focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-400" data-tab="${tab}" data-idx="${idx}">
-        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="-1">▲</button>
-        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="1">▼</button>
-        <button class="text-red-600 hover:text-red-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity delete-item" data-tab="${tab}" data-idx="${idx}">🗑️</button>
+        <input type="checkbox" ${item.checked ? 'checked' : ''} aria-label="Marcar ítem como completado" class="w-4 h-4 accent-blue-600 checklist-input" data-tab="${tab}" data-idx="${idx}">
+        <input type="text" value="${escapeHtml(item.text)}" aria-label="Texto del ítem de checklist" class="flex-1 bg-transparent text-sm focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-400" data-tab="${tab}" data-idx="${idx}">
+        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="-1" aria-label="Mover ítem hacia arriba">▲</button>
+        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="1" aria-label="Mover ítem hacia abajo">▼</button>
+        <button class="text-red-600 hover:text-red-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity delete-item" data-tab="${tab}" data-idx="${idx}" aria-label="Eliminar ítem">🗑️</button>
       </div>
     `).join('');
 
@@ -243,7 +238,7 @@ function buildChecklist() {
 
   const deadlineInput = document.getElementById('deadline-date');
   const countdownDisplay = document.getElementById('countdown-display');
-  const savedDeadline = localStorage.getItem('checklist_deadline');
+  const savedDeadline = loadStoredString('checklist_deadline', '');
   if (savedDeadline) deadlineInput.value = savedDeadline;
 
   function updateDeadlineCountdown() {
@@ -258,7 +253,7 @@ function buildChecklist() {
 
     if (diff <= 0) {
       countdownDisplay.className = 'text-center py-3 bg-red-50 rounded border border-red-300 transition-colors animate-pulse';
-      countdownDisplay.innerHTML = '<p class="text-lg font-bold text-red-600">⏰ ¡Plazo vencido!</p>';
+      countdownDisplay.innerHTML = '<p class="text-lg font-bold text-red-600">⏰ Fecha de entrega vencida</p>';
       return;
     }
 
@@ -280,11 +275,7 @@ function buildChecklist() {
   }
 
   deadlineInput.addEventListener('change', () => {
-    try {
-      saveField('checklist_deadline', deadlineInput.value);
-    } catch (err) {
-      console.error('Failed saving checklist deadline', err);
-    }
+    safeStorageSet('checklist_deadline', deadlineInput.value);
     updateDeadlineCountdown();
   });
 

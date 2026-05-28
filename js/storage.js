@@ -4,19 +4,15 @@
 
 function loadJSON(key, fallback) {
   try {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : fallback;
+    const value = safeStorageGet(key, null);
+    return value ? validateStoredValue(JSON.parse(value), fallback) : fallback;
   } catch (error) {
     return fallback;
   }
 }
 
 function saveJSON(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (err) {
-    console.error('saveJSON failed for', key, err);
-  }
+  safeStorageSetJSON(key, value);
 }
 
 function saveField(key, value) {
@@ -28,11 +24,7 @@ function saveField(key, value) {
 
   clearTimeout(state.saveTimer);
   state.saveTimer = setTimeout(() => {
-    try {
-      localStorage.setItem(key, value);
-    } catch (err) {
-      console.error('saveField failed for', key, err);
-    }
+    safeStorageSet(key, value);
     if (statusEl) {
       statusEl.textContent = '✔ Guardado automáticamente';
       statusEl.classList.remove('text-amber-400');
@@ -60,7 +52,7 @@ function updateCountdown() {
   const diff = target - now;
 
   if (diff <= 0) {
-    el.textContent = '⏰ Plazo vencido';
+    el.textContent = '⏰ Fecha de entrega vencida';
     el.classList.add('text-red-600');
     return;
   }
@@ -151,7 +143,7 @@ function calculateWriterProgress() {
   let filled = 0;
 
   fields.forEach(key => {
-    const val = localStorage.getItem(key) || '';
+    const val = safeStorageGet(key, '');
     if (val.trim().length > 5) filled++;
   });
 
@@ -201,7 +193,7 @@ function calculateQualityMetrics() {
   const exportData = loadJSON('export_student_data', {});
   const apaSources = loadJSON('apa_sources', []);
   const citations = loadJSON('apa_generated_citations', state.generatedCitations || []);
-  const redactorText = localStorage.getItem('redactor_content') || '';
+  const redactorText = safeStorageGet('redactor_content', '');
   const inTextCitations = [...redactorText.matchAll(/\(([^)]+)\)/g)].length;
 
   const structureCompletion = structureChecklist.length > 0 ? (structureChecklist.filter(item => item.checked).length / structureChecklist.length) * 100 : 0;
@@ -215,7 +207,9 @@ function calculateQualityMetrics() {
   }
 
   const wordCompletion = formatChecklist.length > 0 ? (formatChecklist.filter(item => item.checked).length / formatChecklist.length) * 100 : 0;
-  const exportCompletion = (Object.keys(exportData).length / 7) * 100;
+  const exportFields = ['nombre', 'codigo', 'curso', 'docente', 'institucion', 'ciudad', 'fecha'];
+  const exportFilled = exportFields.filter(field => String(exportData[field] || '').trim().length > 0).length;
+  const exportCompletion = (exportFilled / exportFields.length) * 100;
 
   return {
     structure: Math.round(structureCompletion),
@@ -243,8 +237,11 @@ function buildPendingItems(metrics) {
   if (metrics.apa < 100) pendingItems.push({ label: 'Revisar normas APA y referencias', view: 'apa' });
   if (metrics.criteria < 100) pendingItems.push({ label: 'Ajustar la rúbrica del profesor', view: 'simulador' });
   if (metrics.wordFormat < 100) pendingItems.push({ label: 'Completar datos de exportación Word', view: 'exportar' });
-  if ((localStorage.getItem('redactor_content') || '').trim().length < 120) pendingItems.push({ label: 'Avanzar en el redactor', view: 'redactor' });
-  if ((loadJSON('organizer_outline', {}).values ? Object.values(loadJSON('organizer_outline', {}).values) : Object.values(loadJSON('organizer_outline', {}))).flat().join(' ').trim().length < 40) {
+  if (safeStorageGet('redactor_content', '').trim().length < 120) pendingItems.push({ label: 'Avanzar en el redactor', view: 'redactor' });
+
+  const organizerOutline = loadJSON('organizer_outline', {});
+  const organizerValues = organizerOutline.values ? Object.values(organizerOutline.values) : Object.values(organizerOutline);
+  if (organizerValues.flat().join(' ').trim().length < 40) {
     pendingItems.push({ label: 'Completar el organizador de ideas', view: 'organizador' });
   }
 
@@ -253,7 +250,7 @@ function buildPendingItems(metrics) {
 
 function wordToHtml(text) {
   if (!text) return '';
-  return text
+  return escapeHtml(text)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/\n/g, '<br>');
@@ -268,7 +265,6 @@ function sortReferencesByAuthor(references) {
 }
 
 function validateReference(ref) {
-  const required = ['author', 'year', 'title', 'source'];
   const hasUrl = !!ref.url;
   const hasDoi = !!ref.doi;
 

@@ -9,7 +9,7 @@ function buildRubricaRebuilt() {
 
   function buildTemplateOptions() {
     const builtinOptions = Object.entries(baseTemplates).map(([key, template]) => `<option value="builtin:${key}">${template.label}</option>`).join('');
-    const customOptions = Object.keys(savedTemplates).map(name => `<option value="custom:${encodeURIComponent(name)}">${name}</option>`).join('');
+    const customOptions = Object.keys(savedTemplates).map(name => `<option value="custom:${encodeURIComponent(name)}">${escapeHtml(name)}</option>`).join('');
     return `
       <option value="builtin:blank">Personalizado (vacío)</option>
       ${builtinOptions}
@@ -25,7 +25,7 @@ function buildRubricaRebuilt() {
         <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md space-y-4">
           <div class="flex flex-col gap-3">
             <label class="block text-sm font-bold text-slate-900">Plantillas rápidas</label>
-            <select id="template-select" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <select id="template-select" aria-label="Plantillas rápidas" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
               <option value="">Seleccionar plantilla...</option>
               ${buildTemplateOptions()}
             </select>
@@ -36,7 +36,7 @@ function buildRubricaRebuilt() {
         <div class="bg-white rounded-lg border-2 border-orange-200 p-6 shadow-md space-y-4">
           <div>
             <h3 class="font-bold text-orange-900 mb-2">📝 Criterios del profesor</h3>
-            <textarea id="prof-input" rows="4" placeholder="Pega aquí lo que el profesor pidió..." class="w-full border border-orange-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400"></textarea>
+            <textarea id="prof-input" rows="4" placeholder="Pega aquí lo que el profesor pidió..." aria-label="Criterios del profesor" class="w-full border border-orange-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400"></textarea>
           </div>
           <button id="parse-prof-btn" class="w-full bg-orange-600 text-white rounded px-4 py-2 font-bold hover:bg-orange-700 transition-colors text-sm">Convertir en criterios</button>
         </div>
@@ -53,7 +53,7 @@ function buildRubricaRebuilt() {
       <div class="space-y-6">
         <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-4 border-blue-600 p-8 text-center shadow-lg sticky top-6">
           <p class="text-blue-700 text-sm font-bold mb-2">PUNTUACIÓN ACTUAL</p>
-          <p id="score-display-rubrica" class="text-5xl font-black text-blue-900">0/100</p>
+          <p id="score-display-rubrica" class="text-5xl font-black text-blue-900">0/0</p>
           <p id="grade-display-rubrica" class="text-lg font-bold text-blue-800 mt-2">0.0/5 · 0.0/10</p>
           <div id="traffic-light" class="text-5xl mt-4">🟡</div>
           <p id="traffic-label" class="text-blue-900 font-bold text-sm mt-2">Escala: 60-79%</p>
@@ -64,7 +64,7 @@ function buildRubricaRebuilt() {
 
         <div class="bg-white rounded-lg border-2 border-purple-200 p-6 shadow-md">
           <h3 class="font-bold text-purple-900 mb-3">💾 Guardar plantilla personalizada</h3>
-          <input id="template-name" type="text" placeholder="Nombre de la plantilla" class="w-full border border-purple-300 rounded px-3 py-2 text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-purple-400">
+          <input id="template-name" type="text" placeholder="Nombre de la plantilla" aria-label="Nombre de la plantilla" class="w-full border border-purple-300 rounded px-3 py-2 text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-purple-400">
           <button id="save-template-btn" class="w-full bg-purple-600 text-white rounded px-4 py-2 font-bold hover:bg-purple-700 transition-colors text-sm">💾 Guardar como mi plantilla</button>
         </div>
 
@@ -124,22 +124,28 @@ function buildRubricaRebuilt() {
       });
   }
 
+  function createCriterionId() {
+    return crypto.randomUUID?.() || `criterion-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+
   function normalizeCriterion(criterion) {
+    const id = criterion.id || createCriterionId();
+    const name = String(criterion.name || 'Nuevo criterio');
     const max = Math.max(parseInt(criterion.max, 10) || 0, 1);
     const obtained = Math.min(Math.max(parseInt(criterion.obtained, 10) || 0, 0), max);
-    return { ...criterion, max, obtained };
+    return { ...criterion, id, name, max, obtained };
   }
 
   function updateSummary() {
     const totalObtained = criteria.reduce((sum, item) => sum + (parseInt(item.obtained, 10) || 0), 0);
-    const totalMax = criteria.reduce((sum, item) => sum + (parseInt(item.max, 10) || 0), 0) || 100;
+    const totalMax = criteria.reduce((sum, item) => sum + (parseInt(item.max, 10) || 0), 0);
     const percent = totalMax > 0 ? Math.round((totalObtained / totalMax) * 100) : 0;
-    const score100 = Math.round((totalObtained / totalMax) * 100);
+    const score100 = percent;
     const grade5 = (score100 / 20).toFixed(1);
     const grade10 = (score100 / 10).toFixed(1);
 
-    document.getElementById('score-display-rubrica').textContent = `${score100}/100`;
-    document.getElementById('grade-display-rubrica').textContent = `${grade5}/5 · ${grade10}/10`;
+    document.getElementById('score-display-rubrica').textContent = totalMax > 0 ? `${score100}%` : '0/0';
+    document.getElementById('grade-display-rubrica').textContent = totalMax > 0 ? `${totalObtained}/${totalMax} pts · ${grade5}/5 · ${grade10}/10` : '0% · 0.0/5 · 0.0/10';
     document.getElementById('rubric-progress-bar').style.width = `${percent}%`;
 
     const light = document.getElementById('traffic-light');
@@ -158,6 +164,8 @@ function buildRubricaRebuilt() {
 
   function renderCriteria() {
     const list = document.getElementById('criteria-list');
+    criteria = criteria.map(normalizeCriterion);
+
     if (criteria.length === 0) {
       list.innerHTML = '<p class="text-slate-500 italic text-sm">Sin criterios activos.</p>';
       updateSummary();
@@ -173,17 +181,17 @@ function buildRubricaRebuilt() {
       return `
         <div class="border-2 border-slate-300 rounded p-4 space-y-3">
           <div class="flex items-start justify-between gap-2">
-            <input type="text" value="${escapeHtml(normalized.name)}" class="flex-1 font-bold text-slate-900 border-b-2 border-transparent hover:border-slate-300 focus:border-blue-400 focus:outline-none px-1" data-idx="${index}" data-field="name">
-            <button class="text-red-600 hover:text-red-700 font-bold delete-criteria" data-idx="${index}">🗑️ Eliminar</button>
+            <input type="text" value="${escapeHtml(normalized.name)}" aria-label="Nombre del criterio" class="flex-1 font-bold text-slate-900 border-b-2 border-transparent hover:border-slate-300 focus:border-blue-400 focus:outline-none px-1" data-idx="${index}" data-field="name">
+            <button class="text-red-600 hover:text-red-700 font-bold delete-criteria" data-idx="${index}" aria-label="Eliminar criterio">🗑️ Eliminar</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm items-end">
             <div>
               <label class="text-xs font-bold text-slate-700 block mb-1">Máximo</label>
-              <input type="number" min="1" value="${normalized.max}" class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="${index}" data-field="max">
+              <input type="number" min="1" value="${normalized.max}" aria-label="Puntuación máxima del criterio" class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="${index}" data-field="max">
             </div>
             <div>
               <label class="text-xs font-bold text-slate-700 block mb-1">Obtenido</label>
-              <select class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="${index}" data-field="obtained">
+              <select aria-label="Puntuación obtenida del criterio" class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="${index}" data-field="obtained">
                 ${Array.from({ length: normalized.max + 1 }, (_, value) => `<option value="${value}" ${value === normalized.obtained ? 'selected' : ''}>${value}</option>`).join('')}
               </select>
             </div>
@@ -222,10 +230,11 @@ function buildRubricaRebuilt() {
     });
 
     updateSummary();
+    persistRubric();
   }
 
   document.getElementById('add-criteria-btn').addEventListener('click', () => {
-    criteria.push({ name: 'Nuevo criterio', max: 10, obtained: 0 });
+    criteria.push({ id: createCriterionId(), name: 'Nuevo criterio', max: 10, obtained: 0 });
     persistRubric();
     renderCriteria();
   });

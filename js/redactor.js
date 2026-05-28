@@ -53,14 +53,14 @@ function buildRedactorEnhanced() {
     ['anteproyecto', 'Anteproyecto']
   ];
 
-  const savedType = localStorage.getItem('redactor_work_type') || 'ensayo';
+  const savedType = loadStoredString('redactor_work_type', 'ensayo');
 
   const html = `
     <div id="redactor-shell" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div id="redactor-side-panels" class="lg:col-span-4 space-y-4">
         <div class="bg-white rounded-lg border-2 border-blue-200 p-4 shadow-md">
           <label class="text-sm font-bold text-blue-900 mb-2 block">Tipo de trabajo</label>
-          <select id="work-type-select" class="w-full border border-blue-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <select id="work-type-select" aria-label="Tipo de trabajo" class="w-full border border-blue-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             ${workTypeOptions.map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
           </select>
         </div>
@@ -98,7 +98,7 @@ function buildRedactorEnhanced() {
             <button id="focus-mode-btn" class="text-sm font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors" title="Modo Enfoque">🎯 Modo Enfoque</button>
           </div>
 
-          <textarea id="redactor-main" rows="20" placeholder="Redacta aquí tu contenido..." class="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all resize-none font-mono text-sm"></textarea>
+          <textarea id="redactor-main" rows="20" placeholder="Redacta aquí tu contenido..." aria-label="Contenido principal de redacción" class="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all resize-none font-mono text-sm"></textarea>
 
           <div id="section-warning-list" class="space-y-2"></div>
 
@@ -128,10 +128,9 @@ function buildRedactorEnhanced() {
   document.getElementById('main-workspace').innerHTML = html;
   stopCountdown();
 
-  const shell = document.getElementById('redactor-shell');
   const sidePanels = document.getElementById('redactor-side-panels');
   const editorPanel = document.getElementById('redactor-editor-panel');
-  const savedContent = localStorage.getItem('redactor_content') || '';
+  const savedContent = safeStorageGet('redactor_content', '');
   const textarea = document.getElementById('redactor-main');
   const recommendation = document.getElementById('redactor-recommendation');
   const warningList = document.getElementById('section-warning-list');
@@ -215,12 +214,7 @@ function buildRedactorEnhanced() {
     document.getElementById('char-count').textContent = chars;
     document.getElementById('para-count').textContent = paras;
 
-    try {
-      saveField('redactor_content', text);
-    } catch (err) {
-      console.error('Failed saving redactor content', err);
-    }
-    saveJSON('redactor_work_type', workTypeSelect.value);
+    saveField('redactor_content', text);
     renderWarnings();
   }
 
@@ -242,17 +236,13 @@ function buildRedactorEnhanced() {
 
   textarea.addEventListener('input', updateCounters);
   workTypeSelect.addEventListener('change', () => {
-    saveJSON('redactor_work_type', workTypeSelect.value);
+    safeStorageSet('redactor_work_type', workTypeSelect.value);
     renderGuide();
     renderWarnings();
   });
 
   document.getElementById('save-redactor-btn').addEventListener('click', () => {
-    try {
-      saveField('redactor_content', textarea.value);
-    } catch (err) {
-      console.error('Failed saving redactor content', err);
-    }
+    saveField('redactor_content', textarea.value);
     const btn = document.getElementById('save-redactor-btn');
     btn.textContent = '✅ Guardado';
     setTimeout(() => {
@@ -267,7 +257,7 @@ function buildRedactorEnhanced() {
   document.querySelectorAll('.copy-connector').forEach(btn => {
     btn.addEventListener('click', async () => {
       const text = btn.dataset.text || '';
-      await navigator.clipboard.writeText(text);
+      await writeClipboardText(text);
       const previous = btn.textContent;
       btn.textContent = '✓';
       setTimeout(() => {

@@ -59,7 +59,7 @@ function buildOrganizador() {
     anteproyecto: 'Anteproyecto'
   };
 
-  const savedType = localStorage.getItem('organizer_work_type') || 'investigacion';
+  const savedType = loadStoredString('organizer_work_type', 'investigacion');
 
   const html = `
     <div class="max-w-5xl mx-auto">
@@ -71,7 +71,7 @@ function buildOrganizador() {
           <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-lg p-8 space-y-6">
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-3">Selecciona tipo de trabajo:</label>
-              <select id="work-type" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <select id="work-type" aria-label="Tipo de trabajo del organizador" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 ${Object.entries(workTypeLabels).map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
               </select>
             </div>
@@ -119,17 +119,7 @@ function buildOrganizador() {
   const notesList = document.getElementById('section-notes-list');
   const versionPreview = document.getElementById('version-preview');
   const storedOutline = loadJSON('organizer_outline', {});
-  const rawNotes = localStorage.getItem('organizer_notes');
-  let notesStore = {};
-
-  if (rawNotes) {
-    try {
-      const parsedNotes = JSON.parse(rawNotes);
-      notesStore = parsedNotes && typeof parsedNotes === 'object' && !Array.isArray(parsedNotes) ? parsedNotes : {};
-    } catch (error) {
-      notesStore = {};
-    }
-  }
+  let notesStore = loadJSON('organizer_notes', {});
 
   function getCurrentSteps() {
     return organizerSteps[workTypeSelect.value] || [];
@@ -177,7 +167,7 @@ function buildOrganizador() {
           <p class="text-xs font-bold text-yellow-900">${step.label}</p>
           <button class="text-xs font-bold text-yellow-700 hover:text-yellow-900 toggle-note-panel" data-note-key="${step.key}">📌 Nota</button>
         </div>
-        <textarea rows="2" class="section-note-input hidden w-full border border-yellow-300 rounded px-3 py-2 text-xs resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-note-key="${step.key}" placeholder="Recordatorio privado...">${escapeHtml(notesStore[workTypeSelect.value]?.[step.key] || '')}</textarea>
+        <textarea rows="2" class="section-note-input hidden w-full border border-yellow-300 rounded px-3 py-2 text-xs resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-note-key="${step.key}" placeholder="Recordatorio privado..." aria-label="Nota de sección">${escapeHtml(notesStore[workTypeSelect.value]?.[step.key] || '')}</textarea>
       </div>
     `).join('');
 
@@ -213,8 +203,8 @@ function buildOrganizador() {
           <label class="block text-sm font-bold text-slate-900 mb-2">Paso ${index + 1}: ${step.label}</label>
           <p class="text-xs text-slate-500 mb-2">${step.hint}</p>
           ${step.key === 'objetivos_especificos'
-            ? `<textarea rows="4" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="${step.key}" placeholder="Escribe un objetivo por línea...">${escapeHtml(value)}</textarea>`
-            : `<textarea rows="3" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="${step.key}" placeholder="Escribe aquí...">${escapeHtml(value)}</textarea>`}
+            ? `<textarea rows="4" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="${step.key}" placeholder="Escribe un objetivo por línea..." aria-label="${escapeHtml(step.label)}">${escapeHtml(value)}</textarea>`
+            : `<textarea rows="3" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="${step.key}" placeholder="Escribe aquí..." aria-label="${escapeHtml(step.label)}">${escapeHtml(value)}</textarea>`}
         </div>
       `;
     }).join('');
@@ -260,9 +250,9 @@ function buildOrganizador() {
         <div class="flex justify-between items-center gap-2">
           <div>
             <div>v${index + 1}</div>
-            <div class="text-purple-700 text-xs">${version.date}</div>
+            <div class="text-purple-700 text-xs">${escapeHtml(version.date)}</div>
           </div>
-          <span class="text-[10px] uppercase tracking-wide text-purple-700">${workTypeLabels[version.type] || version.type}</span>
+          <span class="text-[10px] uppercase tracking-wide text-purple-700">${escapeHtml(workTypeLabels[version.type] || version.type)}</span>
         </div>
         <div class="flex gap-2">
           <button class="flex-1 bg-purple-300 hover:bg-purple-400 rounded px-2 py-1 preview-version" data-idx="${index}">Vista previa</button>
@@ -276,7 +266,7 @@ function buildOrganizador() {
         const version = state.organizerVersions[parseInt(btn.dataset.idx, 10)];
         versionPreview.classList.remove('hidden');
         versionPreview.innerHTML = `
-          <p class="font-bold text-purple-900 mb-2">Vista previa: ${version.date}</p>
+          <p class="font-bold text-purple-900 mb-2">Vista previa: ${escapeHtml(version.date)}</p>
           <pre class="whitespace-pre-wrap text-slate-700 font-mono">${escapeHtml(JSON.stringify(version.content, null, 2))}</pre>
         `;
       });
@@ -293,7 +283,7 @@ function buildOrganizador() {
   }
 
   document.getElementById('work-type').addEventListener('change', () => {
-    saveJSON('organizer_work_type', workTypeSelect.value);
+    safeStorageSet('organizer_work_type', workTypeSelect.value);
     renderForm();
   });
 
@@ -321,7 +311,7 @@ function buildOrganizador() {
 
   renderForm();
   renderVersions();
-  saveJSON('organizer_work_type', workTypeSelect.value);
+  safeStorageSet('organizer_work_type', workTypeSelect.value);
 
   if (state.organizerSnapshotInterval) clearInterval(state.organizerSnapshotInterval);
   state.organizerSnapshotInterval = setInterval(() => {
