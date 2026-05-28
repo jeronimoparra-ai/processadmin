@@ -20,7 +20,7 @@ function buildRubricaRebuilt() {
   const html = `
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2 space-y-6">
-        <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3"><span>📈</span> Evaluador de rúbrica personalizable</h2>
+        <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">${docproIconHtml('achievement', 'Evaluador de rúbrica personalizable', 'docpro-icon docpro-icon--lg')}<span>Evaluador de rúbrica personalizable</span></h2>
 
         <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md space-y-4">
           <div class="flex flex-col gap-3">
@@ -35,7 +35,7 @@ function buildRubricaRebuilt() {
 
         <div class="bg-white rounded-lg border-2 border-orange-200 p-6 shadow-md space-y-4">
           <div>
-            <h3 class="font-bold text-orange-900 mb-2">📝 Criterios del profesor</h3>
+            <h3 class="font-bold text-orange-900 mb-2 flex items-center gap-2">${docproIconHtml('ideas', 'Criterios del profesor', 'docpro-icon docpro-icon--sm')}<span>Criterios del profesor</span></h3>
             <textarea id="prof-input" rows="4" placeholder="Pega aquí lo que el profesor pidió..." aria-label="Criterios del profesor" class="w-full border border-orange-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400"></textarea>
           </div>
           <button id="parse-prof-btn" class="w-full bg-orange-600 text-white rounded px-4 py-2 font-bold hover:bg-orange-700 transition-colors text-sm">Convertir en criterios</button>
@@ -44,7 +44,7 @@ function buildRubricaRebuilt() {
         <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md space-y-4">
           <div class="flex justify-between items-center gap-3">
             <h3 class="font-bold text-slate-900">Criterios actuales</h3>
-            <button id="add-criteria-btn" class="bg-green-600 text-white rounded px-3 py-1 text-sm font-bold hover:bg-green-700 transition-colors">➕ Agregar criterio</button>
+            <button id="add-criteria-btn" class="bg-green-600 text-white rounded px-3 py-1 text-sm font-bold hover:bg-green-700 transition-colors">Agregar criterio</button>
           </div>
           <div id="criteria-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
         </div>
@@ -55,7 +55,7 @@ function buildRubricaRebuilt() {
           <p class="text-blue-700 text-sm font-bold mb-2">PUNTUACIÓN ACTUAL</p>
           <p id="score-display-rubrica" class="text-5xl font-black text-blue-900">0/0</p>
           <p id="grade-display-rubrica" class="text-lg font-bold text-blue-800 mt-2">0.0/5 · 0.0/10</p>
-          <div id="traffic-light" class="text-5xl mt-4">🟡</div>
+          <div id="traffic-light" class="mt-4 flex justify-center"><span class="traffic-badge traffic-badge--yellow"></span></div>
           <p id="traffic-label" class="text-blue-900 font-bold text-sm mt-2">Escala: 60-79%</p>
           <div class="mt-4 h-3 bg-blue-200 rounded-full overflow-hidden">
             <div id="rubric-progress-bar" class="h-full bg-blue-600 rounded-full transition-all" style="width: 0%"></div>
@@ -63,22 +63,22 @@ function buildRubricaRebuilt() {
         </div>
 
         <div class="bg-white rounded-lg border-2 border-purple-200 p-6 shadow-md">
-          <h3 class="font-bold text-purple-900 mb-3">💾 Guardar plantilla personalizada</h3>
+          <h3 class="font-bold text-purple-900 mb-3 flex items-center gap-2">${docproIconHtml('validation', 'Guardar plantilla personalizada', 'docpro-icon docpro-icon--sm')}<span>Guardar plantilla personalizada</span></h3>
           <input id="template-name" type="text" placeholder="Nombre de la plantilla" aria-label="Nombre de la plantilla" class="w-full border border-purple-300 rounded px-3 py-2 text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-purple-400">
-          <button id="save-template-btn" class="w-full bg-purple-600 text-white rounded px-4 py-2 font-bold hover:bg-purple-700 transition-colors text-sm">💾 Guardar como mi plantilla</button>
+          <button id="save-template-btn" class="w-full bg-purple-600 text-white rounded px-4 py-2 font-bold hover:bg-purple-700 transition-colors text-sm">Guardar como mi plantilla</button>
         </div>
 
         <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md">
-          <button id="reset-rubric-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 font-bold hover:bg-slate-700 transition-colors text-sm">🔄 Restablecer</button>
+          <button id="reset-rubric-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 font-bold hover:bg-slate-700 transition-colors text-sm">Restablecer</button>
           <p class="text-xs text-slate-500 mt-3">Se borran solo los criterios activos y se conserva la biblioteca de plantillas guardadas.</p>
         </div>
 
         <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-lg p-6">
           <p class="text-xs text-slate-300 mb-2 font-bold">ESCALA DE CUMPLIMIENTO:</p>
           <div class="space-y-1 text-xs">
-            <div><span class="text-red-400 font-bold">🔴 0-59%</span> - Deficiente</div>
-            <div><span class="text-yellow-400 font-bold">🟡 60-79%</span> - Aceptable</div>
-            <div><span class="text-green-400 font-bold">🟢 80-100%</span> - Excelente</div>
+            <div><span class="text-red-400 font-bold">0-59%</span> - Deficiente</div>
+            <div><span class="text-yellow-400 font-bold">60-79%</span> - Aceptable</div>
+            <div><span class="text-green-400 font-bold">80-100%</span> - Excelente</div>
           </div>
         </div>
       </div>
@@ -151,13 +151,13 @@ function buildRubricaRebuilt() {
     const light = document.getElementById('traffic-light');
     const label = document.getElementById('traffic-label');
     if (percent >= 80) {
-      light.textContent = '🟢';
+      light.innerHTML = '<span class="traffic-badge traffic-badge--green"></span>';
       label.textContent = 'Excelente: 80-100%';
     } else if (percent >= 60) {
-      light.textContent = '🟡';
+      light.innerHTML = '<span class="traffic-badge traffic-badge--yellow"></span>';
       label.textContent = 'Aceptable: 60-79%';
     } else {
-      light.textContent = '🔴';
+      light.innerHTML = '<span class="traffic-badge traffic-badge--red"></span>';
       label.textContent = 'Deficiente: 0-59%';
     }
   }
@@ -182,7 +182,7 @@ function buildRubricaRebuilt() {
         <div class="border-2 border-slate-300 rounded p-4 space-y-3">
           <div class="flex items-start justify-between gap-2">
             <input type="text" value="${escapeHtml(normalized.name)}" aria-label="Nombre del criterio" class="flex-1 font-bold text-slate-900 border-b-2 border-transparent hover:border-slate-300 focus:border-blue-400 focus:outline-none px-1" data-idx="${index}" data-field="name">
-            <button class="text-red-600 hover:text-red-700 font-bold delete-criteria" data-idx="${index}" aria-label="Eliminar criterio">🗑️ Eliminar</button>
+            <button class="text-red-600 hover:text-red-700 font-bold delete-criteria" data-idx="${index}" aria-label="Eliminar criterio">Eliminar</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm items-end">
             <div>
@@ -196,7 +196,7 @@ function buildRubricaRebuilt() {
               </select>
             </div>
             <div class="px-3 py-2 rounded border text-xs font-bold ${trafficClass}">
-              ${Math.round(ratio * 100)}% · ${ratio >= 0.8 ? '🟢' : ratio >= 0.6 ? '🟡' : '🔴'}
+              ${Math.round(ratio * 100)}% · ${ratio >= 0.8 ? 'Excelente' : ratio >= 0.6 ? 'Aceptable' : 'Deficiente'}
             </div>
           </div>
         </div>
@@ -247,14 +247,14 @@ function buildRubricaRebuilt() {
     renderCriteria();
 
     const button = document.getElementById('load-template-btn');
-    button.textContent = '✅ Cargada';
+    button.textContent = 'Cargada';
     setTimeout(() => { button.textContent = 'Cargar plantilla'; }, 2000);
   });
 
   document.getElementById('save-template-btn').addEventListener('click', () => {
     const name = document.getElementById('template-name').value.trim();
     if (!name) {
-      alert('⚠️ Ingresa nombre para la plantilla');
+      alert('Ingresa nombre para la plantilla');
       return;
     }
 
@@ -270,14 +270,14 @@ function buildRubricaRebuilt() {
     select.appendChild(option);
 
     const button = document.getElementById('save-template-btn');
-    button.textContent = '✅ Guardada';
-    setTimeout(() => { button.textContent = '💾 Guardar como mi plantilla'; }, 2000);
+    button.textContent = 'Guardada';
+    setTimeout(() => { button.textContent = 'Guardar como mi plantilla'; }, 2000);
   });
 
   document.getElementById('parse-prof-btn').addEventListener('click', () => {
     const text = document.getElementById('prof-input').value.trim();
     if (!text) {
-      alert('⚠️ Pega los criterios del profesor');
+      alert('Pega los criterios del profesor');
       return;
     }
 
@@ -292,7 +292,7 @@ function buildRubricaRebuilt() {
     renderCriteria();
 
     const button = document.getElementById('parse-prof-btn');
-    button.textContent = '✅ Convertidos';
+    button.textContent = 'Convertidos';
     setTimeout(() => { button.textContent = 'Convertir en criterios'; }, 2000);
   });
 

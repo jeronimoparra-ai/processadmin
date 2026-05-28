@@ -105,7 +105,7 @@ function buildPanel() {
       <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 rounded-3xl shadow-2xl p-12 text-white relative overflow-hidden">
         <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
         <div class="relative">
-          <h1 class="text-5xl font-black mb-3">📝 Redacta, organiza y exporta en APA 7</h1>
+          <h1 class="text-5xl font-black mb-3 flex items-center gap-4"><span class="shrink-0">${docproIconHtml('redactor', 'Redactor académico', 'docpro-icon docpro-icon--lg')}</span><span>Redacta, organiza y exporta en APA 7</span></h1>
           <p class="text-lg text-blue-100 leading-relaxed max-w-2xl">
             Diseña trabajos académicos claros y consistentes con redacción guiada, organización de ideas, referencias APA 7 y exportación profesional a Word.
           </p>
@@ -115,14 +115,14 @@ function buildPanel() {
       <!-- Quality Dashboard -->
       <div class="bg-white rounded-2xl border-2 border-slate-200 p-10 shadow-lg">
         <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-          <span>📊</span> Indicadores de calidad
+          ${docproIconHtml('panel', 'Indicadores de calidad', 'docpro-icon docpro-icon--lg')} <span>Indicadores de calidad</span>
         </h2>
         <p class="text-gray-600 text-sm mb-8">Seguimiento claro del avance en estructura, APA 7, criterios y formato Word</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-300">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-blue-900 text-sm">📋 Estructura</h3>
+              <h3 class="font-bold text-blue-900 text-sm flex items-center gap-2">${docproIconHtml('validation', 'Estructura', 'docpro-icon docpro-icon--sm')}<span>Estructura</span></h3>
               <span class="text-2xl font-bold text-blue-600">${metrics.structure}%</span>
             </div>
             <div class="h-2 bg-blue-200 rounded-full overflow-hidden">
@@ -133,7 +133,7 @@ function buildPanel() {
 
           <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-300">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-purple-900 text-sm">📐 Normas APA 7</h3>
+              <h3 class="font-bold text-purple-900 text-sm flex items-center gap-2">${docproIconHtml('apa', 'Normas APA 7', 'docpro-icon docpro-icon--sm')}<span>Normas APA 7</span></h3>
               <span class="text-2xl font-bold text-purple-600">${metrics.apa}%</span>
             </div>
             <div class="h-2 bg-purple-200 rounded-full overflow-hidden">
@@ -144,7 +144,7 @@ function buildPanel() {
 
           <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-300">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-green-900 text-sm">✅ Criterios Docente</h3>
+              <h3 class="font-bold text-green-900 text-sm flex items-center gap-2">${docproIconHtml('validation', 'Criterios docente', 'docpro-icon docpro-icon--sm')}<span>Criterios Docente</span></h3>
               <span class="text-2xl font-bold text-green-600">${metrics.criteria}%</span>
             </div>
             <div class="h-2 bg-green-200 rounded-full overflow-hidden">
@@ -155,7 +155,7 @@ function buildPanel() {
 
           <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 border border-orange-300">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-orange-900 text-sm">📄 Formato Word</h3>
+              <h3 class="font-bold text-orange-900 text-sm flex items-center gap-2">${docproIconHtml('exportWord', 'Formato Word', 'docpro-icon docpro-icon--sm')}<span>Formato Word</span></h3>
               <span class="text-2xl font-bold text-orange-600">${metrics.wordFormat}%</span>
             </div>
             <div class="h-2 bg-orange-200 rounded-full overflow-hidden">
@@ -168,7 +168,7 @@ function buildPanel() {
         <!-- Overall Readiness -->
         <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-xl p-8">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-2xl font-bold">🎯 Preparación general</h3>
+            <h3 class="text-2xl font-bold flex items-center gap-3">${docproIconHtml('achievement', 'Preparación general', 'docpro-icon docpro-icon--lg')}<span>Preparación general</span></h3>
             <span class="text-5xl font-black text-blue-300">${metrics.overall}%</span>
           </div>
           <p class="text-lg text-slate-100 mb-4">${motivationalMsg}</p>
@@ -178,7 +178,7 @@ function buildPanel() {
         </div>
 
         <div class="mt-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
-          <h3 class="text-xl font-bold text-slate-900 mb-4">🧭 Pendientes prioritarios</h3>
+          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">${docproIconHtml('review', 'Pendientes prioritarios', 'docpro-icon docpro-icon--sm')}<span>Pendientes prioritarios</span></h3>
           <div class="space-y-2">
             ${pendingItems.length > 0 ? pendingItems.map(item => `
               <button class="w-full text-left bg-white border border-amber-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-amber-50 transition-colors pending-nav" data-view="${item.view}">
@@ -192,7 +192,7 @@ function buildPanel() {
       <!-- Key Metrics -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="group bg-white rounded-2xl border-2 border-blue-100 p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-          <div class="text-blue-600 text-4xl mb-3">⏰</div>
+          <div class="mb-3">${docproIconHtml('review', 'Fecha de entrega', 'docpro-icon docpro-icon--xl')}</div>
           <p class="text-slate-600 text-sm font-medium mb-2">Fecha de entrega</p>
           <p id="delivery-date-label" class="text-3xl font-bold text-blue-900 mb-1">${deliveryDateLabel}</p>
           <label class="block text-xs font-semibold text-slate-500 mb-2" for="delivery-date-input">Modificar fecha</label>
@@ -202,14 +202,14 @@ function buildPanel() {
         </div>
 
         <div class="group bg-white rounded-2xl border-2 border-purple-100 p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-          <div class="text-purple-600 text-4xl mb-3">📊</div>
+          <div class="mb-3">${docproIconHtml('panel', 'Meta de calificación', 'docpro-icon docpro-icon--xl')}</div>
           <p class="text-slate-600 text-sm font-medium mb-2">Meta de calificación</p>
           <p class="text-3xl font-bold text-purple-900 mb-1">100 pts</p>
           <p class="text-sm text-slate-500">Referencia de evaluación</p>
         </div>
 
         <div class="group sm:col-span-2 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-          <div class="text-emerald-600 text-4xl mb-3">📈</div>
+          <div class="mb-3">${docproIconHtml('achievement', 'Progreso general', 'docpro-icon docpro-icon--xl')}</div>
           <p class="text-slate-600 text-sm font-medium mb-2">Progreso general</p>
           <p id="overall-progress-percent" class="text-3xl font-bold text-emerald-900 mb-2">${metrics.overall}%</p>
           <div class="h-2.5 bg-emerald-200 rounded-full overflow-hidden">
@@ -221,7 +221,7 @@ function buildPanel() {
       <!-- Getting Started Guide -->
       <div class="bg-white rounded-2xl border-2 border-slate-200 p-10 shadow-lg">
         <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
-          <span class="text-3xl">🎯</span> Guía de inicio
+          ${docproIconHtml('ideas', 'Guía de inicio', 'docpro-icon docpro-icon--lg')} <span>Guía de inicio</span>
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 hover:shadow-lg transition-all cursor-pointer" data-view="organizador">
@@ -263,7 +263,7 @@ function buildPanel() {
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
           <div>
             <h2 class="text-3xl font-bold text-slate-900 flex items-center gap-3">
-              <span class="text-3xl">📋</span> Estructura de tu Documento
+              ${docproIconHtml('validation', 'Estructura de tu documento', 'docpro-icon docpro-icon--lg')} <span>Estructura de tu Documento</span>
             </h2>
             <p id="structure-status" class="text-sm text-slate-500 mt-2">${structureStatusLabel}</p>
           </div>
@@ -275,7 +275,7 @@ function buildPanel() {
         <div id="structure-table" class="mb-8 space-y-4 ${isStructureOpen ? '' : 'hidden'}"></div>
         <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
           <div class="flex items-center gap-3 mb-3">
-            <span class="text-2xl">📊</span>
+            ${docproIconHtml('panel', 'Tu progreso de completitud', 'docpro-icon docpro-icon--sm')}
             <p class="font-bold text-slate-900">Tu Progreso de Completitud</p>
           </div>
           <div class="h-3 bg-slate-200 rounded-full overflow-hidden mb-2">
@@ -288,12 +288,12 @@ function buildPanel() {
       <!-- Section Progress Overview -->
       <div class="bg-white rounded-2xl border-2 border-slate-200 p-10 shadow-lg">
         <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
-          <span class="text-3xl">🔍</span> Avance por Sección
+          ${docproIconHtml('review', 'Avance por sección', 'docpro-icon docpro-icon--lg')} <span>Avance por Sección</span>
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-300">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-blue-900">📋 Planeación</h3>
+              <h3 class="text-lg font-bold text-blue-900 flex items-center gap-2">${docproIconHtml('ideas', 'Planeación', 'docpro-icon docpro-icon--sm')}<span>Planeación</span></h3>
               <span id="planeacion-status" class="text-2xl font-bold text-blue-600">0%</span>
             </div>
             <div class="h-3 bg-blue-200 rounded-full overflow-hidden">
@@ -304,7 +304,7 @@ function buildPanel() {
 
           <div class="p-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-300">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-purple-900">🏗️ Organización</h3>
+              <h3 class="text-lg font-bold text-purple-900 flex items-center gap-2">${docproIconHtml('redactor', 'Organización', 'docpro-icon docpro-icon--sm')}<span>Organización</span></h3>
               <span id="organizacion-status" class="text-2xl font-bold text-purple-600">0%</span>
             </div>
             <div class="h-3 bg-purple-200 rounded-full overflow-hidden">
@@ -315,7 +315,7 @@ function buildPanel() {
 
           <div class="p-6 rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-300">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-orange-900">🧭 Dirección</h3>
+              <h3 class="text-lg font-bold text-orange-900 flex items-center gap-2">${docproIconHtml('review', 'Dirección', 'docpro-icon docpro-icon--sm')}<span>Dirección</span></h3>
               <span id="direccion-status" class="text-2xl font-bold text-orange-600">0%</span>
             </div>
             <div class="h-3 bg-orange-200 rounded-full overflow-hidden">
@@ -326,7 +326,7 @@ function buildPanel() {
 
           <div class="p-6 rounded-xl bg-gradient-to-br from-red-50 to-red-100 border border-red-300">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-red-900">📊 Control</h3>
+              <h3 class="text-lg font-bold text-red-900 flex items-center gap-2">${docproIconHtml('panel', 'Control', 'docpro-icon docpro-icon--sm')}<span>Control</span></h3>
               <span id="control-status" class="text-2xl font-bold text-red-600">0%</span>
             </div>
             <div class="h-3 bg-red-200 rounded-full overflow-hidden">
@@ -339,7 +339,7 @@ function buildPanel() {
 
       <!-- Quick Stats -->
       <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl shadow-2xl p-10 text-white">
-        <h2 class="text-3xl font-bold mb-8">📈 Estadísticas del Proyecto</h2>
+        <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">${docproIconHtml('achievement', 'Estadísticas del proyecto', 'docpro-icon docpro-icon--lg')}<span>Estadísticas del Proyecto</span></h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           <div class="text-center">
             <div class="text-4xl font-black text-blue-400 mb-2" id="stat-content-words">0</div>

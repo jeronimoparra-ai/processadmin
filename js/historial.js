@@ -34,7 +34,7 @@ function buildHistorial() {
     <div class="max-w-6xl mx-auto space-y-8">
       <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3"><span>🗂️</span> Historial de documentos</h2>
+          <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">${docproIconHtml('review', 'Historial de documentos', 'docpro-icon docpro-icon--lg')}<span>Historial de documentos</span></h2>
           <p class="text-slate-600">Reabre, revisa o descarga versiones que ya exportaste.</p>
         </div>
         <div class="flex items-center gap-3">
@@ -42,7 +42,7 @@ function buildHistorial() {
             <p class="text-xs uppercase tracking-wide text-slate-500">Documentos guardados</p>
             <p id="history-total" class="text-2xl font-bold text-blue-900">${history.length}</p>
           </div>
-          <button id="go-export-btn" class="btn-primary">📤 Ir a exportación</button>
+          <button id="go-export-btn" class="btn-primary">Ir a exportación</button>
         </div>
       </div>
 
@@ -113,7 +113,7 @@ function buildHistorial() {
     if (items.length === 0) {
       list.innerHTML = `
         <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm text-center space-y-3">
-          <div class="text-5xl">🕰️</div>
+          <div class="flex justify-center">${docproIconHtml('review', 'Sin documentos guardados', 'docpro-icon docpro-icon--xl')}</div>
           <h3 class="text-2xl font-bold text-slate-900">${searchTerm ? 'No hay coincidencias' : 'Aún no hay documentos guardados'}</h3>
           <p class="text-slate-600">${searchTerm ? 'Prueba con otro término o limpia el filtro.' : 'Cuando exportes un trabajo, aparecerá aquí para volver a abrirlo o descargarlo.'}</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
@@ -155,9 +155,9 @@ function buildHistorial() {
           </div>
 
           <div class="flex flex-col sm:flex-row gap-3">
-            <button class="history-action btn-primary" data-action="open" data-id="${escapeHtml(entry.id)}">📂 Abrir</button>
-            <button class="history-action btn" data-action="download" data-id="${escapeHtml(entry.id)}">⬇️ Descargar DOCX</button>
-            <button class="history-action btn ghost" data-action="delete" data-id="${escapeHtml(entry.id)}">🗑️ Eliminar</button>
+            <button class="history-action btn-primary" data-action="open" data-id="${escapeHtml(entry.id)}">Abrir</button>
+            <button class="history-action btn" data-action="download" data-id="${escapeHtml(entry.id)}">Descargar DOCX</button>
+            <button class="history-action btn ghost" data-action="delete" data-id="${escapeHtml(entry.id)}">Eliminar</button>
           </div>
         </article>
       `;

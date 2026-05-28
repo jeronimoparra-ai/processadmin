@@ -6,9 +6,9 @@ function buildChecklist() {
   const html = `
     <div class="max-w-6xl mx-auto">
       <div class="flex gap-0 mb-6 border-b-2 border-slate-300 overflow-x-auto">
-        <button class="checklist-tab px-6 py-3 font-bold text-slate-600 hover:text-slate-900 border-b-4 border-transparent -mb-0.5 transition-all active" data-tab="estructura">📋 Estructura del trabajo</button>
-        <button class="checklist-tab px-6 py-3 font-bold text-slate-600 hover:text-slate-900 border-b-4 border-transparent -mb-0.5 transition-all" data-tab="formato">📄 Formato Word APA 7</button>
-        <button class="checklist-tab px-6 py-3 font-bold text-slate-600 hover:text-slate-900 border-b-4 border-transparent -mb-0.5 transition-all" data-tab="criterios">✅ Criterios del profesor</button>
+        <button class="checklist-tab px-6 py-3 font-bold text-slate-600 hover:text-slate-900 border-b-4 border-transparent -mb-0.5 transition-all active" data-tab="estructura">Estructura del trabajo</button>
+        <button class="checklist-tab px-6 py-3 font-bold text-slate-600 hover:text-slate-900 border-b-4 border-transparent -mb-0.5 transition-all" data-tab="formato">Formato Word APA 7</button>
+        <button class="checklist-tab px-6 py-3 font-bold text-slate-600 hover:text-slate-900 border-b-4 border-transparent -mb-0.5 transition-all" data-tab="criterios">Criterios del profesor</button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -20,7 +20,7 @@ function buildChecklist() {
                 <span id="progress-estructura" class="text-xs font-semibold text-slate-500">0/0 completados</span>
               </div>
               <div id="checklist-estructura" class="space-y-2"></div>
-              <button class="mt-2 w-full bg-slate-600 text-white rounded px-4 py-2 text-sm hover:bg-slate-700 transition-colors add-checklist-item" data-tab="estructura">➕ Agregar ítem</button>
+              <button class="mt-2 w-full bg-slate-600 text-white rounded px-4 py-2 text-sm hover:bg-slate-700 transition-colors add-checklist-item" data-tab="estructura">Agregar ítem</button>
             </div>
           </div>
 
@@ -31,7 +31,7 @@ function buildChecklist() {
                 <span id="progress-formato" class="text-xs font-semibold text-slate-500">0/0 completados</span>
               </div>
               <div id="checklist-formato" class="space-y-2"></div>
-              <button class="mt-2 w-full bg-slate-600 text-white rounded px-4 py-2 text-sm hover:bg-slate-700 transition-colors add-checklist-item" data-tab="formato">➕ Agregar ítem</button>
+              <button class="mt-2 w-full bg-slate-600 text-white rounded px-4 py-2 text-sm hover:bg-slate-700 transition-colors add-checklist-item" data-tab="formato">Agregar ítem</button>
             </div>
           </div>
 
@@ -45,12 +45,12 @@ function buildChecklist() {
                 <span id="progress-criterios" class="text-xs font-semibold text-slate-500">0/0 completados</span>
               </div>
               <div id="checklist-criterios" class="space-y-2"></div>
-              <button class="mt-2 w-full bg-slate-600 text-white rounded px-4 py-2 text-sm hover:bg-slate-700 transition-colors add-checklist-item" data-tab="criterios">➕ Agregar ítem</button>
+              <button class="mt-2 w-full bg-slate-600 text-white rounded px-4 py-2 text-sm hover:bg-slate-700 transition-colors add-checklist-item" data-tab="criterios">Agregar ítem</button>
             </div>
           </div>
 
           <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-blue-300 p-6 shadow-md">
-            <h3 class="font-bold text-blue-900 mb-3">📊 Progreso global</h3>
+            <h3 class="font-bold text-blue-900 mb-3 flex items-center gap-2">${docproIconHtml('panel', 'Progreso global', 'docpro-icon docpro-icon--sm')}<span>Progreso global</span></h3>
             <div class="h-3 bg-blue-200 rounded-full overflow-hidden mb-2">
               <div id="checklist-overall-bar" class="h-full bg-blue-600 rounded-full transition-all" style="width: 0%"></div>
             </div>
@@ -61,7 +61,7 @@ function buildChecklist() {
         <div class="lg:col-span-1">
           <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-blue-300 p-6 sticky top-6 space-y-6">
             <div>
-              <h3 class="font-bold text-blue-900 mb-2">📊 Progreso por pestaña</h3>
+              <h3 class="font-bold text-blue-900 mb-2 flex items-center gap-2">${docproIconHtml('panel', 'Progreso por pestaña', 'docpro-icon docpro-icon--sm')}<span>Progreso por pestaña</span></h3>
               <div class="space-y-4">
                 <div>
                   <div class="flex justify-between mb-1"><span class="text-xs font-semibold text-blue-700">Estructura</span><span class="text-xs font-semibold text-blue-700" id="progress-count-estructura">0/0</span></div>
@@ -79,7 +79,7 @@ function buildChecklist() {
             </div>
 
             <div class="border-t border-blue-300 pt-4">
-              <h3 class="font-bold text-blue-900 mb-3">⏰ Entrega</h3>
+              <h3 class="font-bold text-blue-900 mb-3 flex items-center gap-2">${docproIconHtml('review', 'Entrega', 'docpro-icon docpro-icon--sm')}<span>Entrega</span></h3>
               <input id="deadline-date" type="datetime-local" aria-label="Fecha de entrega" class="w-full border border-blue-300 rounded px-3 py-2 text-sm mb-2">
               <p class="text-xs text-blue-700 mb-2">Fecha compartida con el panel y la exportación.</p>
               <div id="countdown-display" class="text-center py-3 bg-white rounded border border-blue-300 transition-colors">
@@ -145,7 +145,7 @@ function buildChecklist() {
         <input type="text" value="${escapeHtml(item.text)}" aria-label="Texto del ítem de checklist" class="flex-1 bg-transparent text-sm focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-400" data-tab="${tab}" data-idx="${idx}">
         <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="-1" aria-label="Mover ítem hacia arriba">▲</button>
         <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="1" aria-label="Mover ítem hacia abajo">▼</button>
-        <button class="text-red-600 hover:text-red-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity delete-item" data-tab="${tab}" data-idx="${idx}" aria-label="Eliminar ítem">🗑️</button>
+        <button class="text-red-600 hover:text-red-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity delete-item" data-tab="${tab}" data-idx="${idx}" aria-label="Eliminar ítem">Eliminar</button>
       </div>
     `).join('');
 
@@ -254,7 +254,7 @@ function buildChecklist() {
 
     if (diff <= 0) {
       countdownDisplay.className = 'text-center py-3 bg-red-50 rounded border border-red-300 transition-colors animate-pulse';
-      countdownDisplay.innerHTML = '<p class="text-lg font-bold text-red-600">⏰ Fecha de entrega vencida</p>';
+      countdownDisplay.innerHTML = '<p class="text-lg font-bold text-red-600">Fecha de entrega vencida</p>';
       return;
     }
 

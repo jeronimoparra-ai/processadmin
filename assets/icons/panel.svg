@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Panel de control">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#eff6ff"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#3559b8"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="8" width="88" height="72" rx="12" fill="url(#bg)" stroke="#5b87d6" stroke-width="2.5"/>
+  <rect x="4" y="8" width="88" height="14" rx="12" fill="#2d6cdf"/>
+  <circle cx="14" cy="15" r="3" fill="#f59e0b"/>
+  <circle cx="25" cy="15" r="3" fill="#fde68a"/>
+  <circle cx="36" cy="15" r="3" fill="#bfdbfe"/>
+  <g stroke="url(#line)" stroke-width="4" stroke-linecap="round">
+    <line x1="18" y1="40" x2="78" y2="40"/>
+    <line x1="18" y1="54" x2="78" y2="54"/>
+    <line x1="18" y1="68" x2="78" y2="68"/>
+  </g>
+  <g fill="#274690" stroke="#1e3a8a" stroke-width="2">
+    <circle cx="36" cy="40" r="7"/>
+    <circle cx="52" cy="54" r="7"/>
+    <circle cx="62" cy="68" r="7"/>
+  </g>
+  <rect x="15" y="33" width="10" height="14" rx="5" fill="#93c5fd" opacity="0.85"/>
+  <rect x="31" y="47" width="10" height="14" rx="5" fill="#93c5fd" opacity="0.85"/>
+  <rect x="41" y="61" width="10" height="14" rx="5" fill="#93c5fd" opacity="0.85"/>
+</svg>

@@ -67,7 +67,7 @@ function buildRedactorEnhanced() {
 
         <div class="bg-white rounded-lg border border-blue-200 overflow-hidden shadow-md">
           <button class="accordion-btn-red w-full flex justify-between items-center p-4 hover:bg-blue-50 transition-colors border-b border-blue-200" data-accordion-red="0">
-            <span class="font-semibold text-blue-900">📋 Guía de estructura</span>
+            <span class="font-semibold text-blue-900 flex items-center gap-2">${docproIconHtml('review', 'Guía de estructura', 'docpro-icon docpro-icon--sm')}<span>Guía de estructura</span></span>
             <span class="accordion-chevron-red open text-xl">▼</span>
           </button>
           <div class="accordion-content-red open p-4 text-gray-700 text-sm space-y-3 max-h-[26rem] overflow-y-auto">
@@ -77,7 +77,7 @@ function buildRedactorEnhanced() {
 
         <div class="bg-white rounded-lg border border-purple-200 overflow-hidden shadow-md">
           <button class="accordion-btn-red w-full flex justify-between items-center p-4 hover:bg-purple-50 transition-colors border-b border-purple-200" data-accordion-red="1">
-            <span class="font-semibold text-purple-900">🔗 Conectores académicos</span>
+            <span class="font-semibold text-purple-900 flex items-center gap-2">${docproIconHtml('ideas', 'Conectores académicos', 'docpro-icon docpro-icon--sm')}<span>Conectores académicos</span></span>
             <span class="accordion-chevron-red text-xl">▼</span>
           </button>
           <div class="accordion-content-red p-4 text-sm space-y-3">
@@ -91,11 +91,11 @@ function buildRedactorEnhanced() {
           <div class="flex justify-between items-center gap-3">
             <div>
               <h2 class="text-2xl font-bold text-blue-900 flex items-center gap-3">
-                <span>✍️</span> Redactor Premium
+                ${docproIconHtml('redactor', 'Redactor Premium', 'docpro-icon docpro-icon--lg')}<span>Redactor Premium</span>
               </h2>
               <p id="redactor-recommendation" class="text-xs text-slate-500 mt-1"></p>
             </div>
-            <button id="focus-mode-btn" class="text-sm font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors" title="Modo Enfoque">🎯 Modo Enfoque</button>
+            <button id="focus-mode-btn" class="text-sm font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors" title="Modo Enfoque">Modo Enfoque</button>
           </div>
 
           <textarea id="redactor-main" rows="20" placeholder="Redacta aquí tu contenido..." aria-label="Contenido principal de redacción" class="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all resize-none font-mono text-sm"></textarea>
@@ -118,7 +118,7 @@ function buildRedactorEnhanced() {
           </div>
 
           <button id="save-redactor-btn" class="w-full bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors shadow-lg">
-            💾 Guardar Redacción
+            Guardar Redacción
           </button>
         </div>
       </div>
@@ -154,7 +154,7 @@ function buildRedactorEnhanced() {
             <p class="font-bold text-blue-900">${section.title}</p>
             <p class="text-[11px] text-blue-700 font-semibold mt-1">${section.length}</p>
           </div>
-          <span class="text-yellow-500 text-sm font-bold">⚠️</span>
+          <span class="shrink-0">${docproIconHtml(isReady ? 'validation' : 'review', isReady ? 'Sección validada' : 'Sección pendiente', 'docpro-icon docpro-icon--sm')}</span>
         </div>
         <p class="text-xs text-slate-700 mb-2"><strong>Propósito:</strong> ${section.purpose}</p>
         <p class="text-xs text-slate-700 mb-2"><strong>Qué incluir:</strong> ${section.include}</p>
@@ -190,11 +190,13 @@ function buildRedactorEnhanced() {
       const minWords = parseInt(section.length.match(/\d+/)?.[0] || '0', 10);
       const isReady = hasHeading && totalWords >= minWords;
       const warningClass = isReady ? 'border-green-200 bg-green-50 text-green-800' : 'border-yellow-200 bg-yellow-50 text-yellow-800';
-      const warningIcon = isReady ? '✅' : '⚠️';
+      const warningIcon = isReady
+        ? docproIconHtml('validation', 'Sección validada', 'docpro-icon docpro-icon--sm')
+        : docproIconHtml('review', 'Sección pendiente', 'docpro-icon docpro-icon--sm');
 
       return `
         <div class="flex items-start gap-3 rounded-lg border px-4 py-3 ${warningClass}">
-          <span class="mt-0.5">${warningIcon}</span>
+          <span class="mt-0.5 shrink-0">${warningIcon}</span>
           <div class="min-w-0">
             <p class="font-bold text-sm">${section.title}</p>
             <p class="text-xs mt-1">${isReady ? 'Sección dentro del rango recomendado.' : `Faltan contenido o encabezado. Meta: ${section.length}.`}</p>
@@ -226,7 +228,7 @@ function buildRedactorEnhanced() {
     redactorMetrics.classList.toggle('hidden', enable);
     warningList.classList.toggle('hidden', enable);
     recommendation.classList.toggle('hidden', enable);
-    document.getElementById('focus-mode-btn').textContent = enable ? '↩️ Vista completa' : '🎯 Modo Enfoque';
+    document.getElementById('focus-mode-btn').textContent = enable ? 'Vista completa' : 'Modo Enfoque';
   }
 
   renderGuide();
@@ -244,9 +246,9 @@ function buildRedactorEnhanced() {
   document.getElementById('save-redactor-btn').addEventListener('click', () => {
     saveField('redactor_content', textarea.value);
     const btn = document.getElementById('save-redactor-btn');
-    btn.textContent = '✅ Guardado';
+    btn.textContent = 'Guardado';
     setTimeout(() => {
-      btn.textContent = '💾 Guardar Redacción';
+      btn.textContent = 'Guardar Redacción';
     }, 2000);
   });
 
@@ -259,7 +261,7 @@ function buildRedactorEnhanced() {
       const text = btn.dataset.text || '';
       await writeClipboardText(text);
       const previous = btn.textContent;
-      btn.textContent = '✓';
+      btn.textContent = 'Copiado';
       setTimeout(() => {
         btn.textContent = previous;
       }, 1200);

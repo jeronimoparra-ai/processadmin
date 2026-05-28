@@ -247,7 +247,7 @@ function buildExportador() {
   const formatDetail = formatProfile?.description || 'Puedes cargar un formato JSON opcional para reutilizar datos y estructura.';
   const html = `
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3"><span>📤</span> Exportación a Word (Formato APA 7)</h2>
+      <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">${docproIconHtml('exportWord', 'Exportación a Word', 'docpro-icon docpro-icon--lg')}<span>Exportación a Word (Formato APA 7)</span></h2>
       <p class="text-gray-600 mb-8">Completa tus datos, revisa la validación y genera tu archivo local sin perder el formato.</p>
 
       <div class="bg-white rounded-2xl border-2 border-dashed border-blue-200 p-5 mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -256,7 +256,7 @@ function buildExportador() {
            <p class="text-sm text-slate-600">${escapeHtml(formatLabel)} · ${escapeHtml(formatDetail)}</p>
         </div>
         <div class="flex flex-wrap gap-3">
-           <button id="load-format-btn" class="bg-blue-600 text-white rounded-lg px-4 py-2 font-bold hover:bg-blue-700 transition-colors text-sm">📂 Cargar formato Word</button>
+           <button id="load-format-btn" class="bg-blue-600 text-white rounded-lg px-4 py-2 font-bold hover:bg-blue-700 transition-colors text-sm">Cargar formato Word</button>
           <button id="clear-format-btn" class="bg-white text-slate-700 rounded-lg px-4 py-2 font-bold border border-slate-200 hover:bg-slate-50 transition-colors text-sm">Quitar formato</button>
         </div>
       </div>
@@ -306,20 +306,20 @@ function buildExportador() {
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pt-2">
-              <button id="generate-docx-btn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors">📥 Generar archivo Word</button>
+              <button id="generate-docx-btn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors">Generar archivo Word</button>
               <button id="export-anyway-btn" class="flex-1 bg-slate-600 text-white rounded-lg py-3 font-bold hover:bg-slate-700 transition-colors">Exportar de todos modos</button>
             </div>
           </div>
 
           <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-lg p-6">
-            <h3 class="font-bold text-slate-900 mb-3">🖥️ Vista previa del documento</h3>
+            <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">${docproIconHtml('review', 'Vista previa del documento', 'docpro-icon docpro-icon--sm')}<span>Vista previa del documento</span></h3>
             <div id="document-preview" class="bg-slate-50 rounded-lg border border-slate-200 p-6 max-h-[42rem] overflow-y-auto"></div>
           </div>
         </div>
 
         <div class="space-y-6">
           <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg border-2 border-green-300 p-6">
-            <h3 class="font-bold text-green-900 mb-4">✅ Validación pre-exportación</h3>
+            <h3 class="font-bold text-green-900 mb-4 flex items-center gap-2">${docproIconHtml('validation', 'Validación pre-exportación', 'docpro-icon docpro-icon--sm')}<span>Validación pre-exportación</span></h3>
             <div id="validation-checklist" class="space-y-2 text-sm"></div>
             <div id="export-summary" class="mt-4 space-y-3 text-xs"></div>
             <div class="mt-4 space-y-2">
@@ -329,7 +329,7 @@ function buildExportador() {
           </div>
 
           <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-blue-300 p-6">
-            <h3 class="font-bold text-blue-900 mb-3">📋 Pendientes directos</h3>
+            <h3 class="font-bold text-blue-900 mb-3 flex items-center gap-2">${docproIconHtml('review', 'Pendientes directos', 'docpro-icon docpro-icon--sm')}<span>Pendientes directos</span></h3>
             <div id="export-pending-list" class="space-y-2 text-xs"></div>
           </div>
         </div>
@@ -649,7 +649,7 @@ function buildExportador() {
     }, {});
 
     if (!data.nombre) {
-      alert('⚠️ Por favor completa al menos tu nombre');
+      alert('Por favor completa al menos tu nombre');
       return;
     }
 
@@ -667,8 +667,8 @@ function buildExportador() {
 
     const button = document.getElementById('generate-docx-btn');
     if (button) {
-      button.textContent = '✅ Archivo generado';
-      setTimeout(() => { button.textContent = '📥 Generar archivo Word'; }, 2500);
+      button.textContent = 'Archivo generado';
+      setTimeout(() => { button.textContent = 'Generar archivo Word'; }, 2500);
     }
   }
 

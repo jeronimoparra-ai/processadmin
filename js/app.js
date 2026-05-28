@@ -83,7 +83,7 @@ if (document.readyState === 'loading') {
     if(closeExport) closeExport.addEventListener('click', closeExportModal);
     if(copyBtn) copyBtn.addEventListener('click', () => {
       const content = document.getElementById('markdownOutput')?.innerText || '';
-      try{ navigator.clipboard.writeText(content); copyBtn.textContent = '✅ Copiado'; setTimeout(()=> copyBtn.textContent = '📋 Copiar al Portapapeles',1500);}catch(e){alert('No se pudo copiar automáticamente.');}
+      try{ navigator.clipboard.writeText(content); copyBtn.textContent = 'Copiado'; setTimeout(()=> copyBtn.textContent = 'Copiar al Portapapeles',1500);}catch(e){alert('No se pudo copiar automáticamente.');}
     });
 
     navigate('panel');
@@ -105,6 +105,6 @@ if (document.readyState === 'loading') {
   function openExportModal(){ if(!exportModal) return; exportModal.classList.add('active'); exportModal.setAttribute('aria-hidden','false'); }
   function closeExportModal(){ if(!exportModal) return; exportModal.classList.remove('active'); exportModal.setAttribute('aria-hidden','true'); }
   if(closeExport) closeExport.addEventListener('click', closeExportModal);
-  if(copyBtn) copyBtn.addEventListener('click', () => { const content = document.getElementById('markdownOutput')?.innerText || ''; try{ navigator.clipboard.writeText(content); copyBtn.textContent = '✅ Copiado'; setTimeout(()=> copyBtn.textContent = '📋 Copiar al Portapapeles',1500);}catch(e){alert('No se pudo copiar automáticamente.');} });
+  if(copyBtn) copyBtn.addEventListener('click', () => { const content = document.getElementById('markdownOutput')?.innerText || ''; try{ navigator.clipboard.writeText(content); copyBtn.textContent = 'Copiado'; setTimeout(()=> copyBtn.textContent = 'Copiar al Portapapeles',1500);}catch(e){alert('No se pudo copiar automáticamente.');} });
   navigate('panel');
 }

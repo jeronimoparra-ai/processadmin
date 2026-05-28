@@ -18,7 +18,7 @@ function saveJSON(key, value) {
 function saveField(key, value) {
   const statusEl = document.getElementById('save-status');
   if (statusEl) {
-    statusEl.textContent = '💾 Guardando...';
+    statusEl.textContent = 'Guardando...';
     statusEl.classList.add('text-amber-400');
   }
 
@@ -26,7 +26,7 @@ function saveField(key, value) {
   state.saveTimer = setTimeout(() => {
     safeStorageSet(key, value);
     if (statusEl) {
-      statusEl.textContent = '✔ Guardado automáticamente';
+      statusEl.textContent = 'Guardado automáticamente';
       statusEl.classList.remove('text-amber-400');
       statusEl.classList.add('text-green-600');
     }
@@ -112,7 +112,7 @@ function updateCountdown() {
   const diff = target - now;
 
   if (diff <= 0) {
-    el.textContent = '⏰ Fecha de entrega vencida';
+    el.textContent = 'Fecha de entrega vencida';
     el.classList.add('text-red-600');
     return;
   }
@@ -176,17 +176,17 @@ function updateScoreVisuals(score) {
     bgClass = 'from-green-50 to-green-100';
     borderClass = 'border-green-500 shadow-2xl shadow-green-100/60';
     badgeClass = 'bg-green-600 text-white';
-    badgeText = '🏆 Excelencia Académica';
+    badgeText = 'Excelencia Académica';
   } else if (score >= 70) {
     bgClass = 'from-amber-50 to-amber-100';
     borderClass = 'border-amber-600 shadow-2xl shadow-amber-100/60';
     badgeClass = 'bg-amber-600 text-white';
-    badgeText = '✔️ Aprobado Satisfactorio';
+    badgeText = 'Aprobado Satisfactorio';
   } else {
     bgClass = 'from-orange-50 to-orange-100';
     borderClass = 'border-orange-500 shadow-2xl shadow-orange-100/60';
     badgeClass = 'bg-orange-600 text-white';
-    badgeText = '⚠️ Requiere Revisión Urgente';
+    badgeText = 'Requiere Revisión Urgente';
   }
 
   card.className = `rounded-2xl border-4 bg-gradient-to-br ${bgClass} ${borderClass} p-10 text-center`;
@@ -229,7 +229,7 @@ function updateWriterProgress() {
 
   if (label) {
     if (progress === 100) {
-      label.textContent = '✅ Borrador completo — listo para exportar';
+      label.textContent = 'Borrador completo — listo para exportar';
     } else {
       label.textContent = `Progreso del borrador: ${progress}%`;
     }
@@ -282,11 +282,11 @@ function calculateQualityMetrics() {
 
 function getMotivationalMessage(percentage) {
   if (percentage < 40) {
-    return '💪 Sigue avanzando. Prioriza una sección y complétala paso a paso.';
+    return 'Sigue avanzando. Prioriza una sección y complétala paso a paso.';
   } else if (percentage < 80) {
-    return '🌟 Vas muy bien. Ya tienes una base sólida; ahora toca pulir detalles.';
+    return 'Vas muy bien. Ya tienes una base sólida; ahora toca pulir detalles.';
   } else {
-    return '🎯 Casi listo. Solo faltan ajustes finales para dejarlo preparado.';
+    return 'Casi listo. Solo faltan ajustes finales para dejarlo preparado.';
   }
 }
 

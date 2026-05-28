@@ -65,7 +65,7 @@ function buildOrganizador() {
     <div class="max-w-5xl mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
-          <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3"><span>🧠</span> Organizador de Ideas</h2>
+          <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">${docproIconHtml('ideas', 'Organizador de Ideas', 'docpro-icon docpro-icon--lg')}<span>Organizador de Ideas</span></h2>
           <p class="text-gray-600 mb-6">Define tu investigación paso a paso y guarda cada avance automáticamente.</p>
 
           <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-lg p-8 space-y-6">
@@ -89,21 +89,21 @@ function buildOrganizador() {
             <div id="outline-form" class="space-y-4"></div>
 
             <div class="flex flex-col sm:flex-row gap-3">
-              <button id="save-outline-btn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors">💾 Guardar avance</button>
-              <button id="create-version-btn" class="flex-1 bg-purple-600 text-white rounded-lg py-3 font-bold hover:bg-purple-700 transition-colors">📸 Guardar versión</button>
+              <button id="save-outline-btn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors">Guardar avance</button>
+              <button id="create-version-btn" class="flex-1 bg-purple-600 text-white rounded-lg py-3 font-bold hover:bg-purple-700 transition-colors">Guardar versión</button>
             </div>
           </div>
         </div>
 
         <div class="space-y-6">
           <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg border-2 border-purple-300 p-6">
-            <h3 class="font-bold text-purple-900 mb-4 flex items-center gap-2"><span>⏱️</span> Historial de versiones</h3>
+            <h3 class="font-bold text-purple-900 mb-4 flex items-center gap-2">${docproIconHtml('review', 'Historial de versiones', 'docpro-icon docpro-icon--sm')}<span>Historial de versiones</span></h3>
             <div id="versions-list" class="space-y-2 max-h-64 overflow-y-auto text-xs"></div>
             <div id="version-preview" class="hidden mt-4 bg-white rounded-lg border border-purple-200 p-4 text-xs"></div>
           </div>
 
           <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg border-2 border-yellow-300 p-6">
-            <h3 class="font-bold text-yellow-900 mb-4 flex items-center gap-2"><span>📌</span> Notas de sección</h3>
+            <h3 class="font-bold text-yellow-900 mb-4 flex items-center gap-2">${docproIconHtml('review', 'Notas de sección', 'docpro-icon docpro-icon--sm')}<span>Notas de sección</span></h3>
             <div id="section-notes-list" class="space-y-2"></div>
           </div>
         </div>
@@ -165,7 +165,7 @@ function buildOrganizador() {
       <div class="bg-white/80 rounded-lg border border-yellow-200 p-3">
         <div class="flex justify-between items-center gap-2 mb-2">
           <p class="text-xs font-bold text-yellow-900">${step.label}</p>
-          <button class="text-xs font-bold text-yellow-700 hover:text-yellow-900 toggle-note-panel" data-note-key="${step.key}">📌 Nota</button>
+          <button class="text-xs font-bold text-yellow-700 hover:text-yellow-900 toggle-note-panel" data-note-key="${step.key}">Nota</button>
         </div>
         <textarea rows="2" class="section-note-input hidden w-full border border-yellow-300 rounded px-3 py-2 text-xs resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-note-key="${step.key}" placeholder="Recordatorio privado..." aria-label="Nota de sección">${escapeHtml(notesStore[workTypeSelect.value]?.[step.key] || '')}</textarea>
       </div>
@@ -290,18 +290,18 @@ function buildOrganizador() {
   document.getElementById('save-outline-btn').addEventListener('click', () => {
     saveCurrentOutline(true, 'manual');
     const btn = document.getElementById('save-outline-btn');
-    btn.textContent = '✅ Guardado';
+    btn.textContent = 'Guardado';
     setTimeout(() => {
-      btn.textContent = '💾 Guardar avance';
+      btn.textContent = 'Guardar avance';
     }, 2000);
   });
 
   document.getElementById('create-version-btn').addEventListener('click', () => {
     saveCurrentOutline(true, 'manual');
     const btn = document.getElementById('create-version-btn');
-    btn.textContent = '✅ Versión guardada';
+    btn.textContent = 'Versión guardada';
     setTimeout(() => {
-      btn.textContent = '📸 Guardar versión';
+      btn.textContent = 'Guardar versión';
     }, 2000);
   });
 

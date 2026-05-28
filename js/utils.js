@@ -175,7 +175,7 @@ function copyToClipboard(text, event) {
     if (!copied) return;
     const btn = event && event.target ? event.target : document.activeElement;
     const original = btn && btn.textContent ? btn.textContent : '';
-    if (btn && btn.textContent !== undefined) btn.textContent = '✅ ¡Copiado!';
+    if (btn && btn.textContent !== undefined) btn.textContent = 'Copiado';
     setTimeout(() => {
       if (btn && btn.textContent !== undefined) btn.textContent = original;
     }, 2000);

@@ -7,7 +7,7 @@ function buildApaEnhanced() {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div class="space-y-6">
         <div class="bg-white rounded-lg border-2 border-green-200 p-6 shadow-md">
-          <h3 class="font-bold text-green-900 mb-4 flex items-center gap-2"><span>📝</span> Generador de citas en texto</h3>
+          <h3 class="font-bold text-green-900 mb-4 flex items-center gap-2">${docproIconHtml('redactor', 'Generador de citas en texto', 'docpro-icon docpro-icon--sm')}<span>Generador de citas en texto</span></h3>
           <div class="space-y-3">
             <input id="cita-autor" type="text" placeholder="Apellido del autor" aria-label="Apellido del autor" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
             <input id="cita-anio" type="number" placeholder="Año" aria-label="Año de publicación" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
@@ -21,14 +21,14 @@ function buildApaEnhanced() {
         </div>
 
         <div class="bg-white rounded-lg border-2 border-orange-200 p-6 shadow-md">
-          <h3 class="font-bold text-orange-900 mb-4 flex items-center gap-2"><span>✔️</span> Validador de referencias</h3>
+          <h3 class="font-bold text-orange-900 mb-4 flex items-center gap-2">${docproIconHtml('validation', 'Validador de referencias', 'docpro-icon docpro-icon--sm')}<span>Validador de referencias</span></h3>
           <textarea id="ref-validator" rows="4" placeholder="Pega una referencia aquí..." aria-label="Referencia para validar" class="w-full border border-orange-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400 mb-2"></textarea>
           <button id="validate-ref-btn" class="w-full bg-orange-600 text-white rounded px-4 py-2 font-bold hover:bg-orange-700 transition-colors text-sm">Validar referencia</button>
           <div id="validator-resultado" class="hidden mt-3 space-y-2 text-xs"></div>
         </div>
 
         <div class="bg-white rounded-lg border-2 border-purple-200 p-6 shadow-md">
-          <h3 class="font-bold text-purple-900 mb-4 flex items-center gap-2"><span>📚</span> Rastreador de fuentes</h3>
+          <h3 class="font-bold text-purple-900 mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Rastreador de fuentes', 'docpro-icon docpro-icon--sm')}<span>Rastreador de fuentes</span></h3>
           <div class="space-y-2 text-sm mb-3">
             <input id="source-titulo" type="text" placeholder="Título" aria-label="Título de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
             <input id="source-autor" type="text" placeholder="Autor/Institución" aria-label="Autor o institución de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
@@ -43,17 +43,17 @@ function buildApaEnhanced() {
 
       <div class="space-y-6">
         <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md sticky top-6">
-          <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2"><span>📖</span> Referencias APA 7 generadas (${state.generatedCitations.length})</h3>
+          <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span></h3>
           <div id="apa-referencias" class="space-y-2 max-h-64 overflow-y-auto mb-4 text-xs"></div>
           <div class="space-y-2">
-            <button id="sort-refs-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-slate-700 transition-colors">📋 Ordenar referencias A-Z</button>
-            <button id="check-consistency-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-slate-700 transition-colors">🔗 Verificar consistencia</button>
-            <button id="clear-refs-btn" class="w-full bg-red-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-red-700 transition-colors">🗑️ Limpiar todo</button>
+            <button id="sort-refs-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-slate-700 transition-colors">Ordenar referencias A-Z</button>
+            <button id="check-consistency-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-slate-700 transition-colors">Verificar consistencia</button>
+            <button id="clear-refs-btn" class="w-full bg-red-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-red-700 transition-colors">Limpiar todo</button>
           </div>
         </div>
 
         <div class="bg-white rounded-lg border-2 border-blue-200 p-6 shadow-md">
-          <h3 class="font-bold text-blue-900 mb-4">📖 Generador de referencia completa</h3>
+          <h3 class="font-bold text-blue-900 mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Generador de referencia completa', 'docpro-icon docpro-icon--sm')}<span>Generador de referencia completa</span></h3>
           <div class="space-y-2 text-sm mb-3">
             <input id="apa-autor-full" type="text" placeholder="Autor/Institución" aria-label="Autor o institución de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
             <input id="apa-anio-full" type="number" placeholder="Año" aria-label="Año de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
@@ -102,7 +102,7 @@ function buildApaEnhanced() {
     const pagina = document.getElementById('cita-pagina').value.trim();
 
     if (!autor || !anio) {
-      alert('⚠️ Completa autor y año');
+      alert('Completa autor y año');
       return;
     }
 
@@ -111,7 +111,7 @@ function buildApaEnhanced() {
     citationResult.classList.remove('hidden');
     copyCitationBtn.classList.remove('hidden');
     await writeClipboardText(citation);
-    document.getElementById('gen-cita-btn').textContent = '✅ Copiado';
+    document.getElementById('gen-cita-btn').textContent = 'Copiado';
     setTimeout(() => {
       document.getElementById('gen-cita-btn').textContent = 'Generar cita en texto';
     }, 2000);
@@ -127,7 +127,7 @@ function buildApaEnhanced() {
   document.getElementById('validate-ref-btn').addEventListener('click', () => {
     const ref = document.getElementById('ref-validator').value.trim();
     if (!ref) {
-      alert('⚠️ Pega una referencia');
+      alert('Pega una referencia');
       return;
     }
     renderReferenceChecklist(ref);
@@ -162,7 +162,7 @@ function buildApaEnhanced() {
   document.getElementById('add-source-btn').addEventListener('click', () => {
     const titulo = document.getElementById('source-titulo').value.trim();
     if (!titulo) {
-      alert('⚠️ Completa el título');
+      alert('Completa el título');
       return;
     }
 
@@ -179,7 +179,7 @@ function buildApaEnhanced() {
     renderSources();
 
     const button = document.getElementById('add-source-btn');
-    button.textContent = '✅ Fuente registrada';
+    button.textContent = 'Fuente registrada';
     setTimeout(() => { button.textContent = 'Registrar fuente'; }, 2000);
   });
 
@@ -193,7 +193,7 @@ function buildApaEnhanced() {
     const url = document.getElementById('apa-url-full').value.trim();
 
     if (!autor || !anio || !titulo) {
-      alert('⚠️ Completa autor, año y título');
+      alert('Completa autor, año y título');
       return;
     }
 
@@ -208,7 +208,7 @@ function buildApaEnhanced() {
     renderReferences();
 
     const button = document.getElementById('gen-ref-btn');
-    button.textContent = '✅ Agregada';
+    button.textContent = 'Agregada';
     setTimeout(() => { button.textContent = 'Generar referencia'; }, 2000);
   });
 
@@ -218,7 +218,7 @@ function buildApaEnhanced() {
 
   function renderReferences() {
     const list = document.getElementById('apa-referencias');
-    document.querySelector('h3.font-bold.text-slate-900.mb-4.flex.items-center.gap-2').innerHTML = `<span>📖</span> Referencias APA 7 generadas (${state.generatedCitations.length})`;
+    document.querySelector('h3.font-bold.text-slate-900.mb-4.flex.items-center.gap-2').innerHTML = `${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span>`;
 
     if (state.generatedCitations.length === 0) {
       list.innerHTML = '<p class="text-gray-500 italic">Sin referencias aún</p>';
@@ -248,8 +248,8 @@ function buildApaEnhanced() {
     renderReferences();
 
     const button = document.getElementById('sort-refs-btn');
-    button.textContent = '✅ Ordenadas';
-    setTimeout(() => { button.textContent = '📋 Ordenar referencias A-Z'; }, 2000);
+    button.textContent = 'Ordenadas';
+    setTimeout(() => { button.textContent = 'Ordenar referencias A-Z'; }, 2000);
   });
 
   document.getElementById('check-consistency-btn').addEventListener('click', () => {
@@ -262,11 +262,11 @@ function buildApaEnhanced() {
     const referencesWithoutCitation = referenceAuthors.filter(referenceAuthor => !citedAuthors.some(author => normalizeSpanishText(author) === normalizeSpanishText(referenceAuthor)));
 
     alert(
-      `🔗 Verificación de consistencia:\n\n` +
-      `✓ Citas en texto detectadas: ${citedAuthors.length}\n` +
-      `✓ Referencias registradas: ${referenceAuthors.length}\n` +
-      `⚠️ Citas sin referencia: ${citationsWithoutReference.length}\n` +
-      `⚠️ Referencias sin cita: ${referencesWithoutCitation.length}`
+      `Verificación de consistencia:\n\n` +
+      `Citas en texto detectadas: ${citedAuthors.length}\n` +
+      `Referencias registradas: ${referenceAuthors.length}\n` +
+      `Citas sin referencia: ${citationsWithoutReference.length}\n` +
+      `Referencias sin cita: ${referencesWithoutCitation.length}`
     );
   });
 

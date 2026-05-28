@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Exportar a Word">
+  <defs>
+    <linearGradient id="doc" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eff6ff"/>
+    </linearGradient>
+    <linearGradient id="word" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 14h34l14 14v54H20z" fill="url(#doc)" stroke="#94a3b8" stroke-width="2.5"/>
+  <path d="M54 14v14h14" fill="#e2e8f0"/>
+  <path d="M28 34h24M28 44h24M28 54h18" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+  <rect x="54" y="42" width="30" height="30" rx="6" fill="url(#word)"/>
+  <text x="60" y="61" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700">W</text>
+  <path d="M17 66h18v10h12l-18 12-18-12h12z" fill="#16a34a"/>
+  <path d="M26 60v14" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M22 70l4 4 7-7" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
