@@ -31,7 +31,7 @@ function navigate(viewId) {
   state.activeView = viewId;
 
   // update nav active states
-  document.querySelectorAll('.nav-btn').forEach(btn => {
+  document.querySelectorAll('.nav-btn, .nav-item').forEach(btn => {
     if (btn.dataset && btn.dataset.view) {
       btn.classList.toggle('active', btn.dataset.view === viewId);
     }
@@ -58,10 +58,30 @@ if (document.readyState === 'loading') {
       safeStorageSet('ws_work_start', Date.now().toString());
     }
 
-    document.querySelectorAll('.nav-btn').forEach(btn => {
+    document.querySelectorAll('.nav-btn, .nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
         navigate(btn.dataset.view);
       });
+    });
+
+    // Modal helpers (export modal)
+    const exportModal = document.getElementById('exportModal');
+    const closeExport = document.getElementById('closeExportModal');
+    const copyBtn = document.getElementById('copyMarkdownBtn');
+    function openExportModal(){
+      if(!exportModal) return;
+      exportModal.classList.add('active');
+      exportModal.setAttribute('aria-hidden','false');
+    }
+    function closeExportModal(){
+      if(!exportModal) return;
+      exportModal.classList.remove('active');
+      exportModal.setAttribute('aria-hidden','true');
+    }
+    if(closeExport) closeExport.addEventListener('click', closeExportModal);
+    if(copyBtn) copyBtn.addEventListener('click', () => {
+      const content = document.getElementById('markdownOutput')?.innerText || '';
+      try{ navigator.clipboard.writeText(content); copyBtn.textContent = '✅ Copiado'; setTimeout(()=> copyBtn.textContent = '📋 Copiar al Portapapeles',1500);}catch(e){alert('No se pudo copiar automáticamente.');}
     });
 
     navigate('panel');
@@ -70,10 +90,18 @@ if (document.readyState === 'loading') {
   if (!safeStorageGet('ws_work_start', '')) {
     safeStorageSet('ws_work_start', Date.now().toString());
   }
-  document.querySelectorAll('.nav-btn').forEach(btn => {
+  document.querySelectorAll('.nav-btn, .nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
       navigate(btn.dataset.view);
     });
   });
+  // same modal helpers for non-loading path
+  const exportModal = document.getElementById('exportModal');
+  const closeExport = document.getElementById('closeExportModal');
+  const copyBtn = document.getElementById('copyMarkdownBtn');
+  function openExportModal(){ if(!exportModal) return; exportModal.classList.add('active'); exportModal.setAttribute('aria-hidden','false'); }
+  function closeExportModal(){ if(!exportModal) return; exportModal.classList.remove('active'); exportModal.setAttribute('aria-hidden','true'); }
+  if(closeExport) closeExport.addEventListener('click', closeExportModal);
+  if(copyBtn) copyBtn.addEventListener('click', () => { const content = document.getElementById('markdownOutput')?.innerText || ''; try{ navigator.clipboard.writeText(content); copyBtn.textContent = '✅ Copiado'; setTimeout(()=> copyBtn.textContent = '📋 Copiar al Portapapeles',1500);}catch(e){alert('No se pudo copiar automáticamente.');} });
   navigate('panel');
 }

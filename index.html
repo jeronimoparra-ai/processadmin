@@ -6,39 +6,39 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>DocPro™ | Generador Profesional APA 7 - Trabajos de Calidad</title>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts (elegant serif + readable sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Libre+Franklin:wght@300;400;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/redesign.css">
 
-  <!-- Tailwind CSS -->
+  <!-- Tailwind (optional) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
-<body class="bg-slate-50" style="font-family: 'Plus Jakarta Sans', sans-serif;">
-  <div class="flex h-screen bg-slate-50">
+<body class="page-root">
+  <div class="app-wrap">
     <!-- SIDEBAR -->
-    <aside class="w-80 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white shadow-2xl flex flex-col border-r border-slate-700 overflow-hidden">
-      <div class="p-8 border-b border-slate-700 bg-gradient-to-r from-slate-900 to-slate-800">
+    <aside class="side-panel">
+      <div class="brand p-8">
         <div class="flex items-center gap-3 mb-2">
           <div class="text-4xl">📝</div>
           <div>
-            <h1 class="text-2xl font-black bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">DocPro</h1>
-            <p class="text-xs text-slate-400 font-medium">APA 7 Professional</p>
+            <h1 class="logo">DocPro</h1>
+            <p class="tag">APA 7 Professional</p>
           </div>
         </div>
       </div>
 
-      <nav class="flex-1 p-6 space-y-3 overflow-y-auto">
-        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-2 mb-4">Herramientas</div>
-        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="panel">
-          <span class="relative flex items-center gap-3"><span class="text-lg">📊</span><span>Panel de Control</span></span>
-        </button>
+      <nav class="nav-list">
+        <div class="nav-section">Herramientas</div>
+        <button class="nav-item" data-view="panel"><span class="ico">📊</span><span>Panel de Control</span></button>
         <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="redactor">
           <span class="relative flex items-center gap-3"><span class="text-lg">✍️</span><span>Redactor Premium</span></span>
         </button>
@@ -61,44 +61,42 @@
         </button>
       </nav>
 
-      <div class="p-6 border-t border-slate-700 bg-gradient-to-r from-slate-800 to-slate-700">
-        <div class="space-y-3">
-          <div class="text-xs"><p class="text-slate-400 mb-1">📄 Documentos Creados</p><p class="text-2xl font-bold text-white">1</p></div>
-          <div class="pt-3 border-t border-slate-600"><p class="text-xs text-slate-400">💾 Guardado en tiempo real</p><p class="text-xs text-slate-400">🔒 100% Privado & Local</p></div>
-        </div>
+      <div class="side-footer p-6">
+        <div class="meta"><div class="meta-label">Documentos</div><div class="meta-value">1</div></div>
       </div>
     </aside>
 
     <!-- MAIN -->
-    <main class="flex-1 flex flex-col overflow-hidden">
-      <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white px-12 py-8 shadow-2xl">
-        <div class="flex items-start justify-between">
+    <main class="main-area">
+      <header class="main-hero">
+        <div class="hero-inner">
           <div>
-            <h2 class="text-4xl font-black mb-2">DocPro™</h2>
-            <p class="text-blue-100 text-lg font-medium">Diseña trabajos de calidad con normas APA 7</p>
+            <h2 class="hero-title">DocPro™</h2>
+            <p class="hero-sub">Diseña trabajos de calidad con normas APA 7</p>
           </div>
-          <div class="text-6xl opacity-20">📝</div>
+          <div class="hero-ornament">✦</div>
         </div>
-      </div>
+      </header>
 
-      <div class="flex-1 overflow-y-auto p-12 bg-gradient-to-br from-slate-50 to-blue-50">
-        <div id="main-workspace"></div>
-      </div>
+      <section class="content-area">
+        <div id="main-workspace" class="workspace"></div>
+      </section>
     </main>
+  </div>
   </div>
 
   <!-- EXPORT MODAL -->
-  <div id="exportModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] flex flex-col border-2 border-blue-200">
-      <div class="flex justify-between items-center p-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white rounded-t-xl border-b border-blue-300">
-        <h2 class="text-2xl font-bold">📄 Documento en Markdown</h2>
-        <button id="closeExportModal" class="text-blue-100 hover:text-white text-3xl font-bold" aria-label="Cerrar documento en Markdown">✕</button>
+  <div id="exportModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h2>📄 Documento en Markdown</h2>
+        <button id="closeExportModal" class="modal-close" aria-label="Cerrar documento en Markdown">✕</button>
       </div>
-      <div class="flex-1 overflow-y-auto p-6">
-        <pre id="markdownOutput" class="bg-slate-900 text-emerald-400 rounded-lg p-6 font-mono text-sm overflow-x-auto border border-slate-700"></pre>
+      <div class="modal-body">
+        <pre id="markdownOutput" class="markdown-output"></pre>
       </div>
-      <div class="p-6 border-t-2 border-blue-200 flex gap-3 bg-gradient-to-r from-blue-50 to-purple-50">
-        <button id="copyMarkdownBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg py-3 font-bold hover:shadow-lg transition-all shadow-md">📋 Copiar al Portapapeles</button>
+      <div class="modal-footer">
+        <button id="copyMarkdownBtn" class="btn-primary">📋 Copiar al Portapapeles</button>
       </div>
     </div>
   </div>
