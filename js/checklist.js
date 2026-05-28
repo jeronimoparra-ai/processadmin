@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════
 
 function buildChecklist() {
-  const html = \`
+  const html = `
     <div class="max-w-6xl mx-auto">
       <div class="flex gap-0 mb-6 border-b-2 border-slate-300 overflow-x-auto">
         <button class="checklist-tab px-6 py-3 font-bold text-slate-600 hover:text-slate-900 border-b-4 border-transparent -mb-0.5 transition-all active" data-tab="estructura">📋 Estructura del trabajo</button>
@@ -89,7 +89,7 @@ function buildChecklist() {
         </div>
       </div>
     </div>
-  \`;
+  `;
 
   document.getElementById('main-workspace').innerHTML = html;
   stopCountdown();
@@ -99,8 +99,8 @@ function buildChecklist() {
     formato: ['Márgenes 2.54 cm', 'Fuente Times New Roman 12pt', 'Interlineado doble (2.0)', 'Sangría francesa en referencias', 'Numeración de páginas', 'Portada sin número', 'Títulos con jerarquía APA', 'Tabla de contenido actualizada']
   };
 
-  const storedStructure = loadJSON('checklist_estructura', defaultItems.estructura.map(text => ({ id: crypto.randomUUID?.() || \`\${Date.now()}-\${Math.random()}\`, text, checked: false })));
-  const storedFormato = loadJSON('checklist_formato', defaultItems.formato.map(text => ({ id: crypto.randomUUID?.() || \`\${Date.now()}-\${Math.random()}\`, text, checked: false })));
+  const storedStructure = loadJSON('checklist_estructura', defaultItems.estructura.map(text => ({ id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, text, checked: false })));
+  const storedFormato = loadJSON('checklist_formato', defaultItems.formato.map(text => ({ id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, text, checked: false })));
   const rubricCriteria = loadJSON('rubrica_current', []);
   const storedCriteria = loadJSON('checklist_criterios', []);
 
@@ -109,7 +109,7 @@ function buildChecklist() {
     formato: storedFormato,
     criterios: rubricCriteria.length
       ? rubricCriteria.map((criterion, index) => ({
-          id: storedCriteria[index]?.id || \`\${criterion.name}-\${index}\`,
+          id: storedCriteria[index]?.id || `${criterion.name}-${index}`,
           text: criterion.name,
           checked: storedCriteria[index]?.checked || false
         }))
@@ -118,14 +118,14 @@ function buildChecklist() {
 
   if (!checklists.criterios.length && rubricCriteria.length) {
     checklists.criterios = rubricCriteria.map((criterion, index) => ({
-      id: \`\${criterion.name}-\${index}\`,
+      id: `${criterion.name}-${index}`,
       text: criterion.name,
       checked: false
     }));
   }
 
   function persistChecklist(tab) {
-    saveJSON(\`checklist_\${tab}\`, checklists[tab]);
+    saveJSON(`checklist_${tab}`, checklists[tab]);
   }
 
   function moveItem(tab, index, direction) {
@@ -140,18 +140,18 @@ function buildChecklist() {
   }
 
   function renderChecklist(tab) {
-    const container = document.getElementById(\`checklist-\${tab}\`);
+    const container = document.getElementById(`checklist-${tab}`);
     const items = checklists[tab];
 
-    container.innerHTML = items.map((item, idx) => \`
+    container.innerHTML = items.map((item, idx) => `
       <div class="flex items-center gap-2 p-3 bg-slate-50 rounded border border-slate-200 hover:bg-slate-100 transition-colors group">
-        <input type="checkbox" \${item.checked ? 'checked' : ''} class="w-4 h-4 accent-blue-600 checklist-input" data-tab="\${tab}" data-idx="\${idx}">
-        <input type="text" value="\${escapeHtml(item.text)}" class="flex-1 bg-transparent text-sm focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-400" data-tab="\${tab}" data-idx="\${idx}">
-        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="\${tab}" data-idx="\${idx}" data-direction="-1">▲</button>
-        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="\${tab}" data-idx="\${idx}" data-direction="1">▼</button>
-        <button class="text-red-600 hover:text-red-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity delete-item" data-tab="\${tab}" data-idx="\${idx}">🗑️</button>
+        <input type="checkbox" ${item.checked ? 'checked' : ''} class="w-4 h-4 accent-blue-600 checklist-input" data-tab="${tab}" data-idx="${idx}">
+        <input type="text" value="${escapeHtml(item.text)}" class="flex-1 bg-transparent text-sm focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-400" data-tab="${tab}" data-idx="${idx}">
+        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="-1">▲</button>
+        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="1">▼</button>
+        <button class="text-red-600 hover:text-red-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity delete-item" data-tab="${tab}" data-idx="${idx}">🗑️</button>
       </div>
-    \`).join('');
+    `).join('');
 
     container.querySelectorAll('.checklist-input').forEach(el => {
       el.addEventListener('change', (e) => {
@@ -200,12 +200,12 @@ function buildChecklist() {
       const total = items.length;
       const percent = total > 0 ? (checked / total) * 100 : 0;
 
-      const progressLabel = document.getElementById(\`progress-\${tab}\`);
-      const progressCount = document.getElementById(\`progress-count-\${tab}\`);
-      const bar = document.getElementById(\`bar-\${tab}\`);
-      if (progressLabel) progressLabel.textContent = \`\${checked}/\${total} completados\`;
-      if (progressCount) progressCount.textContent = \`\${checked}/\${total}\`;
-      if (bar) bar.style.width = \`\${percent}%\`;
+      const progressLabel = document.getElementById(`progress-${tab}`);
+      const progressCount = document.getElementById(`progress-count-${tab}`);
+      const bar = document.getElementById(`bar-${tab}`);
+      if (progressLabel) progressLabel.textContent = `${checked}/${total} completados`;
+      if (progressCount) progressCount.textContent = `${checked}/${total}`;
+      if (bar) bar.style.width = `${percent}%`;
       overall.push({ checked, total });
     });
 
@@ -214,8 +214,8 @@ function buildChecklist() {
     const overallPercent = totalItems > 0 ? Math.round((totalChecked / totalItems) * 100) : 0;
     const overallBar = document.getElementById('checklist-overall-bar');
     const overallLabel = document.getElementById('checklist-overall-label');
-    if (overallBar) overallBar.style.width = \`\${overallPercent}%\`;
-    if (overallLabel) overallLabel.textContent = \`\${overallPercent}% completado\`;
+    if (overallBar) overallBar.style.width = `${overallPercent}%`;
+    if (overallLabel) overallLabel.textContent = `${overallPercent}% completado`;
   }
 
   ['estructura', 'formato', 'criterios'].forEach(tab => renderChecklist(tab));
@@ -227,14 +227,14 @@ function buildChecklist() {
       document.querySelectorAll('.checklist-tab').forEach(tabButton => tabButton.classList.remove('active', 'text-blue-600', 'border-blue-600'));
       document.querySelectorAll('.checklist-tab-content').forEach(content => content.classList.add('hidden'));
       btn.classList.add('active', 'text-blue-600', 'border-blue-600');
-      document.querySelector(\`[data-tab="\${tab}"].checklist-tab-content\`).classList.remove('hidden');
+      document.querySelector(`[data-tab="${tab}"].checklist-tab-content`).classList.remove('hidden');
     });
   });
 
   document.querySelectorAll('.add-checklist-item').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-      checklists[tab].push({ id: \`\${tab}-\${Date.now()}\`, text: 'Nuevo ítem', checked: false });
+      checklists[tab].push({ id: `${tab}-${Date.now()}`, text: 'Nuevo ítem', checked: false });
       persistChecklist(tab);
       renderChecklist(tab);
       updateChecklistProgress();
@@ -275,8 +275,8 @@ function buildChecklist() {
       panelClass = 'bg-yellow-50 border-yellow-300';
     }
 
-    countdownDisplay.className = \`text-center py-3 rounded border transition-colors \${panelClass}\`;
-    countdownDisplay.innerHTML = \`<p class="text-lg font-bold \${colorClass}">Faltan \${days} días, \${hours} horas</p>\`;
+    countdownDisplay.className = `text-center py-3 rounded border transition-colors ${panelClass}`;
+    countdownDisplay.innerHTML = `<p class="text-lg font-bold ${colorClass}">Faltan ${days} días, ${hours} horas</p>`;
   }
 
   deadlineInput.addEventListener('change', () => {

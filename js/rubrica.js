@@ -8,16 +8,16 @@ function buildRubricaRebuilt() {
   let criteria = Array.isArray(state.currentRubric) ? state.currentRubric : [];
 
   function buildTemplateOptions() {
-    const builtinOptions = Object.entries(baseTemplates).map(([key, template]) => \`<option value="builtin:\${key}">\${template.label}</option>\`).join('');
-    const customOptions = Object.keys(savedTemplates).map(name => \`<option value="custom:\${encodeURIComponent(name)}">\${name}</option>\`).join('');
-    return \`
+    const builtinOptions = Object.entries(baseTemplates).map(([key, template]) => `<option value="builtin:${key}">${template.label}</option>`).join('');
+    const customOptions = Object.keys(savedTemplates).map(name => `<option value="custom:${encodeURIComponent(name)}">${name}</option>`).join('');
+    return `
       <option value="builtin:blank">Personalizado (vacío)</option>
-      \${builtinOptions}
-      \${customOptions}
-    \`;
+      ${builtinOptions}
+      ${customOptions}
+    `;
   }
 
-  const html = \`
+  const html = `
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div class="lg:col-span-2 space-y-6">
         <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3"><span>📈</span> Evaluador de rúbrica personalizable</h2>
@@ -27,7 +27,7 @@ function buildRubricaRebuilt() {
             <label class="block text-sm font-bold text-slate-900">Plantillas rápidas</label>
             <select id="template-select" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
               <option value="">Seleccionar plantilla...</option>
-              \${buildTemplateOptions()}
+              ${buildTemplateOptions()}
             </select>
             <button id="load-template-btn" class="w-full bg-blue-600 text-white rounded px-4 py-2 font-bold hover:bg-blue-700 transition-colors text-sm">Cargar plantilla</button>
           </div>
@@ -83,7 +83,7 @@ function buildRubricaRebuilt() {
         </div>
       </div>
     </div>
-  \`;
+  `;
 
   document.getElementById('main-workspace').innerHTML = html;
   stopCountdown();
@@ -138,9 +138,9 @@ function buildRubricaRebuilt() {
     const grade5 = (score100 / 20).toFixed(1);
     const grade10 = (score100 / 10).toFixed(1);
 
-    document.getElementById('score-display-rubrica').textContent = \`\${score100}/100\`;
-    document.getElementById('grade-display-rubrica').textContent = \`\${grade5}/5 · \${grade10}/10\`;
-    document.getElementById('rubric-progress-bar').style.width = \`\${percent}%\`;
+    document.getElementById('score-display-rubrica').textContent = `${score100}/100`;
+    document.getElementById('grade-display-rubrica').textContent = `${grade5}/5 · ${grade10}/10`;
+    document.getElementById('rubric-progress-bar').style.width = `${percent}%`;
 
     const light = document.getElementById('traffic-light');
     const label = document.getElementById('traffic-label');
@@ -170,29 +170,29 @@ function buildRubricaRebuilt() {
       const ratio = normalized.max > 0 ? normalized.obtained / normalized.max : 0;
       const trafficClass = ratio >= 0.8 ? 'text-green-600 bg-green-50 border-green-200' : ratio >= 0.6 ? 'text-yellow-600 bg-yellow-50 border-yellow-200' : 'text-red-600 bg-red-50 border-red-200';
 
-      return \`
+      return `
         <div class="border-2 border-slate-300 rounded p-4 space-y-3">
           <div class="flex items-start justify-between gap-2">
-            <input type="text" value="\${escapeHtml(normalized.name)}" class="flex-1 font-bold text-slate-900 border-b-2 border-transparent hover:border-slate-300 focus:border-blue-400 focus:outline-none px-1" data-idx="\${index}" data-field="name">
-            <button class="text-red-600 hover:text-red-700 font-bold delete-criteria" data-idx="\${index}">🗑️ Eliminar</button>
+            <input type="text" value="${escapeHtml(normalized.name)}" class="flex-1 font-bold text-slate-900 border-b-2 border-transparent hover:border-slate-300 focus:border-blue-400 focus:outline-none px-1" data-idx="${index}" data-field="name">
+            <button class="text-red-600 hover:text-red-700 font-bold delete-criteria" data-idx="${index}">🗑️ Eliminar</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm items-end">
             <div>
               <label class="text-xs font-bold text-slate-700 block mb-1">Máximo</label>
-              <input type="number" min="1" value="\${normalized.max}" class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="\${index}" data-field="max">
+              <input type="number" min="1" value="${normalized.max}" class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="${index}" data-field="max">
             </div>
             <div>
               <label class="text-xs font-bold text-slate-700 block mb-1">Obtenido</label>
-              <select class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="\${index}" data-field="obtained">
-                \${Array.from({ length: normalized.max + 1 }, (_, value) => \`<option value="\${value}" \${value === normalized.obtained ? 'selected' : ''}>\${value}</option>\`).join('')}
+              <select class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="${index}" data-field="obtained">
+                ${Array.from({ length: normalized.max + 1 }, (_, value) => `<option value="${value}" ${value === normalized.obtained ? 'selected' : ''}>${value}</option>`).join('')}
               </select>
             </div>
-            <div class="px-3 py-2 rounded border text-xs font-bold \${trafficClass}">
-              \${Math.round(ratio * 100)}% · \${ratio >= 0.8 ? '🟢' : ratio >= 0.6 ? '🟡' : '🔴'}
+            <div class="px-3 py-2 rounded border text-xs font-bold ${trafficClass}">
+              ${Math.round(ratio * 100)}% · ${ratio >= 0.8 ? '🟢' : ratio >= 0.6 ? '🟡' : '🔴'}
             </div>
           </div>
         </div>
-      \`;
+      `;
     }).join('');
 
     list.querySelectorAll('input, select').forEach(element => {
@@ -254,7 +254,7 @@ function buildRubricaRebuilt() {
     document.getElementById('template-name').value = '';
 
     const select = document.getElementById('template-select');
-    const customValue = \`custom:\${encodeURIComponent(name)}\`;
+    const customValue = `custom:${encodeURIComponent(name)}`;
     const option = document.createElement('option');
     option.value = customValue;
     option.textContent = name;

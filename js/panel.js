@@ -88,11 +88,11 @@ function buildPanel() {
         <div class="mt-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
           <h3 class="text-xl font-bold text-slate-900 mb-4">🧭 Pendientes críticos</h3>
           <div class="space-y-2">
-            ${pendingItems.length > 0 ? pendingItems.map(item => \`
-              <button class="w-full text-left bg-white border border-amber-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-amber-50 transition-colors pending-nav" data-view="\${item.view}">
-                \${item.label}
+            ${pendingItems.length > 0 ? pendingItems.map(item => `
+              <button class="w-full text-left bg-white border border-amber-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-amber-50 transition-colors pending-nav" data-view="${item.view}">
+                ${item.label}
               </button>
-            \`).join('') : '<p class="text-sm text-emerald-700 font-semibold">No tienes pendientes críticos en este momento.</p>'}
+            `).join('') : '<p class="text-sm text-emerald-700 font-semibold">No tienes pendientes críticos en este momento.</p>'}
           </div>
         </div>
       </div>
@@ -136,7 +136,7 @@ function buildPanel() {
           <span class="text-3xl">🎯</span> Guía de Inicio Rápido
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="relative p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 hover:shadow-lg transition-all cursor-pointer" onclick="document.querySelector('[data-view=organizer]')?.click() || false">
+          <div class="relative p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 hover:shadow-lg transition-all cursor-pointer" onclick="document.querySelector('[data-view=organizador]')?.click() || false">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
             <h3 class="text-lg font-bold text-blue-900 mb-3">Planifica tu Investigación</h3>
             <p class="text-slate-700 text-sm leading-relaxed">
@@ -168,12 +168,12 @@ function buildPanel() {
           <span class="text-3xl">📋</span> Estructura de tu Documento
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          ${['📑 Portada profesional', '📝 Introducción detallada', '🎯 Misión y Visión', '📊 Análisis DOFA', '🏢 Organigrama claro', '🧭 Análisis de Dirección', '📈 Indicadores KPI', '✅ Conclusiones sólidas', '📚 Referencias APA 7', '✏️ Sin errores ortográficos', '📄 Máximo 20 páginas', '⏰ Entregado a tiempo'].map((item, idx) => \`
+          ${['📑 Portada profesional', '📝 Introducción detallada', '🎯 Misión y Visión', '📊 Análisis DOFA', '🏢 Organigrama claro', '🧭 Análisis de Dirección', '📈 Indicadores KPI', '✅ Conclusiones sólidas', '📚 Referencias APA 7', '✏️ Sin errores ortográficos', '📄 Máximo 20 páginas', '⏰ Entregado a tiempo'].map((item, idx) => `
             <label class="flex items-center gap-4 p-4 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors group">
-              <input type="checkbox" class="section-check w-6 h-6 accent-blue-600 cursor-pointer" data-section="\${idx}">
-              <span class="text-slate-700 font-medium group-hover:text-blue-700 transition-colors">\${item}</span>
+              <input type="checkbox" class="section-check w-6 h-6 accent-blue-600 cursor-pointer" data-section="${idx}">
+              <span class="text-slate-700 font-medium group-hover:text-blue-700 transition-colors">${item}</span>
             </label>
-          \`).join('')}
+          `).join('')}
         </div>
         <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
           <div class="flex items-center gap-3 mb-3">
@@ -295,7 +295,7 @@ function updateSectionProgress(checks) {
   const counter = document.getElementById('section-count');
 
   if (bar) bar.style.width = percent + '%';
-  if (counter) counter.textContent = \`\${count}/\${total}\`;
+  if (counter) counter.textContent = `${count}/${total}`;
 }
 
 function updateSectionCompleteness() {
@@ -316,8 +316,8 @@ function updateSectionCompleteness() {
     const percent = Math.min((wordCount / targetWords[key]) * 100, 100);
     totalPercent += percent;
 
-    const bar = document.getElementById(\`\${key}-bar\`);
-    const status = document.getElementById(\`\${key}-status\`);
+    const bar = document.getElementById(`${key}-bar`);
+    const status = document.getElementById(`${key}-status`);
     if (bar) bar.style.width = percent + '%';
     if (status) status.textContent = Math.round(percent) + '%';
   });

@@ -55,13 +55,13 @@ function buildRedactorEnhanced() {
 
   const savedType = localStorage.getItem('redactor_work_type') || 'ensayo';
 
-  const html = \`
+  const html = `
     <div id="redactor-shell" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div id="redactor-side-panels" class="lg:col-span-4 space-y-4">
         <div class="bg-white rounded-lg border-2 border-blue-200 p-4 shadow-md">
           <label class="text-sm font-bold text-blue-900 mb-2 block">Tipo de trabajo</label>
           <select id="work-type-select" class="w-full border border-blue-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            \${workTypeOptions.map(([value, label]) => \`<option value="\${value}" \${value === savedType ? 'selected' : ''}>\${label}</option>\`).join('')}
+            ${workTypeOptions.map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
           </select>
         </div>
 
@@ -123,7 +123,7 @@ function buildRedactorEnhanced() {
         </div>
       </div>
     </div>
-  \`;
+  `;
 
   document.getElementById('main-workspace').innerHTML = html;
   stopCountdown();
@@ -148,36 +148,36 @@ function buildRedactorEnhanced() {
     const guide = document.getElementById('structure-guide-content');
     recommendation.textContent = sections.map(section => SECTION_RECOMMENDATIONS[section.key] || section.length).join(' • ');
 
-    guide.innerHTML = sections.map(section => \`
+    guide.innerHTML = sections.map(section => `
       <div class="rounded-xl border border-blue-100 bg-blue-50 p-4">
         <div class="flex items-start justify-between gap-3 mb-2">
           <div>
-            <p class="font-bold text-blue-900">\${section.title}</p>
-            <p class="text-[11px] text-blue-700 font-semibold mt-1">\${section.length}</p>
+            <p class="font-bold text-blue-900">${section.title}</p>
+            <p class="text-[11px] text-blue-700 font-semibold mt-1">${section.length}</p>
           </div>
           <span class="text-yellow-500 text-sm font-bold">⚠️</span>
         </div>
-        <p class="text-xs text-slate-700 mb-2"><strong>Propósito:</strong> \${section.purpose}</p>
-        <p class="text-xs text-slate-700 mb-2"><strong>Qué incluir:</strong> \${section.include}</p>
-        <p class="text-xs text-slate-700"><strong>Evita:</strong> \${section.mistakes}</p>
+        <p class="text-xs text-slate-700 mb-2"><strong>Propósito:</strong> ${section.purpose}</p>
+        <p class="text-xs text-slate-700 mb-2"><strong>Qué incluir:</strong> ${section.include}</p>
+        <p class="text-xs text-slate-700"><strong>Evita:</strong> ${section.mistakes}</p>
       </div>
-    \`).join('');
+    `).join('');
   }
 
   function renderConnectors() {
     const container = document.getElementById('connectors-content');
-    container.innerHTML = Object.entries(connectors).map(([group, words]) => \`
+    container.innerHTML = Object.entries(connectors).map(([group, words]) => `
       <div>
-        <p class="font-semibold text-purple-700 text-xs mb-2 capitalize">\${group.replace('_', ' y ')}:</p>
+        <p class="font-semibold text-purple-700 text-xs mb-2 capitalize">${group.replace('_', ' y ')}:</p>
         <div class="flex flex-wrap gap-2">
-          \${words.map(word => \`
-            <button class="bg-purple-100 text-purple-900 px-2.5 py-1 rounded text-xs hover:bg-purple-200 transition-colors copy-connector" data-text="\${escapeHtml(word)}">
-              \${escapeHtml(word)}
+          ${words.map(word => `
+            <button class="bg-purple-100 text-purple-900 px-2.5 py-1 rounded text-xs hover:bg-purple-200 transition-colors copy-connector" data-text="${escapeHtml(word)}">
+              ${escapeHtml(word)}
             </button>
-          \`).join('')}
+          `).join('')}
         </div>
       </div>
-    \`).join('');
+    `).join('');
   }
 
   function renderWarnings() {
@@ -193,15 +193,15 @@ function buildRedactorEnhanced() {
       const warningClass = isReady ? 'border-green-200 bg-green-50 text-green-800' : 'border-yellow-200 bg-yellow-50 text-yellow-800';
       const warningIcon = isReady ? '✅' : '⚠️';
 
-      return \`
-        <div class="flex items-start gap-3 rounded-lg border px-4 py-3 \${warningClass}">
-          <span class="mt-0.5">\${warningIcon}</span>
+      return `
+        <div class="flex items-start gap-3 rounded-lg border px-4 py-3 ${warningClass}">
+          <span class="mt-0.5">${warningIcon}</span>
           <div class="min-w-0">
-            <p class="font-bold text-sm">\${section.title}</p>
-            <p class="text-xs mt-1">\${isReady ? 'Sección dentro del rango recomendado.' : \`Faltan contenido o encabezado. Meta: \${section.length}.\`}</p>
+            <p class="font-bold text-sm">${section.title}</p>
+            <p class="text-xs mt-1">${isReady ? 'Sección dentro del rango recomendado.' : `Faltan contenido o encabezado. Meta: ${section.length}.`}</p>
           </div>
         </div>
-      \`;
+      `;
     }).join('');
   }
 

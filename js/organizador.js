@@ -61,7 +61,7 @@ function buildOrganizador() {
 
   const savedType = localStorage.getItem('organizer_work_type') || 'investigacion';
 
-  const html = \`
+  const html = `
     <div class="max-w-5xl mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
@@ -72,7 +72,7 @@ function buildOrganizador() {
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-3">Selecciona tipo de trabajo:</label>
               <select id="work-type" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                \${Object.entries(workTypeLabels).map(([value, label]) => \`<option value="\${value}" \${value === savedType ? 'selected' : ''}>\${label}</option>\`).join('')}
+                ${Object.entries(workTypeLabels).map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
               </select>
             </div>
 
@@ -109,7 +109,7 @@ function buildOrganizador() {
         </div>
       </div>
     </div>
-  \`;
+  `;
 
   document.getElementById('main-workspace').innerHTML = html;
   stopCountdown();
@@ -159,32 +159,32 @@ function buildOrganizador() {
   function renderProgress() {
     const steps = getCurrentSteps();
     const completed = steps.filter(step => {
-      const field = document.querySelector(\`[data-field="\${step.key}"]\`);
+      const field = document.querySelector(`[data-field="${step.key}"]`);
       return field && field.value.trim().length > 0;
     }).length;
     const percent = steps.length > 0 ? Math.round((completed / steps.length) * 100) : 0;
     const bar = document.getElementById('organizer-progress-bar');
     const label = document.getElementById('organizer-progress-label');
-    if (bar) bar.style.width = \`\${percent}%\`;
-    if (label) label.textContent = \`\${completed}/\${steps.length} (\${percent}%)\`;
+    if (bar) bar.style.width = `${percent}%`;
+    if (label) label.textContent = `${completed}/${steps.length} (${percent}%)`;
   }
 
   function renderNotes() {
     const steps = getCurrentSteps();
-    notesList.innerHTML = steps.map(step => \`
+    notesList.innerHTML = steps.map(step => `
       <div class="bg-white/80 rounded-lg border border-yellow-200 p-3">
         <div class="flex justify-between items-center gap-2 mb-2">
-          <p class="text-xs font-bold text-yellow-900">\${step.label}</p>
-          <button class="text-xs font-bold text-yellow-700 hover:text-yellow-900 toggle-note-panel" data-note-key="\${step.key}">📌 Nota</button>
+          <p class="text-xs font-bold text-yellow-900">${step.label}</p>
+          <button class="text-xs font-bold text-yellow-700 hover:text-yellow-900 toggle-note-panel" data-note-key="${step.key}">📌 Nota</button>
         </div>
-        <textarea rows="2" class="section-note-input hidden w-full border border-yellow-300 rounded px-3 py-2 text-xs resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-note-key="\${step.key}" placeholder="Recordatorio privado...">\${escapeHtml(notesStore[workTypeSelect.value]?.[step.key] || '')}</textarea>
+        <textarea rows="2" class="section-note-input hidden w-full border border-yellow-300 rounded px-3 py-2 text-xs resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-note-key="${step.key}" placeholder="Recordatorio privado...">${escapeHtml(notesStore[workTypeSelect.value]?.[step.key] || '')}</textarea>
       </div>
-    \`).join('');
+    `).join('');
 
     notesList.querySelectorAll('.toggle-note-panel').forEach(button => {
       button.addEventListener('click', () => {
         const key = button.dataset.noteKey;
-        const field = notesList.querySelector(\`[data-note-key="\${key}"]\`);
+        const field = notesList.querySelector(`[data-note-key="${key}"]`);
         field.classList.toggle('hidden');
         if (!field.classList.contains('hidden')) field.focus();
       });
@@ -208,15 +208,15 @@ function buildOrganizador() {
         ? (Array.isArray(outlineValues[step.key]) ? outlineValues[step.key].join('\n') : (outlineValues[step.key] || ''))
         : (outlineValues[step.key] || '');
 
-      return \`
+      return `
         <div class="bg-slate-50 rounded-lg border border-slate-200 p-4">
-          <label class="block text-sm font-bold text-slate-900 mb-2">Paso \${index + 1}: \${step.label}</label>
-          <p class="text-xs text-slate-500 mb-2">\${step.hint}</p>
-          \${step.key === 'objetivos_especificos'
-            ? \`<textarea rows="4" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="\${step.key}" placeholder="Escribe un objetivo por línea...">\${escapeHtml(value)}</textarea>\`
-            : \`<textarea rows="3" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="\${step.key}" placeholder="Escribe aquí...">\${escapeHtml(value)}</textarea>\`}
+          <label class="block text-sm font-bold text-slate-900 mb-2">Paso ${index + 1}: ${step.label}</label>
+          <p class="text-xs text-slate-500 mb-2">${step.hint}</p>
+          ${step.key === 'objetivos_especificos'
+            ? `<textarea rows="4" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="${step.key}" placeholder="Escribe un objetivo por línea...">${escapeHtml(value)}</textarea>`
+            : `<textarea rows="3" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="${step.key}" placeholder="Escribe aquí...">${escapeHtml(value)}</textarea>`}
         </div>
-      \`;
+      `;
     }).join('');
 
     renderProgress();
@@ -255,30 +255,30 @@ function buildOrganizador() {
       return;
     }
 
-    list.innerHTML = state.organizerVersions.map((version, index) => \`
+    list.innerHTML = state.organizerVersions.map((version, index) => `
       <div class="bg-purple-200 rounded p-2 text-purple-900 text-xs font-semibold space-y-2">
         <div class="flex justify-between items-center gap-2">
           <div>
-            <div>v\${index + 1}</div>
-            <div class="text-purple-700 text-xs">\${version.date}</div>
+            <div>v${index + 1}</div>
+            <div class="text-purple-700 text-xs">${version.date}</div>
           </div>
-          <span class="text-[10px] uppercase tracking-wide text-purple-700">\${workTypeLabels[version.type] || version.type}</span>
+          <span class="text-[10px] uppercase tracking-wide text-purple-700">${workTypeLabels[version.type] || version.type}</span>
         </div>
         <div class="flex gap-2">
-          <button class="flex-1 bg-purple-300 hover:bg-purple-400 rounded px-2 py-1 preview-version" data-idx="\${index}">Vista previa</button>
-          <button class="flex-1 bg-purple-500 text-white hover:bg-purple-600 rounded px-2 py-1 restore-version" data-idx="\${index}">Restaurar</button>
+          <button class="flex-1 bg-purple-300 hover:bg-purple-400 rounded px-2 py-1 preview-version" data-idx="${index}">Vista previa</button>
+          <button class="flex-1 bg-purple-500 text-white hover:bg-purple-600 rounded px-2 py-1 restore-version" data-idx="${index}">Restaurar</button>
         </div>
       </div>
-    \`).join('');
+    `).join('');
 
     list.querySelectorAll('.preview-version').forEach(btn => {
       btn.addEventListener('click', () => {
         const version = state.organizerVersions[parseInt(btn.dataset.idx, 10)];
         versionPreview.classList.remove('hidden');
-        versionPreview.innerHTML = \`
-          <p class="font-bold text-purple-900 mb-2">Vista previa: \${version.date}</p>
-          <pre class="whitespace-pre-wrap text-slate-700 font-mono">\${escapeHtml(JSON.stringify(version.content, null, 2))}</pre>
-        \`;
+        versionPreview.innerHTML = `
+          <p class="font-bold text-purple-900 mb-2">Vista previa: ${version.date}</p>
+          <pre class="whitespace-pre-wrap text-slate-700 font-mono">${escapeHtml(JSON.stringify(version.content, null, 2))}</pre>
+        `;
       });
     });
 

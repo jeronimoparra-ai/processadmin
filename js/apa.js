@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════
 
 function buildApaEnhanced() {
-  const html = \`
+  const html = `
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div class="space-y-6">
         <div class="bg-white rounded-lg border-2 border-green-200 p-6 shadow-md">
@@ -43,7 +43,7 @@ function buildApaEnhanced() {
 
       <div class="space-y-6">
         <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md sticky top-6">
-          <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2"><span>📖</span> Referencias APA 7 generadas (\${state.generatedCitations.length})</h3>
+          <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2"><span>📖</span> Referencias APA 7 generadas (${state.generatedCitations.length})</h3>
           <div id="apa-referencias" class="space-y-2 max-h-64 overflow-y-auto mb-4 text-xs"></div>
           <div class="space-y-2">
             <button id="sort-refs-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-slate-700 transition-colors">📋 Ordenar referencias A-Z</button>
@@ -66,7 +66,7 @@ function buildApaEnhanced() {
         </div>
       </div>
     </div>
-  \`;
+  `;
 
   document.getElementById('main-workspace').innerHTML = html;
   stopCountdown();
@@ -91,8 +91,8 @@ function buildApaEnhanced() {
     const result = document.getElementById('validator-resultado');
     result.innerHTML = APA_REFERENCE_CHECKS.map(item => {
       const ok = checks[item.key];
-      return \`<div class="flex items-center gap-2 \${ok ? 'text-green-700' : 'text-red-700'}"><span>\${ok ? '●' : '●'}</span><span>\${item.label}: \${ok ? 'Presente' : 'Falta'}</span></div>\`;
-    }).join('') + \`<div class="pt-2 border-t border-orange-200 text-slate-600">\${Object.values(checks).every(Boolean) ? 'Referencia con estructura básica correcta.' : 'Revisa los campos faltantes antes de usarla.'}</div>\`;
+      return `<div class="flex items-center gap-2 ${ok ? 'text-green-700' : 'text-red-700'}"><span>${ok ? '●' : '●'}</span><span>${item.label}: ${ok ? 'Presente' : 'Falta'}</span></div>`;
+    }).join('') + `<div class="pt-2 border-t border-orange-200 text-slate-600">${Object.values(checks).every(Boolean) ? 'Referencia con estructura básica correcta.' : 'Revisa los campos faltantes antes de usarla.'}</div>`;
     result.classList.remove('hidden');
   }
 
@@ -142,13 +142,13 @@ function buildApaEnhanced() {
       return;
     }
 
-    list.innerHTML = sources.map((source, index) => \`
+    list.innerHTML = sources.map((source, index) => `
       <div class="bg-purple-50 border border-purple-300 p-2 rounded">
-        <div class="font-bold text-purple-900">\${escapeHtml(source.titulo)}</div>
-        <div class="text-purple-700 text-xs">\${escapeHtml(source.autor)}</div>
-        <button class="text-red-600 text-xs hover:text-red-700 delete-source" data-idx="\${index}">Eliminar</button>
+        <div class="font-bold text-purple-900">${escapeHtml(source.titulo)}</div>
+        <div class="text-purple-700 text-xs">${escapeHtml(source.autor)}</div>
+        <button class="text-red-600 text-xs hover:text-red-700 delete-source" data-idx="${index}">Eliminar</button>
       </div>
-    \`).join('');
+    `).join('');
 
     list.querySelectorAll('.delete-source').forEach(button => {
       button.addEventListener('click', () => {
@@ -197,9 +197,9 @@ function buildApaEnhanced() {
       return;
     }
 
-    let reference = \`\${autor} (\${anio}). <em>\${titulo}</em>\`;
-    if (fuente) reference += \`. \${fuente}\`;
-    if (url) reference += \`. Recuperado de \${url}\`;
+    let reference = `${autor} (${anio}). <em>${titulo}</em>`;
+    if (fuente) reference += `. ${fuente}`;
+    if (url) reference += `. Recuperado de ${url}`;
 
     state.generatedCitations.push(reference);
     saveCitations();
@@ -218,7 +218,7 @@ function buildApaEnhanced() {
 
   function renderReferences() {
     const list = document.getElementById('apa-referencias');
-    document.querySelector('h3.font-bold.text-slate-900.mb-4.flex.items-center.gap-2').innerHTML = \`<span>📖</span> Referencias APA 7 generadas (\${state.generatedCitations.length})\`;
+    document.querySelector('h3.font-bold.text-slate-900.mb-4.flex.items-center.gap-2').innerHTML = `<span>📖</span> Referencias APA 7 generadas (${state.generatedCitations.length})`;
 
     if (state.generatedCitations.length === 0) {
       list.innerHTML = '<p class="text-gray-500 italic">Sin referencias aún</p>';
@@ -226,12 +226,12 @@ function buildApaEnhanced() {
       return;
     }
 
-    list.innerHTML = state.generatedCitations.map((reference, index) => \`
+    list.innerHTML = state.generatedCitations.map((reference, index) => `
       <div class="bg-slate-50 border border-slate-300 p-2 rounded text-xs">
-        <div>\${reference.replace(/<\/?em>/g, '')}</div>
-        <button class="text-red-600 text-xs hover:text-red-700 mt-1 delete-ref" data-idx="\${index}">Eliminar</button>
+        <div>${reference.replace(/<\/?em>/g, '')}</div>
+        <button class="text-red-600 text-xs hover:text-red-700 mt-1 delete-ref" data-idx="${index}">Eliminar</button>
       </div>
-    \`).join('');
+    `).join('');
 
     list.querySelectorAll('.delete-ref').forEach(button => {
       button.addEventListener('click', () => {
@@ -262,11 +262,11 @@ function buildApaEnhanced() {
     const referencesWithoutCitation = referenceAuthors.filter(referenceAuthor => !citedAuthors.some(author => normalizeSpanishText(author) === normalizeSpanishText(referenceAuthor)));
 
     alert(
-      \`🔗 Verificación de consistencia:\n\n\` +
-      \`✓ Citas en texto detectadas: \${citedAuthors.length}\n\` +
-      \`✓ Referencias registradas: \${referenceAuthors.length}\n\` +
-      \`⚠️ Citas sin referencia: \${citationsWithoutReference.length}\n\` +
-      \`⚠️ Referencias sin cita: \${referencesWithoutCitation.length}\`
+      `🔗 Verificación de consistencia:\n\n` +
+      `✓ Citas en texto detectadas: ${citedAuthors.length}\n` +
+      `✓ Referencias registradas: ${referenceAuthors.length}\n` +
+      `⚠️ Citas sin referencia: ${citationsWithoutReference.length}\n` +
+      `⚠️ Referencias sin cita: ${referencesWithoutCitation.length}`
     );
   });
 
