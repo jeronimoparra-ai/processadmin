@@ -43,6 +43,57 @@ function saveField(key, value) {
   }, 800);
 }
 
+const DOCUMENT_HISTORY_KEY = 'export_document_history';
+
+function loadDocumentHistory() {
+  return loadJSON(DOCUMENT_HISTORY_KEY, []);
+}
+
+function saveDocumentHistory(history) {
+  saveJSON(DOCUMENT_HISTORY_KEY, history);
+  updateSavedDocumentCounter();
+}
+
+function createDocumentHistorySnapshot(data, snapshot = {}) {
+  return {
+    id: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    title: data.titulo || data.curso || data.nombre || 'Documento sin título',
+    savedAt: new Date().toISOString(),
+    data: { ...data },
+    snapshot: {
+      redactorContent: snapshot.redactorContent ?? safeStorageGet('redactor_content', ''),
+      organizerOutline: snapshot.organizerOutline ?? loadJSON('organizer_outline', {}),
+      generatedCitations: snapshot.generatedCitations ?? [...state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, ''))
+    }
+  };
+}
+
+function addDocumentHistoryEntry(data, snapshot = {}) {
+  const history = loadDocumentHistory();
+  const entry = createDocumentHistorySnapshot(data, snapshot);
+  history.unshift(entry);
+  saveDocumentHistory(history.slice(0, 12));
+  return entry;
+}
+
+function removeDocumentHistoryEntry(entryId) {
+  const history = loadDocumentHistory().filter(entry => entry.id !== entryId);
+  saveDocumentHistory(history);
+  return history;
+}
+
+function getDocumentHistoryCount() {
+  return loadDocumentHistory().length;
+}
+
+function updateSavedDocumentCounter() {
+  const count = getDocumentHistoryCount();
+  const counter = document.getElementById('saved-document-count');
+  if (counter) {
+    counter.textContent = count.toString();
+  }
+}
+
 function updateCountdown() {
   const el = document.getElementById('countdown');
   if (!el) return;

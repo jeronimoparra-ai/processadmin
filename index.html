@@ -56,13 +56,16 @@
         <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="checklist">
           <span class="relative flex items-center gap-3"><span class="text-lg">✅</span><span>Checklist Inteligente</span></span>
         </button>
+        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="historial">
+          <span class="relative flex items-center gap-3"><span class="text-lg">🗂️</span><span>Historial de Documentos</span></span>
+        </button>
         <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="exportar">
           <span class="relative flex items-center gap-3"><span class="text-lg">📤</span><span>Exportación a Word</span></span>
         </button>
       </nav>
 
       <div class="side-footer p-6">
-        <div class="meta"><div class="meta-label">Documentos</div><div class="meta-value">1</div></div>
+        <div class="meta"><div class="meta-label">Documentos</div><div id="saved-document-count" class="meta-value">0</div></div>
       </div>
     </aside>
 
@@ -111,6 +114,7 @@
   <script src="js/rubrica.js"></script>
   <script src="js/checklist.js"></script>
   <script src="js/organizador.js"></script>
+  <script src="js/historial.js"></script>
   <script src="js/exportador.js"></script>
   <script src="js/app.js"></script>
 </body>

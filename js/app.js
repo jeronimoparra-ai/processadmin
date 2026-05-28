@@ -46,6 +46,7 @@ function navigate(viewId) {
     case 'organizador':
     case 'organizer': return typeof buildOrganizador === 'function' ? buildOrganizador() : null;
     case 'checklist': return typeof buildChecklist === 'function' ? buildChecklist() : null;
+    case 'historial': return typeof buildHistorial === 'function' ? buildHistorial() : null;
     case 'exportar':
     case 'export': return typeof buildExportador === 'function' ? buildExportador() : null;
     default: return typeof buildPanel === 'function' ? buildPanel() : null;
@@ -57,6 +58,7 @@ if (document.readyState === 'loading') {
     if (!safeStorageGet('ws_work_start', '')) {
       safeStorageSet('ws_work_start', Date.now().toString());
     }
+    updateSavedDocumentCounter();
 
     document.querySelectorAll('.nav-btn, .nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -90,6 +92,7 @@ if (document.readyState === 'loading') {
   if (!safeStorageGet('ws_work_start', '')) {
     safeStorageSet('ws_work_start', Date.now().toString());
   }
+  updateSavedDocumentCounter();
   document.querySelectorAll('.nav-btn, .nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
       navigate(btn.dataset.view);

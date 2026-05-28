@@ -135,7 +135,7 @@ function buildPanel() {
         <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
           <span class="text-3xl">🎯</span> Guía de Inicio Rápido
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 hover:shadow-lg transition-all cursor-pointer" data-view="organizador">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
             <h3 class="text-lg font-bold text-blue-900 mb-3">Planifica tu Investigación</h3>
@@ -157,6 +157,14 @@ function buildPanel() {
             <h3 class="text-lg font-bold text-pink-900 mb-3">Exporta a Word</h3>
             <p class="text-slate-700 text-sm leading-relaxed">
               Genera un <strong>documento Word profesional</strong> con portada, índice y formato APA 7 automático.
+            </p>
+          </div>
+
+          <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 border-l-4 border-slate-600 hover:shadow-lg transition-all cursor-pointer" data-view="historial">
+            <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold">4</div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">Abre tu Historial</h3>
+            <p class="text-slate-700 text-sm leading-relaxed">
+              Revisa documentos guardados, vuelve a exportarlos o elimínalos cuando ya no los necesites.
             </p>
           </div>
         </div>

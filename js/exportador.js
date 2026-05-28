@@ -2,6 +2,133 @@
 // EXPORTADOR.JS - Exportación a Formato DOCX (APA 7)
 // ═══════════════════════════════════════════════════════════════════════
 
+function buildExportSnapshot() {
+  return {
+    redactorContent: safeStorageGet('redactor_content', ''),
+    organizerOutline: loadJSON('organizer_outline', {}),
+    generatedCitations: [...state.generatedCitations].map(reference => reference.replace(/<\/?em>/g, ''))
+  };
+}
+
+function buildExportDocxPackage(data, snapshot = {}) {
+  const references = (snapshot.generatedCitations || [...state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, '')));
+  const outline = snapshot.organizerOutline || loadJSON('organizer_outline', {});
+  const outlineValues = outline.values || outline;
+  const redactorContent = snapshot.redactorContent ?? safeStorageGet('redactor_content', '');
+  const title = data.titulo || data.curso || 'Trabajo académico';
+
+  const paragraphs = [];
+  const p = (text, options = {}) => {
+    const align = options.align || 'left';
+    const bold = options.bold ? '<w:b/>' : '';
+    const size = options.size || 24;
+    const style = options.style ? `<w:pStyle w:val="${options.style}"/>` : '';
+    const spacing = options.double ? '<w:spacing w:line="480" w:lineRule="auto"/>' : '';
+    const indent = options.hanging ? '<w:ind w:hanging="720"/>' : '';
+    return `<w:p><w:pPr><w:jc w:val="${align}"/>${style}${spacing}${indent}</w:pPr><w:r><w:rPr>${bold}<w:sz w:val="${size}"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
+  };
+
+  paragraphs.push(p(data.institucion || 'Institución', { align: 'center', size: 24, double: false }));
+  paragraphs.push(p(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
+  if (data.modalidad) paragraphs.push(p(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
+  paragraphs.push(p(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
+  paragraphs.push(p(title, { align: 'center', size: 32, bold: true }));
+  paragraphs.push(p(data.nombre || 'Nombre completo', { align: 'center', size: 24 }));
+  paragraphs.push(p(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
+  paragraphs.push(p(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
+  paragraphs.push(p(data.fecha || 'Fecha de entrega', { align: 'center', size: 24 }));
+  paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
+  paragraphs.push(p('Tabla de contenido', { style: 'Heading1', bold: true, size: 28 }));
+  ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias'].forEach((entry, index) => {
+    paragraphs.push(p(`${index + 1}. ${entry}`, { size: 22 }));
+  });
+  paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
+  paragraphs.push(p('Introducción', { style: 'Heading1', bold: true, size: 28 }));
+  (redactorContent || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
+    if (paragraph.trim()) paragraphs.push(p(paragraph.trim(), { size: 24, double: true }));
+  });
+  paragraphs.push(p('Referencias', { style: 'Heading1', bold: true, size: 28 }));
+  if (references.length === 0) {
+    paragraphs.push(p('Sin referencias aún', { size: 24, hanging: true }));
+  } else {
+    references.forEach(reference => paragraphs.push(p(reference, { size: 24, hanging: true })));
+  }
+
+  const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 wp14">
+  <w:body>
+    ${paragraphs.join('\n    ')}
+    <w:sectPr>
+      <w:pgSz w:w="12240" w:h="15840"/>
+      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
+      <w:cols w:space="708"/>
+      <w:titlePg/>
+      <w:headerReference w:type="default" r:id="rId1"/>
+    </w:sectPr>
+  </w:body>
+</w:document>`;
+
+  const headerXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <w:p>
+    <w:pPr><w:jc w:val="right"/></w:pPr>
+    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>
+    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r>
+  </w:p>
+</w:hdr>`;
+
+  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:docDefaults>
+    <w:rPrDefault><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:rPrDefault>
+    <w:pPrDefault><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:pPrDefault>
+  </w:docDefaults>
+  <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style>
+  <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="32"/></w:rPr></w:style>
+  <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="28"/></w:rPr></w:style>
+  <w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="26"/></w:rPr></w:style>
+  <w:style w:type="paragraph" w:styleId="Heading3"><w:name w:val="heading 3"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="24"/></w:rPr></w:style>
+</w:styles>`;
+
+  const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+</Types>`;
+
+  const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="R1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`;
+
+  return createZipBlob([
+    { path: '[Content_Types].xml', content: contentTypesXml },
+    { path: '_rels/.rels', content: relsXml },
+    { path: 'word/_rels/document.xml.rels', content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>
+</Relationships>` },
+    { path: 'word/document.xml', content: documentXml },
+    { path: 'word/header1.xml', content: headerXml },
+    { path: 'word/styles.xml', content: stylesXml }
+  ]);
+}
+
+function downloadExportDocx(data, snapshot = {}, fileName = null) {
+  const blob = buildExportDocxPackage(data, snapshot);
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = fileName || `${(data.nombre || 'documento').replace(/\s+/g, '_')}_APA7.docx`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 function buildExportador() {
   const html = `
     <div class="max-w-6xl mx-auto">
@@ -68,6 +195,7 @@ function buildExportador() {
             <div id="export-summary" class="mt-4 space-y-3 text-xs"></div>
             <div class="mt-4 space-y-2">
               <button id="fix-issues-btn" class="w-full bg-green-600 text-white rounded px-4 py-2 font-bold hover:bg-green-700 transition-colors text-sm">Ir a revisar pendientes</button>
+              <button id="history-shortcut-btn" class="w-full bg-white text-slate-700 rounded px-4 py-2 font-bold border border-green-200 hover:bg-green-50 transition-colors text-sm">Ver historial de documentos</button>
             </div>
           </div>
 
@@ -320,19 +448,15 @@ function buildExportador() {
       if (!shouldContinue) return;
     }
 
-    const blob = buildDocxPackage(data);
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `${(data.nombre || 'documento').replace(/\s+/g, '_')}_APA7.docx`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    const snapshot = buildExportSnapshot();
+    addDocumentHistoryEntry(data, snapshot);
+    downloadExportDocx(data, snapshot);
 
     const button = document.getElementById('generate-docx-btn');
-    button.textContent = '✅ Archivo generado';
-    setTimeout(() => { button.textContent = '📥 Generar archivo Word'; }, 2500);
+    if (button) {
+      button.textContent = '✅ Archivo generado';
+      setTimeout(() => { button.textContent = '📥 Generar archivo Word'; }, 2500);
+    }
   }
 
   updateValidation();
@@ -356,4 +480,5 @@ function buildExportador() {
       navigate('panel');
     }
   });
+  document.getElementById('history-shortcut-btn').addEventListener('click', () => navigate('historial'));
 }
