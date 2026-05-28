@@ -27,6 +27,8 @@ function buildHistoryEntrySummary(entry) {
 
 function buildHistorial() {
   const history = loadDocumentHistory();
+  let searchTerm = '';
+  let sortMode = 'recent';
 
   const html = `
     <div class="max-w-6xl mx-auto space-y-8">
@@ -44,6 +46,21 @@ function buildHistorial() {
         </div>
       </div>
 
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 md:p-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex-1">
+          <label class="block text-sm font-semibold text-slate-700 mb-2" for="history-search">Buscar documento</label>
+          <input id="history-search" type="search" placeholder="Título, curso, nombre, ciudad o modalidad" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+        <div class="min-w-[220px]">
+          <label class="block text-sm font-semibold text-slate-700 mb-2" for="history-sort">Ordenar por</label>
+          <select id="history-sort" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <option value="recent">Más recientes</option>
+            <option value="oldest">Más antiguos</option>
+            <option value="title">Título A-Z</option>
+          </select>
+        </div>
+      </div>
+
       <div id="history-list" class="space-y-4"></div>
     </div>
   `;
@@ -53,9 +70,43 @@ function buildHistorial() {
 
   const list = document.getElementById('history-list');
   const total = document.getElementById('history-total');
+  const searchInput = document.getElementById('history-search');
+  const sortSelect = document.getElementById('history-sort');
+
+  function getFilteredItems() {
+    const normalizedTerm = searchTerm.trim().toLowerCase();
+    const items = loadDocumentHistory().filter(entry => {
+      if (!normalizedTerm) return true;
+
+      const data = entry.data || {};
+      const haystack = [
+        entry.title,
+        data.nombre,
+        data.curso,
+        data.modalidad,
+        data.ciudad,
+        data.docente,
+        data.institucion,
+        data.fecha,
+        entry.savedAt
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      return haystack.includes(normalizedTerm);
+    });
+
+    if (sortMode === 'oldest') {
+      return items.sort((a, b) => new Date(a.savedAt) - new Date(b.savedAt));
+    }
+
+    if (sortMode === 'title') {
+      return items.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'es'));
+    }
+
+    return items.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+  }
 
   function renderHistory() {
-    const items = loadDocumentHistory();
+    const items = getFilteredItems();
     if (total) total.textContent = items.length.toString();
     updateSavedDocumentCounter();
 
@@ -63,12 +114,24 @@ function buildHistorial() {
       list.innerHTML = `
         <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm text-center space-y-3">
           <div class="text-5xl">🕰️</div>
-          <h3 class="text-2xl font-bold text-slate-900">Aún no hay documentos guardados</h3>
-          <p class="text-slate-600">Cuando exportes un trabajo, aparecerá aquí para volver a abrirlo o descargarlo.</p>
-          <button id="empty-history-export" class="btn-primary">Crear primer documento</button>
+          <h3 class="text-2xl font-bold text-slate-900">${searchTerm ? 'No hay coincidencias' : 'Aún no hay documentos guardados'}</h3>
+          <p class="text-slate-600">${searchTerm ? 'Prueba con otro término o limpia el filtro.' : 'Cuando exportes un trabajo, aparecerá aquí para volver a abrirlo o descargarlo.'}</p>
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <button id="empty-history-export" class="btn-primary">${searchTerm ? 'Limpiar filtro' : 'Crear primer documento'}</button>
+            ${searchTerm ? '<button id="empty-history-export-doc" class="btn">Ir a exportación</button>' : ''}
+          </div>
         </div>
       `;
-      document.getElementById('empty-history-export')?.addEventListener('click', () => navigate('exportar'));
+      document.getElementById('empty-history-export')?.addEventListener('click', () => {
+        if (searchTerm) {
+          searchTerm = '';
+          if (searchInput) searchInput.value = '';
+          renderHistory();
+          return;
+        }
+        navigate('exportar');
+      });
+      document.getElementById('empty-history-export-doc')?.addEventListener('click', () => navigate('exportar'));
       return;
     }
 
@@ -130,5 +193,13 @@ function buildHistorial() {
   }
 
   document.getElementById('go-export-btn')?.addEventListener('click', () => navigate('exportar'));
+  searchInput?.addEventListener('input', () => {
+    searchTerm = searchInput.value;
+    renderHistory();
+  });
+  sortSelect?.addEventListener('change', () => {
+    sortMode = sortSelect.value;
+    renderHistory();
+  });
   renderHistory();
 }
