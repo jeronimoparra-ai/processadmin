@@ -124,7 +124,7 @@ p{margin:0 0 var(--space-sm) 0;color:var(--text-muted);line-height:1.6}
 .muted{color:var(--text-muted)}
 
 /* ensure existing ids keep usable */
-#main-workspace, #main-workspace *{color:inherit}
+#main-workspace{color:var(--text-main)}
 
 /* Component overrides to restyle existing Tailwind-based markup into the new theme */
 .bg-white{background:var(--surface);color:inherit}
@@ -136,6 +136,58 @@ p{margin:0 0 var(--space-sm) 0;color:var(--text-muted);line-height:1.6}
 .bg-slate-50{background:transparent}
 .bg-gradient-to-br{background-image:none}
 .bg-gradient-to-r{background-image:none}
+
+/* Panel metric cards: consistent white surface and subtle accent borders */
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group{
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-1) !important;
+  color: var(--text-main) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group::before{
+  content: '';
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 4px;
+  height: 100%;
+  background: var(--color-secondary);
+}
+
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group:nth-child(1)::before{ background: var(--color-secondary); }
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group:nth-child(2)::before{ background: #7c3aed; }
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group:nth-child(3)::before{ background: var(--color-accent); }
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group:nth-child(4)::before{ background: var(--color-primary); }
+
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .text-slate-600,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .text-slate-500{
+  color: var(--text-muted) !important;
+}
+
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .text-blue-900,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .text-purple-900,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .text-pink-900,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .text-emerald-900{
+  color: var(--text-main) !important;
+}
+
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-blue-200,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-purple-200,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-green-200,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-orange-200,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-emerald-200{
+  background: #e2e8f0 !important;
+}
+
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-blue-600,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-purple-600,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-green-600,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-orange-600,
+.space-y-8.max-w-7xl.mx-auto > .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 > .group .bg-emerald-600{
+  color: #fff !important;
+}
 
 input[type="text"], input[type="date"], textarea, select{
   background:transparent;border:1px solid var(--border);padding:10px;border-radius:10px;color:var(--text-main);width:100%;box-sizing:border-box
