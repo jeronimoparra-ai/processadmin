@@ -6,52 +6,100 @@ function buildExportSnapshot() {
   return {
     redactorContent: safeStorageGet('redactor_content', ''),
     organizerOutline: loadJSON('organizer_outline', {}),
-    generatedCitations: [...state.generatedCitations].map(reference => reference.replace(/<\/?em>/g, ''))
+    generatedCitations: [...state.generatedCitations].map(reference => reference.replace(/<\/?em>/g, '')),
+    exportFormatProfile: state.exportFormatProfile
   };
 }
 
-function buildExportDocxPackage(data, snapshot = {}) {
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(reader.error || new Error('No se pudo leer el archivo'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function dataUrlToArrayBuffer(dataUrl) {
+  const base64 = String(dataUrl || '').split(',')[1] || '';
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return bytes.buffer;
+}
+
+function escapeRegExp(text) {
+  return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function buildWordParagraph(text, options = {}) {
+  const align = options.align || 'left';
+  const bold = options.bold ? '<w:b/>' : '';
+  const size = options.size || 24;
+  const style = options.style ? `<w:pStyle w:val="${options.style}"/>` : '';
+  const spacing = options.double ? '<w:spacing w:line="480" w:lineRule="auto"/>' : '';
+  const indent = options.hanging ? '<w:ind w:hanging="720"/>' : '';
+  return `<w:p><w:pPr><w:jc w:val="${align}"/>${style}${spacing}${indent}</w:pPr><w:r><w:rPr>${bold}<w:sz w:val="${size}"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
+}
+
+function replaceXmlText(xml, token, value) {
+  return xml.split(`{{${token}}}`).join(xmlEscape(value));
+}
+
+function replaceXmlParagraph(xml, token, replacementXml) {
+  const tokenRegex = escapeRegExp(`{{${token}}}`);
+  const paragraphRegex = new RegExp(`<w:p\\b[^>]*>[\\s\\S]*?${tokenRegex}[\\s\\S]*?<\\/w:p>`, 'g');
+  return xml.replace(paragraphRegex, replacementXml);
+}
+
+function getWordTemplateDataUrl(profile) {
+  if (!profile || typeof profile !== 'object') return '';
+  if (typeof profile.templateDataUrl === 'string' && profile.templateDataUrl.trim()) return profile.templateDataUrl.trim();
+  if (typeof profile.templateBase64 === 'string' && profile.templateBase64.trim()) {
+    return `data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${profile.templateBase64.trim()}`;
+  }
+  return '';
+}
+
+function buildGeneratedDocxPackage(data, snapshot = {}) {
   const references = (snapshot.generatedCitations || [...state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, '')));
   const outline = snapshot.organizerOutline || loadJSON('organizer_outline', {});
   const outlineValues = outline.values || outline;
   const redactorContent = snapshot.redactorContent ?? safeStorageGet('redactor_content', '');
+  const exportFormatProfile = snapshot.exportFormatProfile ?? state.exportFormatProfile;
+  const formatSections = Array.isArray(exportFormatProfile?.structureParts)
+    ? exportFormatProfile.structureParts.map(part => part.text).filter(Boolean)
+    : [];
   const title = data.titulo || data.curso || 'Trabajo académico';
 
   const paragraphs = [];
-  const p = (text, options = {}) => {
-    const align = options.align || 'left';
-    const bold = options.bold ? '<w:b/>' : '';
-    const size = options.size || 24;
-    const style = options.style ? `<w:pStyle w:val="${options.style}"/>` : '';
-    const spacing = options.double ? '<w:spacing w:line="480" w:lineRule="auto"/>' : '';
-    const indent = options.hanging ? '<w:ind w:hanging="720"/>' : '';
-    return `<w:p><w:pPr><w:jc w:val="${align}"/>${style}${spacing}${indent}</w:pPr><w:r><w:rPr>${bold}<w:sz w:val="${size}"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
-  };
-
-  paragraphs.push(p(data.institucion || 'Institución', { align: 'center', size: 24, double: false }));
-  paragraphs.push(p(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
-  if (data.modalidad) paragraphs.push(p(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
-  paragraphs.push(p(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
-  paragraphs.push(p(title, { align: 'center', size: 32, bold: true }));
-  paragraphs.push(p(data.nombre || 'Nombre completo', { align: 'center', size: 24 }));
-  paragraphs.push(p(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
-  paragraphs.push(p(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
-  paragraphs.push(p(data.fecha || 'Fecha de entrega', { align: 'center', size: 24 }));
+  paragraphs.push(buildWordParagraph(data.institucion || 'Institución', { align: 'center', size: 24, double: false }));
+  paragraphs.push(buildWordParagraph(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
+  if (data.modalidad) paragraphs.push(buildWordParagraph(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
+  paragraphs.push(buildWordParagraph(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
+  paragraphs.push(buildWordParagraph(title, { align: 'center', size: 32, bold: true }));
+  paragraphs.push(buildWordParagraph(data.nombre || 'Nombre completo', { align: 'center', size: 24 }));
+  paragraphs.push(buildWordParagraph(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
+  paragraphs.push(buildWordParagraph(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
+  if (data.fecha) paragraphs.push(buildWordParagraph(data.fecha, { align: 'center', size: 24 }));
   paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-  paragraphs.push(p('Tabla de contenido', { style: 'Heading1', bold: true, size: 28 }));
-  ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias'].forEach((entry, index) => {
-    paragraphs.push(p(`${index + 1}. ${entry}`, { size: 22 }));
+  paragraphs.push(buildWordParagraph('Tabla de contenido', { style: 'Heading1', bold: true, size: 28 }));
+  (formatSections.length > 0 ? formatSections : ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias']).forEach((entry, index) => {
+    paragraphs.push(buildWordParagraph(`${index + 1}. ${entry}`, { size: 22 }));
   });
   paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-  paragraphs.push(p('Introducción', { style: 'Heading1', bold: true, size: 28 }));
-  (redactorContent || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
-    if (paragraph.trim()) paragraphs.push(p(paragraph.trim(), { size: 24, double: true }));
+  paragraphs.push(buildWordParagraph('Introducción', { style: 'Heading1', bold: true, size: 28 }));
+  const formatBody = formatSections.length > 0 ? formatSections.join('\n\n') : Object.values(outlineValues).flat().join('\n');
+  (redactorContent || formatBody || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
+    if (paragraph.trim()) paragraphs.push(buildWordParagraph(paragraph.trim(), { size: 24, double: true }));
   });
-  paragraphs.push(p('Referencias', { style: 'Heading1', bold: true, size: 28 }));
+  paragraphs.push(buildWordParagraph('Referencias', { style: 'Heading1', bold: true, size: 28 }));
   if (references.length === 0) {
-    paragraphs.push(p('Sin referencias aún', { size: 24, hanging: true }));
+    paragraphs.push(buildWordParagraph('Sin referencias aún', { size: 24, hanging: true }));
   } else {
-    references.forEach(reference => paragraphs.push(p(reference, { size: 24, hanging: true })));
+    references.forEach(reference => paragraphs.push(buildWordParagraph(reference, { size: 24, hanging: true })));
   }
 
   const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -117,8 +165,72 @@ function buildExportDocxPackage(data, snapshot = {}) {
   ]);
 }
 
-function downloadExportDocx(data, snapshot = {}, fileName = null) {
-  const blob = buildExportDocxPackage(data, snapshot);
+async function buildTemplateDocxPackage(data, snapshot = {}) {
+  const references = (snapshot.generatedCitations || [...state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, '')));
+  const outline = snapshot.organizerOutline || loadJSON('organizer_outline', {});
+  const outlineValues = outline.values || outline;
+  const redactorContent = snapshot.redactorContent ?? safeStorageGet('redactor_content', '');
+  const exportFormatProfile = snapshot.exportFormatProfile ?? state.exportFormatProfile;
+  const formatSections = Array.isArray(exportFormatProfile?.structureParts)
+    ? exportFormatProfile.structureParts.map(part => part.text).filter(Boolean)
+    : [];
+  const title = data.titulo || data.curso || exportFormatProfile?.title || 'Trabajo académico';
+  const tocItems = formatSections.length > 0 ? formatSections : ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias'];
+  const bodyText = redactorContent || formatSections.join('\n\n') || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.';
+  const dataUrl = getWordTemplateDataUrl(exportFormatProfile);
+
+  if (!dataUrl || typeof JSZip === 'undefined') {
+    return buildGeneratedDocxPackage(data, snapshot);
+  }
+
+  const zip = await JSZip.loadAsync(dataUrlToArrayBuffer(dataUrl));
+  const textFiles = Object.values(zip.files).filter(file => /\.(xml|rels)$/i.test(file.name) && !file.dir);
+
+  const metadataReplacements = {
+    institucion: data.institucion || 'Institución',
+    curso: data.curso || 'Nombre del curso',
+    modalidad: data.modalidad || '',
+    docente: data.docente || 'Nombre del docente',
+    titulo: title,
+    nombre: data.nombre || 'Nombre completo',
+    codigo: data.codigo || 'Código estudiantil',
+    ciudad: data.ciudad || 'Ciudad',
+    fecha: data.fecha || ''
+  };
+
+  const tocXml = tocItems.map((entry, index) => buildWordParagraph(`${index + 1}. ${entry}`, { size: 22 })).join('\n');
+  const bodyXml = bodyText.split(/\n\s*\n+/).filter(Boolean).map(paragraph => buildWordParagraph(paragraph, { size: 24, double: true })).join('\n');
+  const referencesXml = (references.length > 0 ? references : ['Sin referencias aún']).map(reference => buildWordParagraph(reference, { size: 24, hanging: true })).join('\n');
+
+  await Promise.all(textFiles.map(async file => {
+    let content = await file.async('string');
+    Object.entries(metadataReplacements).forEach(([key, value]) => {
+      content = replaceXmlText(content, key, value);
+    });
+    content = replaceXmlParagraph(content, 'toc', tocXml);
+    content = replaceXmlParagraph(content, 'tabla_de_contenido', tocXml);
+    content = replaceXmlParagraph(content, 'contenido', bodyXml);
+    content = replaceXmlParagraph(content, 'cuerpo', bodyXml);
+    content = replaceXmlParagraph(content, 'referencias', referencesXml);
+    zip.file(file.name, content);
+  }));
+
+  return zip.generateAsync({
+    type: 'blob',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  });
+}
+
+async function buildExportDocxPackage(data, snapshot = {}) {
+  const exportFormatProfile = snapshot.exportFormatProfile ?? state.exportFormatProfile;
+  if (getWordTemplateDataUrl(exportFormatProfile)) {
+    return buildTemplateDocxPackage(data, snapshot);
+  }
+  return buildGeneratedDocxPackage(data, snapshot);
+}
+
+async function downloadExportDocx(data, snapshot = {}, fileName = null) {
+  const blob = await buildExportDocxPackage(data, snapshot);
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
@@ -130,10 +242,26 @@ function downloadExportDocx(data, snapshot = {}, fileName = null) {
 }
 
 function buildExportador() {
+  const formatProfile = state.exportFormatProfile;
+  const formatLabel = formatProfile?.name || 'Sin formato cargado';
+  const formatDetail = formatProfile?.description || 'Puedes cargar un formato JSON opcional para reutilizar datos y estructura.';
   const html = `
     <div class="max-w-6xl mx-auto">
       <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3"><span>📤</span> Exportación a Word (Formato APA 7)</h2>
       <p class="text-gray-600 mb-8">Completa tus datos, revisa la validación y genera tu archivo local sin perder el formato.</p>
+
+      <div class="bg-white rounded-2xl border-2 border-dashed border-blue-200 p-5 mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold text-blue-900">Formato de trabajo</p>
+           <p class="text-sm text-slate-600">${escapeHtml(formatLabel)} · ${escapeHtml(formatDetail)}</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+           <button id="load-format-btn" class="bg-blue-600 text-white rounded-lg px-4 py-2 font-bold hover:bg-blue-700 transition-colors text-sm">📂 Cargar formato Word</button>
+          <button id="clear-format-btn" class="bg-white text-slate-700 rounded-lg px-4 py-2 font-bold border border-slate-200 hover:bg-slate-50 transition-colors text-sm">Quitar formato</button>
+        </div>
+      </div>
+
+       <input id="load-format-input" type="file" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx,application/json,.json" class="hidden">
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-6">
@@ -174,6 +302,7 @@ function buildExportador() {
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Fecha de entrega</label>
               <input id="export-fecha" type="date" aria-label="Fecha de entrega" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <p id="export-fecha-help" class="mt-2 text-xs text-slate-500">Opcional: agrega la fecha si quieres incluirla en la exportación.</p>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pt-2">
@@ -213,6 +342,22 @@ function buildExportador() {
 
   const fields = ['nombre', 'codigo', 'curso', 'modalidad', 'docente', 'institucion', 'ciudad', 'fecha'];
   const savedData = loadJSON('export_student_data', {});
+  const storedDeliveryDate = getDeliveryDateValue();
+  const formatProfile = state.exportFormatProfile;
+
+  if (formatProfile && formatProfile.kind === 'legacy-json') {
+    savedData.curso = savedData.curso || formatProfile.curso;
+    savedData.modalidad = savedData.modalidad || formatProfile.modalidad;
+    savedData.docente = savedData.docente || formatProfile.docente;
+    savedData.institucion = savedData.institucion || formatProfile.institucion;
+    savedData.ciudad = savedData.ciudad || formatProfile.ciudad;
+    savedData.fecha = savedData.fecha || formatProfile.fecha;
+    savedData.titulo = savedData.titulo || formatProfile.title || savedData.curso;
+  }
+
+  if (!savedData.fecha && storedDeliveryDate) {
+    savedData.fecha = storedDeliveryDate.slice(0, 10);
+  }
 
   function persistData() {
     saveJSON('export_student_data', savedData);
@@ -224,21 +369,92 @@ function buildExportador() {
     if (element) {
       element.addEventListener('input', () => {
         savedData[field] = element.value;
+        if (field === 'fecha') {
+          setDeliveryDateValue(normalizeDeliveryDateInput(element.value));
+        }
         persistData();
         scheduleValidation();
       });
     }
   });
 
+  const loadFormatInput = document.getElementById('load-format-input');
+  const loadFormatButton = document.getElementById('load-format-btn');
+  const clearFormatButton = document.getElementById('clear-format-btn');
+
+  if (loadFormatButton && loadFormatInput) {
+    loadFormatButton.addEventListener('click', () => loadFormatInput.click());
+    loadFormatInput.addEventListener('change', async () => {
+      const file = loadFormatInput.files?.[0];
+      if (!file) return;
+
+      try {
+        const isDocx = /\.docx$/i.test(file.name) || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        let normalized = null;
+
+        if (isDocx) {
+          const dataUrl = await readFileAsDataUrl(file);
+          normalized = saveExportFormatProfile({
+            kind: 'word-template',
+            name: file.name.replace(/\.docx$/i, ''),
+            description: 'Plantilla Word cargada desde un documento DOCX',
+            fileName: file.name,
+            templateDataUrl: dataUrl
+          });
+        } else {
+          const raw = await file.text();
+          const parsed = JSON.parse(raw);
+          const candidate = parsed.profile || parsed.formato || parsed;
+          normalized = saveExportFormatProfile({
+            ...candidate,
+            kind: 'legacy-json',
+            name: candidate.name || file.name.replace(/\.json$/i, ''),
+            description: candidate.description || 'Formato personalizado cargado desde archivo'
+          });
+        }
+
+        if (normalized) {
+          if (normalized.kind === 'legacy-json') {
+            savedData.curso = savedData.curso || normalized.curso;
+            savedData.modalidad = savedData.modalidad || normalized.modalidad;
+            savedData.docente = savedData.docente || normalized.docente;
+            savedData.institucion = savedData.institucion || normalized.institucion;
+            savedData.ciudad = savedData.ciudad || normalized.ciudad;
+            savedData.fecha = savedData.fecha || normalized.fecha;
+            savedData.titulo = savedData.titulo || normalized.title || savedData.curso;
+          }
+          persistData();
+          updateValidation();
+        }
+      } catch (err) {
+        alert('No se pudo cargar el formato. Verifica que sea un archivo Word .docx válido o un JSON compatible.');
+      } finally {
+        loadFormatInput.value = '';
+      }
+    });
+  }
+
+  if (clearFormatButton) {
+    clearFormatButton.addEventListener('click', () => {
+      clearExportFormatProfile();
+      updateValidation();
+    });
+  }
+
   function buildDocumentPreview(data) {
     const outline = loadJSON('organizer_outline', {});
     const outlineValues = outline.values || outline;
     const redactorContent = safeStorageGet('redactor_content', '');
     const references = state.generatedCitations.map(ref => ref.replace(/<\/?em>/g, ''));
+    const formatSections = Array.isArray(state.exportFormatProfile?.structureParts)
+      ? state.exportFormatProfile.structureParts.map(part => part.text).filter(Boolean)
+      : [];
+      const templateLoaded = state.exportFormatProfile?.kind === 'word-template';
 
     return `
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-slate-900" style="font-family: 'Times New Roman', serif; line-height: 2;">
         <div class="text-center min-h-[16rem] flex flex-col justify-center border-b border-slate-200 pb-8 mb-8">
+           ${templateLoaded ? '<p class="text-xs uppercase tracking-[0.2em] text-blue-600 mb-4">Plantilla Word cargada</p>' : ''}
           <p class="text-base">${escapeHtml(data.institucion || 'Institución')}</p>
           <p class="text-base mt-1">${escapeHtml(data.curso || 'Nombre del curso')}</p>
           <p class="text-base mt-1">${escapeHtml(data.modalidad || '')}</p>
@@ -255,11 +471,7 @@ function buildExportador() {
         <div class="mb-6">
           <h2 class="text-lg font-bold mb-3">Tabla de contenido</h2>
           <ol class="list-decimal list-inside text-sm space-y-1">
-            <li>Portada</li>
-            <li>Introducción</li>
-            <li>Desarrollo</li>
-            <li>Conclusiones</li>
-            <li>Referencias</li>
+            ${(formatSections.length > 0 ? formatSections : ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias']).map(entry => `<li>${escapeHtml(entry)}</li>`).join('')}
           </ol>
         </div>
 
@@ -289,6 +501,7 @@ function buildExportador() {
     const validations = [
       { name: 'Nombre del estudiante', ok: !!document.getElementById('export-nombre').value },
       { name: 'Datos básicos del curso', ok: !!document.getElementById('export-curso').value },
+      { name: 'Fecha de entrega', ok: true },
       { name: 'Estructura completada', ok: metrics.structure >= 80 },
       { name: 'Normas APA 7', ok: metrics.apa >= 70 },
       { name: 'Rúbrica activa', ok: metrics.criteria > 0 }
@@ -429,7 +642,7 @@ function buildExportador() {
     ]);
   }
 
-  function exportWordFile(forceExport = false) {
+  async function exportWordFile(forceExport = false) {
     const data = fields.reduce((accumulator, field) => {
       accumulator[field] = document.getElementById(`export-${field}`).value.trim();
       return accumulator;
@@ -450,7 +663,7 @@ function buildExportador() {
 
     const snapshot = buildExportSnapshot();
     addDocumentHistoryEntry(data, snapshot);
-    downloadExportDocx(data, snapshot);
+    await downloadExportDocx(data, snapshot);
 
     const button = document.getElementById('generate-docx-btn');
     if (button) {

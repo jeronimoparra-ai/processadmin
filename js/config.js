@@ -75,6 +75,9 @@ function safeParse(key, fallback) {
   }
 }
 
+const DELIVERY_DATE_STORAGE_KEY = 'checklist_deadline';
+const EXPORT_FORMAT_PROFILE_KEY = 'export_format_profile';
+
 const workStartRaw = safeStorageGet('ws_work_start', '');
 const parsedWorkStart = parseInt(workStartRaw, 10);
 
@@ -95,12 +98,107 @@ const state = {
   organizerVersions: safeParse('organizer_versions', []),
   organizerNotes: safeParse('organizer_notes', {}),
   organizerSnapshots: safeParse('organizer_snapshots', []),
+  exportFormatProfile: loadExportFormatProfile(),
   organizerSnapshotInterval: null,
   checklistDeadlineInterval: null,
   exportValidationTimer: null
 };
 
-const DELIVERY_DATE = new Date('2026-05-31T23:59:00');
+function normalizeExportFormatProfile(profile) {
+  if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return null;
+
+  const templateDataUrl = typeof profile.templateDataUrl === 'string' && profile.templateDataUrl.trim()
+    ? profile.templateDataUrl.trim()
+    : '';
+  const templateBase64 = typeof profile.templateBase64 === 'string' && profile.templateBase64.trim()
+    ? profile.templateBase64.trim()
+    : '';
+
+  if (templateDataUrl || templateBase64) {
+    return {
+      kind: 'word-template',
+      name: typeof profile.name === 'string' ? profile.name.trim() : '',
+      description: typeof profile.description === 'string' ? profile.description.trim() : '',
+      fileName: typeof profile.fileName === 'string' ? profile.fileName.trim() : '',
+      templateDataUrl,
+      templateBase64,
+      updatedAt: typeof profile.updatedAt === 'string' ? profile.updatedAt : new Date().toISOString()
+    };
+  }
+
+  const normalizedParts = Array.isArray(profile.structureParts)
+    ? profile.structureParts
+        .filter(part => part && typeof part === 'object')
+        .map((part, index) => ({
+          id: typeof part.id === 'string' && part.id ? part.id : `format-part-${index + 1}`,
+          text: typeof part.text === 'string' && part.text.trim() ? part.text.trim() : `Parte ${index + 1}`,
+          checked: !!part.checked
+        }))
+    : [];
+
+  return {
+    kind: 'legacy-json',
+    name: typeof profile.name === 'string' ? profile.name.trim() : '',
+    description: typeof profile.description === 'string' ? profile.description.trim() : '',
+    title: typeof profile.title === 'string' ? profile.title.trim() : '',
+    curso: typeof profile.curso === 'string' ? profile.curso.trim() : '',
+    modalidad: typeof profile.modalidad === 'string' ? profile.modalidad.trim() : '',
+    docente: typeof profile.docente === 'string' ? profile.docente.trim() : '',
+    institucion: typeof profile.institucion === 'string' ? profile.institucion.trim() : '',
+    ciudad: typeof profile.ciudad === 'string' ? profile.ciudad.trim() : '',
+    fecha: typeof profile.fecha === 'string' ? profile.fecha.trim() : '',
+    structureParts: normalizedParts,
+    updatedAt: typeof profile.updatedAt === 'string' ? profile.updatedAt : new Date().toISOString()
+  };
+}
+
+function loadExportFormatProfile() {
+  return normalizeExportFormatProfile(safeParse(EXPORT_FORMAT_PROFILE_KEY, null));
+}
+
+function saveExportFormatProfile(profile) {
+  const normalized = normalizeExportFormatProfile(profile);
+  if (!normalized) {
+    try {
+      localStorage.removeItem(EXPORT_FORMAT_PROFILE_KEY);
+    } catch (err) {}
+    state.exportFormatProfile = null;
+    return null;
+  }
+
+  normalized.updatedAt = new Date().toISOString();
+  safeStorageSetJSON(EXPORT_FORMAT_PROFILE_KEY, normalized);
+  state.exportFormatProfile = normalized;
+  return normalized;
+}
+
+function clearExportFormatProfile() {
+  try {
+    localStorage.removeItem(EXPORT_FORMAT_PROFILE_KEY);
+  } catch (err) {}
+  state.exportFormatProfile = null;
+}
+
+function getDeliveryDateValue() {
+  return loadStoredString(DELIVERY_DATE_STORAGE_KEY, '');
+}
+
+function getDeliveryDate() {
+  const value = getDeliveryDateValue();
+  if (!value) return null;
+
+  const deliveryDate = new Date(value);
+  return Number.isNaN(deliveryDate.getTime()) ? null : deliveryDate;
+}
+
+function setDeliveryDateValue(value) {
+  safeStorageSet(DELIVERY_DATE_STORAGE_KEY, value);
+}
+
+function normalizeDeliveryDateInput(value) {
+  if (!value) return '';
+  return value.includes('T') ? value : `${value}T23:59:00`;
+}
 
 const SECTION_RECOMMENDATIONS = {
   introduccion: 'Introducción: 150-250 palabras',

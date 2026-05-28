@@ -1,0 +1,18 @@
+{
+  "name": "Formato académico base",
+  "description": "Perfil opcional para prellenar exportación y estructura",
+  "title": "Trabajo académico",
+  "curso": "Investigación aplicada",
+  "modalidad": "Virtual",
+  "docente": "Prof. Gómez",
+  "institucion": "Universidad Central",
+  "ciudad": "Bogotá",
+  "fecha": "",
+  "structureParts": [
+    { "text": "Portada", "checked": false },
+    { "text": "Introducción", "checked": false },
+    { "text": "Desarrollo", "checked": false },
+    { "text": "Conclusiones", "checked": false },
+    { "text": "Referencias", "checked": false }
+  ]
+}

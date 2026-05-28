@@ -81,6 +81,7 @@ function buildChecklist() {
             <div class="border-t border-blue-300 pt-4">
               <h3 class="font-bold text-blue-900 mb-3">⏰ Entrega</h3>
               <input id="deadline-date" type="datetime-local" aria-label="Fecha de entrega" class="w-full border border-blue-300 rounded px-3 py-2 text-sm mb-2">
+              <p class="text-xs text-blue-700 mb-2">Fecha compartida con el panel y la exportación.</p>
               <div id="countdown-display" class="text-center py-3 bg-white rounded border border-blue-300 transition-colors">
                 <p class="text-sm font-bold text-blue-900">Faltan días</p>
               </div>
@@ -238,7 +239,7 @@ function buildChecklist() {
 
   const deadlineInput = document.getElementById('deadline-date');
   const countdownDisplay = document.getElementById('countdown-display');
-  const savedDeadline = loadStoredString('checklist_deadline', '');
+  const savedDeadline = getDeliveryDateValue();
   if (savedDeadline) deadlineInput.value = savedDeadline;
 
   function updateDeadlineCountdown() {
@@ -275,7 +276,7 @@ function buildChecklist() {
   }
 
   deadlineInput.addEventListener('change', () => {
-    safeStorageSet('checklist_deadline', deadlineInput.value);
+    setDeliveryDateValue(deadlineInput.value);
     updateDeadlineCountdown();
   });
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>DocPro™ | Generador Profesional APA 7 - Trabajos de Calidad</title>
+  <title>DocPro™ | Redacción académica APA 7</title>
 
   <!-- Google Fonts (elegant serif + readable sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,6 +21,9 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- JSZip -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
 </head>
 <body class="page-root">
   <div class="app-wrap">
@@ -31,41 +34,41 @@
           <div class="text-4xl">📝</div>
           <div>
             <h1 class="logo">DocPro</h1>
-            <p class="tag">APA 7 Professional</p>
+            <p class="tag">Redacción académica APA 7</p>
           </div>
         </div>
       </div>
 
       <nav class="nav-list">
         <div class="nav-section">Herramientas</div>
-        <button class="nav-item" data-view="panel"><span class="ico">📊</span><span>Panel de Control</span></button>
-        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="redactor">
+        <button class="nav-item" data-view="panel"><span class="ico">📊</span><span>Panel principal</span></button>
+        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="redactor">
           <span class="relative flex items-center gap-3"><span class="text-lg">✍️</span><span>Redactor Premium</span></span>
         </button>
-        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="apa">
-          <span class="relative flex items-center gap-3"><span class="text-lg">📚</span><span>Gestor APA 7</span></span>
+        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="apa">
+          <span class="relative flex items-center gap-3"><span class="text-lg">📚</span><span>Citas y referencias APA 7</span></span>
         </button>
-        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="simulador">
-          <span class="relative flex items-center gap-3"><span class="text-lg">📈</span><span>Evaluador de Rúbrica</span></span>
+        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="simulador">
+          <span class="relative flex items-center gap-3"><span class="text-lg">📈</span><span>Evaluador de progreso</span></span>
         </button>
-        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="organizador">
+        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="organizador">
           <span class="relative flex items-center gap-3"><span class="text-lg">🧠</span><span>Organizador de Ideas</span></span>
         </button>
 
         <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-2 mb-2 mt-4">Utilidades</div>
-        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="checklist">
-          <span class="relative flex items-center gap-3"><span class="text-lg">✅</span><span>Checklist Inteligente</span></span>
+        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="checklist">
+          <span class="relative flex items-center gap-3"><span class="text-lg">✅</span><span>Checklist académico</span></span>
         </button>
-        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="historial">
-          <span class="relative flex items-center gap-3"><span class="text-lg">🗂️</span><span>Historial de Documentos</span></span>
+        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="historial">
+          <span class="relative flex items-center gap-3"><span class="text-lg">🗂️</span><span>Documentos guardados</span></span>
         </button>
-        <button class="nav-btn w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="exportar">
-          <span class="relative flex items-center gap-3"><span class="text-lg">📤</span><span>Exportación a Word</span></span>
+        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="exportar">
+          <span class="relative flex items-center gap-3"><span class="text-lg">📤</span><span>Exportar a Word</span></span>
         </button>
       </nav>
 
       <div class="side-footer p-6">
-        <div class="meta"><div class="meta-label">Documentos</div><div id="saved-document-count" class="meta-value">0</div></div>
+        <div class="meta"><div class="meta-label">Guardados</div><div id="saved-document-count" class="meta-value">0</div></div>
       </div>
     </aside>
 
@@ -75,7 +78,7 @@
         <div class="hero-inner">
           <div>
             <h2 class="hero-title">DocPro™</h2>
-            <p class="hero-sub">Diseña trabajos de calidad con normas APA 7</p>
+            <p class="hero-sub">Redacta, organiza y exporta trabajos académicos con normas APA 7</p>
           </div>
           <div class="hero-ornament">✦</div>
         </div>
@@ -92,14 +95,14 @@
   <div id="exportModal" class="modal-backdrop" aria-hidden="true">
     <div class="modal-panel">
       <div class="modal-header">
-        <h2>📄 Documento en Markdown</h2>
-        <button id="closeExportModal" class="modal-close" aria-label="Cerrar documento en Markdown">✕</button>
+        <h2>📄 Vista previa en Markdown</h2>
+        <button id="closeExportModal" class="modal-close" aria-label="Cerrar vista previa en Markdown">✕</button>
       </div>
       <div class="modal-body">
         <pre id="markdownOutput" class="markdown-output"></pre>
       </div>
       <div class="modal-footer">
-        <button id="copyMarkdownBtn" class="btn-primary">📋 Copiar al Portapapeles</button>
+        <button id="copyMarkdownBtn" class="btn-primary">📋 Copiar contenido</button>
       </div>
     </div>
   </div>

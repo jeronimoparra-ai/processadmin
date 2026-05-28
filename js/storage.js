@@ -63,7 +63,8 @@ function createDocumentHistorySnapshot(data, snapshot = {}) {
     snapshot: {
       redactorContent: snapshot.redactorContent ?? safeStorageGet('redactor_content', ''),
       organizerOutline: snapshot.organizerOutline ?? loadJSON('organizer_outline', {}),
-      generatedCitations: snapshot.generatedCitations ?? [...state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, ''))
+      generatedCitations: snapshot.generatedCitations ?? [...state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, '')),
+      exportFormatProfile: snapshot.exportFormatProfile ?? state.exportFormatProfile ?? null
     }
   };
 }
@@ -98,8 +99,16 @@ function updateCountdown() {
   const el = document.getElementById('countdown');
   if (!el) return;
 
+  const deliveryDate = getDeliveryDate();
+  if (!deliveryDate) {
+    el.textContent = 'Opcional: agrega una fecha de entrega si quieres ver el conteo';
+    el.classList.remove('text-red-600');
+    el.classList.add('text-slate-500');
+    return;
+  }
+
   const now = Date.now();
-  const target = DELIVERY_DATE.getTime();
+  const target = deliveryDate.getTime();
   const diff = target - now;
 
   if (diff <= 0) {
