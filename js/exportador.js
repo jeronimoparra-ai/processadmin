@@ -120,8 +120,7 @@ function buildExportador() {
           <div class="mt-6 text-base space-y-1">
             <p>${escapeHtml(data.nombre || 'Nombre completo')}</p>
             <p>${escapeHtml(data.codigo || 'Código estudiantil')}</p>
-            <p>${escapeHtml(data.ciudad || 'Ciudad')}</p>
-            <p>${escapeHtml(data.fecha || 'Fecha de entrega')}</p>
+            <p>${escapeHtml([data.ciudad || '', data.modalidad || '', data.fecha || ''].filter(Boolean).join(' · ') || 'Ciudad · Modalidad · Fecha')}</p>
           </div>
         </div>
 

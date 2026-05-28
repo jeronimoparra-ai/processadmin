@@ -101,7 +101,7 @@ function buildPanel() {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="group bg-white rounded-2xl border-2 border-blue-100 p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
           <div class="text-blue-600 text-4xl mb-3">⏰</div>
-          <p class="text-slate-600 text-sm font-medium mb-2">Fecha de Entrega</p>
+          <p class="text-slate-600 text-sm font-medium mb-2">Fecha de entrega</p>
           <p class="text-3xl font-bold text-blue-900 mb-1">31 Mayo</p>
           <p id="countdown" class="text-sm text-blue-600 font-semibold">Calculando...</p>
         </div>

@@ -207,7 +207,7 @@ function calculateQualityMetrics() {
   }
 
   const wordCompletion = formatChecklist.length > 0 ? (formatChecklist.filter(item => item.checked).length / formatChecklist.length) * 100 : 0;
-  const exportFields = ['nombre', 'codigo', 'curso', 'docente', 'institucion', 'ciudad', 'fecha'];
+  const exportFields = ['nombre', 'codigo', 'curso', 'modalidad', 'docente', 'institucion', 'ciudad', 'fecha'];
   const exportFilled = exportFields.filter(field => String(exportData[field] || '').trim().length > 0).length;
   const exportCompletion = (exportFilled / exportFields.length) * 100;
 
