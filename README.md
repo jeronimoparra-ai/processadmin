@@ -39,7 +39,7 @@
 
 ## ¿Qué es DocPro™?
 
-**DocPro™** es una aplicación web de página única (**SPA**) construida en HTML5, CSS3 y JavaScript puro — sin frameworks, sin instalaciones, sin conexión a servidores. Está diseñada específicamente para estudiantes e investigadores que necesitan producir documentos académicos rigurosos bajo las normas **APA 7ª edición**.
+**DocPro™** es una aplicación web de página única (**SPA**) construida en HTML5, CSS3 y JavaScript puro sin frameworks, sin instalaciones, sin conexión a servidores. Está diseñada específicamente para estudiantes e investigadores que necesitan producir documentos académicos rigurosos bajo las normas **APA 7ª edición**.
 
 Combina cuatro módulos especializados en una interfaz unificada: redacción asistida, gestión de citas, seguimiento de progreso y evaluación con rúbrica.
 
