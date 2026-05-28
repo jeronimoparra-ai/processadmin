@@ -23,6 +23,15 @@ function buildExportador() {
               <label class="block text-sm font-bold text-slate-900 mb-2">Nombre del curso</label>
               <input id="export-curso" type="text" aria-label="Nombre del curso" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
+                <div>
+                  <label class="block text-sm font-bold text-slate-900 mb-2">Modalidad</label>
+                  <select id="export-modalidad" aria-label="Modalidad del trabajo" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    <option value="">Seleccionar modalidad</option>
+                    <option value="Presencial">Presencial</option>
+                    <option value="Virtual">Virtual</option>
+                    <option value="Híbrida">Híbrida</option>
+                  </select>
+                </div>
             <div>
               <label class="block text-sm font-bold text-slate-900 mb-2">Nombre del docente</label>
               <input id="export-docente" type="text" aria-label="Nombre del docente" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -74,7 +83,7 @@ function buildExportador() {
   document.getElementById('main-workspace').innerHTML = html;
   stopCountdown();
 
-  const fields = ['nombre', 'codigo', 'curso', 'docente', 'institucion', 'ciudad', 'fecha'];
+  const fields = ['nombre', 'codigo', 'curso', 'modalidad', 'docente', 'institucion', 'ciudad', 'fecha'];
   const savedData = loadJSON('export_student_data', {});
 
   function persistData() {
@@ -104,6 +113,7 @@ function buildExportador() {
         <div class="text-center min-h-[16rem] flex flex-col justify-center border-b border-slate-200 pb-8 mb-8">
           <p class="text-base">${escapeHtml(data.institucion || 'Institución')}</p>
           <p class="text-base mt-1">${escapeHtml(data.curso || 'Nombre del curso')}</p>
+          <p class="text-base mt-1">${escapeHtml(data.modalidad || '')}</p>
           <p class="text-base mt-1">${escapeHtml(data.docente || 'Nombre del docente')}</p>
           <div class="flex-1"></div>
           <h1 class="text-2xl font-bold mt-6">${escapeHtml(data.titulo || 'Título del trabajo')}</h1>
@@ -205,6 +215,7 @@ function buildExportador() {
 
     paragraphs.push(p(data.institucion || 'Institución', { align: 'center', size: 24, double: false }));
     paragraphs.push(p(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
+    if (data.modalidad) paragraphs.push(p(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
     paragraphs.push(p(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
     paragraphs.push(p(title, { align: 'center', size: 32, bold: true }));
     paragraphs.push(p(data.nombre || 'Nombre completo', { align: 'center', size: 24 }));
