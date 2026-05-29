@@ -24,7 +24,7 @@
 <br/>
 
 > *Diseña documentos académicos de alta calidad, genera citas APA 7 automáticamente*  
-> *y evalúa tu trabajo — sin salir del navegador.*
+> *y evalúa tu trabajo sin salir del navegador.*
 
 <br/>
 
