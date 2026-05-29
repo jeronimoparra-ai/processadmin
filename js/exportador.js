@@ -343,16 +343,16 @@ function buildExportador() {
   const fields = ['nombre', 'codigo', 'curso', 'modalidad', 'docente', 'institucion', 'ciudad', 'fecha'];
   const savedData = loadJSON('export_student_data', {});
   const storedDeliveryDate = getDeliveryDateValue();
-  const formatProfile = state.exportFormatProfile;
+  const savedFormatProfile = state.exportFormatProfile;
 
-  if (formatProfile && formatProfile.kind === 'legacy-json') {
-    savedData.curso = savedData.curso || formatProfile.curso;
-    savedData.modalidad = savedData.modalidad || formatProfile.modalidad;
-    savedData.docente = savedData.docente || formatProfile.docente;
-    savedData.institucion = savedData.institucion || formatProfile.institucion;
-    savedData.ciudad = savedData.ciudad || formatProfile.ciudad;
-    savedData.fecha = savedData.fecha || formatProfile.fecha;
-    savedData.titulo = savedData.titulo || formatProfile.title || savedData.curso;
+  if (savedFormatProfile && savedFormatProfile.kind === 'legacy-json') {
+    savedData.curso = savedData.curso || savedFormatProfile.curso;
+    savedData.modalidad = savedData.modalidad || savedFormatProfile.modalidad;
+    savedData.docente = savedData.docente || savedFormatProfile.docente;
+    savedData.institucion = savedData.institucion || savedFormatProfile.institucion;
+    savedData.ciudad = savedData.ciudad || savedFormatProfile.ciudad;
+    savedData.fecha = savedData.fecha || savedFormatProfile.fecha;
+    savedData.titulo = savedData.titulo || savedFormatProfile.title || savedData.curso;
   }
 
   if (!savedData.fecha && storedDeliveryDate) {

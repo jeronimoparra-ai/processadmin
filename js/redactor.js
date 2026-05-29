@@ -145,9 +145,17 @@ function buildRedactorEnhanced() {
   function renderGuide() {
     const sections = getActiveSections();
     const guide = document.getElementById('structure-guide-content');
+    const text = textarea.value || '';
+    const normalizedText = normalizeSpanishText(text);
+    const totalWords = countWords(text);
     recommendation.textContent = sections.map(section => SECTION_RECOMMENDATIONS[section.key] || section.length).join(' • ');
 
-    guide.innerHTML = sections.map(section => `
+    guide.innerHTML = sections.map(section => {
+      const hasHeading = normalizedText.includes(normalizeSpanishText(section.title));
+      const minWords = parseInt(section.length.match(/\d+/)?.[0] || '0', 10);
+      const isReady = hasHeading && totalWords >= minWords;
+
+      return `
       <div class="rounded-xl border border-blue-100 bg-blue-50 p-4">
         <div class="flex items-start justify-between gap-3 mb-2">
           <div>
@@ -160,7 +168,8 @@ function buildRedactorEnhanced() {
         <p class="text-xs text-slate-700 mb-2"><strong>Qué incluir:</strong> ${section.include}</p>
         <p class="text-xs text-slate-700"><strong>Evita:</strong> ${section.mistakes}</p>
       </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function renderConnectors() {

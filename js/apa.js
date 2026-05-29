@@ -97,6 +97,7 @@ function buildApaEnhanced() {
   }
 
   document.getElementById('gen-cita-btn').addEventListener('click', async () => {
+    const button = document.getElementById('gen-cita-btn');
     const autor = document.getElementById('cita-autor').value.trim();
     const anio = document.getElementById('cita-anio').value.trim();
     const pagina = document.getElementById('cita-pagina').value.trim();
@@ -111,9 +112,9 @@ function buildApaEnhanced() {
     citationResult.classList.remove('hidden');
     copyCitationBtn.classList.remove('hidden');
     await writeClipboardText(citation);
-    document.getElementById('gen-cita-btn').textContent = 'Copiado';
+    if (button) button.textContent = 'Copiado';
     setTimeout(() => {
-      document.getElementById('gen-cita-btn').textContent = 'Generar cita en texto';
+      if (button) button.textContent = 'Generar cita en texto';
     }, 2000);
   });
 
