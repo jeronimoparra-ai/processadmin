@@ -742,7 +742,7 @@ function buildExportador() {
     ]);
   }
 
-  async function exportWordFile(forceExport = false) {
+  async function exportarDocx(forceExport = false) {
     const data = fields.reduce((accumulator, field) => {
       accumulator[field] = document.getElementById(`export-${field}`).value.trim();
       return accumulator;
@@ -754,6 +754,7 @@ function buildExportador() {
     }
 
     persistData();
+    const storedData = loadJSON('export_student_data', {});
     const metrics = calculateQualityMetrics();
     const pendingItems = buildPendingItems(metrics);
     if (!forceExport && pendingItems.length > 0) {
@@ -762,8 +763,8 @@ function buildExportador() {
     }
 
     const snapshot = buildExportSnapshot();
-    addDocumentHistoryEntry(data, snapshot);
-    await downloadExportDocx(data, snapshot);
+    addDocumentHistoryEntry(storedData, snapshot);
+    await downloadExportDocx(storedData, snapshot);
 
     const button = document.getElementById('generate-docx-btn');
     if (button) {
@@ -771,6 +772,13 @@ function buildExportador() {
       setTimeout(() => { button.textContent = 'Generar documento Word'; }, 2500);
     }
   }
+
+  async function exportWordFile(forceExport = false) {
+    return exportarDocx(forceExport);
+  }
+
+  window.exportarDocx = exportarDocx;
+  window.exportWordFile = exportWordFile;
 
   updateValidation();
 
@@ -782,8 +790,8 @@ function buildExportador() {
     }, 150);
   }
 
-  document.getElementById('generate-docx-btn').addEventListener('click', () => exportWordFile(false));
-  document.getElementById('export-anyway-btn').addEventListener('click', () => exportWordFile(true));
+  document.getElementById('generate-docx-btn').addEventListener('click', () => exportarDocx(false));
+  document.getElementById('export-anyway-btn').addEventListener('click', () => exportarDocx(true));
   document.getElementById('fix-issues-btn').addEventListener('click', () => {
     const metrics = calculateQualityMetrics();
     const pendingItems = buildPendingItems(metrics);
