@@ -185,6 +185,7 @@ async function buildTemplateDocxPackage(data, snapshot = {}) {
 
   const zip = await JSZip.loadAsync(dataUrlToArrayBuffer(dataUrl));
   const textFiles = Object.values(zip.files).filter(file => /\.(xml|rels)$/i.test(file.name) && !file.dir);
+  let replacedAnyToken = false;
 
   const metadataReplacements = {
     institucion: data.institucion || 'Institución',
@@ -204,6 +205,7 @@ async function buildTemplateDocxPackage(data, snapshot = {}) {
 
   await Promise.all(textFiles.map(async file => {
     let content = await file.async('string');
+    const originalContent = content;
     Object.entries(metadataReplacements).forEach(([key, value]) => {
       content = replaceXmlText(content, key, value);
     });
@@ -212,8 +214,13 @@ async function buildTemplateDocxPackage(data, snapshot = {}) {
     content = replaceXmlParagraph(content, 'contenido', bodyXml);
     content = replaceXmlParagraph(content, 'cuerpo', bodyXml);
     content = replaceXmlParagraph(content, 'referencias', referencesXml);
+    if (content !== originalContent) replacedAnyToken = true;
     zip.file(file.name, content);
   }));
+
+  if (!replacedAnyToken) {
+    return buildGeneratedDocxPackage(data, snapshot);
+  }
 
   return zip.generateAsync({
     type: 'blob',
