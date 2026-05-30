@@ -6,7 +6,7 @@ function buildExportSnapshot() {
   return {
     redactorContent: safeStorageGet('redactor_content', ''),
     organizerOutline: loadJSON('organizer_outline', {}),
-    generatedCitations: [...state.generatedCitations].map(reference => reference.replace(/<\/?em>/g, '')),
+    generatedCitations: getExportReferences(),
     exportFormatProfile: state.exportFormatProfile
   };
 }
@@ -63,8 +63,99 @@ function getWordTemplateDataUrl(profile) {
   return '';
 }
 
+function readFirstStoredValue(...keys) {
+  for (const key of keys) {
+    const value = safeStorageGet(key, '');
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+  return '';
+}
+
+function parseStoredReferences(rawValue) {
+  if (!rawValue) return [];
+
+  try {
+    const parsed = JSON.parse(rawValue);
+    if (Array.isArray(parsed)) {
+      return parsed
+        .map(item => {
+          if (typeof item === 'string') return item.trim();
+          if (item && typeof item === 'object') {
+            return String(item.texto || item.referencia || item.text || item.value || JSON.stringify(item)).trim();
+          }
+          return '';
+        })
+        .filter(Boolean);
+    }
+  } catch (error) {}
+
+  return String(rawValue)
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean);
+}
+
+function getExportReferences(snapshot = {}) {
+  if (Array.isArray(snapshot.generatedCitations) && snapshot.generatedCitations.length > 0) {
+    return snapshot.generatedCitations.map(reference => String(reference || '').replace(/<\/?em>/g, '').trim()).filter(Boolean);
+  }
+
+  const fromState = Array.isArray(state.generatedCitations) ? state.generatedCitations : [];
+  if (fromState.length > 0) {
+    return fromState.map(reference => String(reference || '').replace(/<\/?em>/g, '').trim()).filter(Boolean);
+  }
+
+  const storedRaw = readFirstStoredValue('apa_generated_citations', 'apa_sources', 'docpro_referencias', 'processadmin_referencias', 'docpro_citas', 'pa_citas');
+  if (!storedRaw) return [];
+
+  return parseStoredReferences(storedRaw);
+}
+
+function formatApaDate(value) {
+  if (!value) return '';
+
+  const source = String(value).trim();
+  const candidate = source.includes('T') ? source : `${source}T00:00:00`;
+  const parsed = new Date(candidate);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return source;
+  }
+
+  return parsed.toLocaleDateString('es-CO', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+function buildToCFieldParagraph() {
+  return `
+    <w:p>
+      <w:pPr><w:pStyle w:val="Heading1"/></w:pPr>
+      <w:r><w:rPr><w:b/><w:sz w:val="28"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">Tabla de contenido</w:t></w:r>
+    </w:p>
+    <w:p>
+      <w:r><w:fldChar w:fldCharType="begin"/></w:r>
+      <w:r><w:instrText xml:space="preserve"> TOC \\o &quot;1-2&quot; \\h \\z \\u </w:instrText></w:r>
+      <w:r><w:fldChar w:fldCharType="separate"/></w:r>
+      <w:r><w:t xml:space="preserve">Actualice la tabla de contenido en Word.</w:t></w:r>
+      <w:r><w:fldChar w:fldCharType="end"/></w:r>
+    </w:p>
+  `;
+}
+
+function buildSettingsXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:updateFields w:val="true"/>
+</w:settings>`;
+}
+
 function buildGeneratedDocxPackage(data, snapshot = {}) {
-  const references = (snapshot.generatedCitations || [...state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, '')));
+  const references = getExportReferences(snapshot);
   const outline = snapshot.organizerOutline || loadJSON('organizer_outline', {});
   const outlineValues = outline.values || outline;
   const redactorContent = snapshot.redactorContent ?? safeStorageGet('redactor_content', '');
@@ -73,22 +164,20 @@ function buildGeneratedDocxPackage(data, snapshot = {}) {
     ? exportFormatProfile.structureParts.map(part => part.text).filter(Boolean)
     : [];
   const title = data.titulo || data.curso || 'Trabajo académico';
+  const formattedDate = formatApaDate(data.fecha || getDeliveryDateValue() || new Date().toISOString());
 
   const paragraphs = [];
   paragraphs.push(buildWordParagraph(data.institucion || 'Institución', { align: 'center', size: 24, double: false }));
   paragraphs.push(buildWordParagraph(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
   if (data.modalidad) paragraphs.push(buildWordParagraph(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
   paragraphs.push(buildWordParagraph(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
-  paragraphs.push(buildWordParagraph(title, { align: 'center', size: 32, bold: true }));
+  paragraphs.push(buildWordParagraph(title, { align: 'center', size: 44, bold: true }));
   paragraphs.push(buildWordParagraph(data.nombre || 'Nombre completo', { align: 'center', size: 24 }));
   paragraphs.push(buildWordParagraph(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
   paragraphs.push(buildWordParagraph(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
-  if (data.fecha) paragraphs.push(buildWordParagraph(data.fecha, { align: 'center', size: 24 }));
+  if (formattedDate) paragraphs.push(buildWordParagraph(formattedDate, { align: 'center', size: 24 }));
   paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-  paragraphs.push(buildWordParagraph('Tabla de contenido', { style: 'Heading1', bold: true, size: 28 }));
-  (formatSections.length > 0 ? formatSections : ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias']).forEach((entry, index) => {
-    paragraphs.push(buildWordParagraph(`${index + 1}. ${entry}`, { size: 22 }));
-  });
+  paragraphs.push(buildToCFieldParagraph());
   paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
   paragraphs.push(buildWordParagraph('Introducción', { style: 'Heading1', bold: true, size: 28 }));
   const formatBody = formatSections.length > 0 ? formatSections.join('\n\n') : Object.values(outlineValues).flat().join('\n');
@@ -97,7 +186,7 @@ function buildGeneratedDocxPackage(data, snapshot = {}) {
   });
   paragraphs.push(buildWordParagraph('Referencias', { style: 'Heading1', bold: true, size: 28 }));
   if (references.length === 0) {
-    paragraphs.push(buildWordParagraph('Sin referencias aún', { size: 24, hanging: true }));
+    paragraphs.push(buildWordParagraph('Sin referencias registradas.', { size: 24, hanging: true }));
   } else {
     references.forEach(reference => paragraphs.push(buildWordParagraph(reference, { size: 24, hanging: true })));
   }
@@ -132,12 +221,14 @@ function buildGeneratedDocxPackage(data, snapshot = {}) {
     <w:rPrDefault><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:rPrDefault>
     <w:pPrDefault><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:pPrDefault>
   </w:docDefaults>
-  <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style>
-  <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="32"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="28"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="26"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading3"><w:name w:val="heading 3"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="24"/></w:rPr></w:style>
+  <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:style>
+  <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr><w:rPr><w:b/><w:sz w:val="44"/></w:rPr></w:style>
+  <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:b/><w:sz w:val="28"/></w:rPr></w:style>
+  <w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/><w:sz w:val="26"/></w:rPr></w:style>
+  <w:style w:type="paragraph" w:styleId="Heading3"><w:name w:val="heading 3"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/><w:outlineLvl w:val="2"/></w:pPr><w:rPr><w:b/><w:sz w:val="24"/></w:rPr></w:style>
 </w:styles>`;
+
+  const settingsXml = buildSettingsXml();
 
   const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
@@ -158,15 +249,17 @@ function buildGeneratedDocxPackage(data, snapshot = {}) {
     { path: 'word/_rels/document.xml.rels', content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>
 </Relationships>` },
     { path: 'word/document.xml', content: documentXml },
     { path: 'word/header1.xml', content: headerXml },
-    { path: 'word/styles.xml', content: stylesXml }
+    { path: 'word/styles.xml', content: stylesXml },
+    { path: 'word/settings.xml', content: settingsXml }
   ]);
 }
 
 async function buildTemplateDocxPackage(data, snapshot = {}) {
-  const references = (snapshot.generatedCitations || [...state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, '')));
+  const references = getExportReferences(snapshot);
   const outline = snapshot.organizerOutline || loadJSON('organizer_outline', {});
   const outlineValues = outline.values || outline;
   const redactorContent = snapshot.redactorContent ?? safeStorageGet('redactor_content', '');
@@ -196,12 +289,12 @@ async function buildTemplateDocxPackage(data, snapshot = {}) {
     nombre: data.nombre || 'Nombre completo',
     codigo: data.codigo || 'Código estudiantil',
     ciudad: data.ciudad || 'Ciudad',
-    fecha: data.fecha || ''
+    fecha: formatApaDate(data.fecha || getDeliveryDateValue() || new Date().toISOString())
   };
 
-  const tocXml = tocItems.map((entry, index) => buildWordParagraph(`${index + 1}. ${entry}`, { size: 22 })).join('\n');
+  const tocXml = buildToCFieldParagraph();
   const bodyXml = bodyText.split(/\n\s*\n+/).filter(Boolean).map(paragraph => buildWordParagraph(paragraph, { size: 24, double: true })).join('\n');
-  const referencesXml = (references.length > 0 ? references : ['Sin referencias aún']).map(reference => buildWordParagraph(reference, { size: 24, hanging: true })).join('\n');
+  const referencesXml = (references.length > 0 ? references : ['Sin referencias registradas.']).map(reference => buildWordParagraph(reference, { size: 24, hanging: true })).join('\n');
 
   await Promise.all(textFiles.map(async file => {
     let content = await file.async('string');
@@ -452,11 +545,12 @@ function buildExportador() {
     const outline = loadJSON('organizer_outline', {});
     const outlineValues = outline.values || outline;
     const redactorContent = safeStorageGet('redactor_content', '');
-    const references = state.generatedCitations.map(ref => ref.replace(/<\/?em>/g, ''));
+    const references = getExportReferences();
     const formatSections = Array.isArray(state.exportFormatProfile?.structureParts)
       ? state.exportFormatProfile.structureParts.map(part => part.text).filter(Boolean)
       : [];
-      const templateLoaded = state.exportFormatProfile?.kind === 'word-template';
+    const templateLoaded = state.exportFormatProfile?.kind === 'word-template';
+    const previewDate = formatApaDate(data.fecha || getDeliveryDateValue() || new Date().toISOString());
 
     return `
       <div class="dp-card p-6 text-[var(--dp-text-primary)]" style="font-family: 'Times New Roman', serif; line-height: 2;">
@@ -471,7 +565,7 @@ function buildExportador() {
           <div class="mt-6 space-y-1 text-base">
             <p>${escapeHtml(data.nombre || 'Nombre completo')}</p>
             <p>${escapeHtml(data.codigo || 'Código estudiantil')}</p>
-            <p>${escapeHtml([data.ciudad || '', data.modalidad || '', data.fecha || ''].filter(Boolean).join(' · ') || 'Ciudad · Modalidad · Fecha')}</p>
+            <p>${escapeHtml([data.ciudad || '', data.modalidad || '', previewDate || ''].filter(Boolean).join(' · ') || 'Ciudad · Modalidad · Fecha')}</p>
           </div>
         </div>
 
@@ -490,7 +584,7 @@ function buildExportador() {
         <div>
           <h2 class="mb-3 text-lg font-bold">Referencias</h2>
           <div class="space-y-2 text-sm">
-            ${references.length > 0 ? references.map(reference => `<p class="pl-4 -indent-4">${escapeHtml(reference)}</p>`).join('') : '<p class="italic text-[var(--dp-text-muted)]">Sin referencias aún</p>'}
+            ${references.length > 0 ? references.map(reference => `<p class="pl-4 -indent-4">${escapeHtml(reference)}</p>`).join('') : '<p class="italic text-[var(--dp-text-muted)]">Sin referencias registradas.</p>'}
           </div>
         </div>
       </div>
@@ -544,10 +638,11 @@ function buildExportador() {
   }
 
   function buildDocxPackage(data) {
-    const references = state.generatedCitations.map(ref => ref.replace(/<\/?em>/g, ''));
+    const references = getExportReferences();
     const outline = loadJSON('organizer_outline', {});
     const outlineValues = outline.values || outline;
     const title = data.titulo || data.curso || 'Trabajo académico';
+    const formattedDate = formatApaDate(data.fecha || getDeliveryDateValue() || new Date().toISOString());
 
     const paragraphs = [];
     const p = (text, options = {}) => {
@@ -564,16 +659,14 @@ function buildExportador() {
     paragraphs.push(p(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
     if (data.modalidad) paragraphs.push(p(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
     paragraphs.push(p(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
-    paragraphs.push(p(title, { align: 'center', size: 32, bold: true }));
+    paragraphs.push(p(title, { align: 'center', size: 44, bold: true }));
     paragraphs.push(p(data.nombre || 'Nombre completo', { align: 'center', size: 24 }));
     paragraphs.push(p(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
     paragraphs.push(p(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
-    paragraphs.push(p(data.fecha || 'Fecha de entrega', { align: 'center', size: 24 }));
+    paragraphs.push(p(formattedDate || 'Fecha de entrega', { align: 'center', size: 24 }));
     paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
     paragraphs.push(p('Tabla de contenido', { style: 'Heading1', bold: true, size: 28 }));
-    ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias'].forEach((entry, index) => {
-      paragraphs.push(p(`${index + 1}. ${entry}`, { size: 22 }));
-    });
+    paragraphs.push(p('Actualice la tabla de contenido en Word.', { size: 22 }));
     paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
     paragraphs.push(p('Introducción', { style: 'Heading1', bold: true, size: 28 }));
     (safeStorageGet('redactor_content', '') || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
@@ -581,7 +674,7 @@ function buildExportador() {
     });
     paragraphs.push(p('Referencias', { style: 'Heading1', bold: true, size: 28 }));
     if (references.length === 0) {
-      paragraphs.push(p('Sin referencias aún', { size: 24, hanging: true }));
+      paragraphs.push(p('Sin referencias registradas.', { size: 24, hanging: true }));
     } else {
       references.forEach(reference => paragraphs.push(p(reference, { size: 24, hanging: true }))); 
     }
