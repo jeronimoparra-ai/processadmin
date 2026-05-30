@@ -250,8 +250,8 @@ async function downloadExportDocx(data, snapshot = {}, fileName = null) {
 
 function buildExportador() {
   const formatProfile = state.exportFormatProfile;
-  const formatLabel = formatProfile?.name || 'Sin formato cargado';
-  const formatDetail = formatProfile?.description || 'Puedes cargar un formato JSON opcional para reutilizar datos y estructura.';
+  const formatLabel = formatProfile?.name || 'Ningún formato cargado';
+  const formatDetail = formatProfile?.description || 'Puedes cargar una plantilla Word o un JSON opcional para reutilizar datos y estructura.';
   const html = `
     <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
       <h2 class="mb-2 flex items-center gap-3 text-3xl font-bold">${docproIconHtml('exportWord', 'Exportación a Word', 'docpro-icon docpro-icon--lg')}<span>Exportación a Word (Formato APA 7)</span></h2>
@@ -263,8 +263,8 @@ function buildExportador() {
           <p class="text-sm text-[var(--dp-text-secondary)]">${escapeHtml(formatLabel)} · ${escapeHtml(formatDetail)}</p>
         </div>
         <div class="flex flex-wrap gap-3">
-          <button id="load-format-btn" class="dp-btn dp-btn-primary text-sm">Cargar formato Word</button>
-          <button id="clear-format-btn" class="dp-btn dp-btn-ghost text-sm">Quitar formato</button>
+          <button id="load-format-btn" class="dp-btn dp-btn-primary text-sm">Cargar plantilla Word</button>
+          <button id="clear-format-btn" class="dp-btn dp-btn-ghost text-sm">Eliminar formato cargado</button>
         </div>
       </div>
 
@@ -313,8 +313,8 @@ function buildExportador() {
             </div>
 
             <div class="flex flex-col gap-3 pt-2 sm:flex-row">
-              <button id="generate-docx-btn" class="dp-btn dp-btn-primary flex-1">Generar archivo Word</button>
-              <button id="export-anyway-btn" class="dp-btn dp-btn-ghost flex-1">Exportar de todos modos</button>
+              <button id="generate-docx-btn" class="dp-btn dp-btn-primary flex-1">Generar documento Word</button>
+              <button id="export-anyway-btn" class="dp-btn dp-btn-ghost flex-1">Exportar igualmente</button>
             </div>
           </div>
 
@@ -664,7 +664,7 @@ function buildExportador() {
     const metrics = calculateQualityMetrics();
     const pendingItems = buildPendingItems(metrics);
     if (!forceExport && pendingItems.length > 0) {
-      const shouldContinue = confirm('Hay pendientes por revisar. ¿Deseas exportar de todos modos?');
+      const shouldContinue = confirm('Hay pendientes por revisar. ¿Quieres exportar igualmente?');
       if (!shouldContinue) return;
     }
 
@@ -675,7 +675,7 @@ function buildExportador() {
     const button = document.getElementById('generate-docx-btn');
     if (button) {
       button.textContent = 'Archivo generado';
-      setTimeout(() => { button.textContent = 'Generar archivo Word'; }, 2500);
+      setTimeout(() => { button.textContent = 'Generar documento Word'; }, 2500);
     }
   }
 

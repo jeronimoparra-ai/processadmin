@@ -105,7 +105,7 @@ function buildApaEnhanced() {
     const pagina = document.getElementById('cita-pagina').value.trim();
 
     if (!autor || !anio) {
-      alert('Completa autor y año');
+      alert('Ingresa autor y año para continuar.');
       return;
     }
 
@@ -130,7 +130,7 @@ function buildApaEnhanced() {
   document.getElementById('validate-ref-btn').addEventListener('click', () => {
     const ref = document.getElementById('ref-validator').value.trim();
     if (!ref) {
-      alert('Pega una referencia');
+      alert('Pega una referencia para revisarla.');
       return;
     }
     renderReferenceChecklist(ref);
@@ -165,7 +165,7 @@ function buildApaEnhanced() {
   document.getElementById('add-source-btn').addEventListener('click', () => {
     const titulo = document.getElementById('source-titulo').value.trim();
     if (!titulo) {
-      alert('Completa el título');
+      alert('Ingresa el título de la fuente.');
       return;
     }
 
@@ -196,7 +196,7 @@ function buildApaEnhanced() {
     const url = document.getElementById('apa-url-full').value.trim();
 
     if (!autor || !anio || !titulo) {
-      alert('Completa autor, año y título');
+      alert('Ingresa autor, año y título para generar la referencia.');
       return;
     }
 

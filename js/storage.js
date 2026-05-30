@@ -176,17 +176,17 @@ function updateScoreVisuals(score) {
     bgClass = 'from-green-50 to-green-100';
     borderClass = 'border-green-500 shadow-2xl shadow-green-100/60';
     badgeClass = 'bg-green-600 text-white';
-    badgeText = 'Excelencia Académica';
+    badgeText = 'Resultado alto';
   } else if (score >= 70) {
     bgClass = 'from-amber-50 to-amber-100';
     borderClass = 'border-amber-600 shadow-2xl shadow-amber-100/60';
     badgeClass = 'bg-amber-600 text-white';
-    badgeText = 'Aprobado Satisfactorio';
+    badgeText = 'Resultado aceptable';
   } else {
     bgClass = 'from-orange-50 to-orange-100';
     borderClass = 'border-orange-500 shadow-2xl shadow-orange-100/60';
     badgeClass = 'bg-orange-600 text-white';
-    badgeText = 'Requiere Revisión Urgente';
+    badgeText = 'Necesita revisión';
   }
 
   card.className = `rounded-2xl border-4 bg-gradient-to-br ${bgClass} ${borderClass} p-10 text-center`;

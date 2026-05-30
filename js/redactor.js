@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════
-// REDACTOR.JS - Editor de Contenido Premium con Guías y Métricas
+// REDACTOR.JS - Editor de contenido asistido con guías y métricas
 // ═══════════════════════════════════════════════════════════════════════
 
 function buildRedactorEnhanced() {
@@ -92,7 +92,7 @@ function buildRedactorEnhanced() {
             <div class="flex items-center justify-between gap-3">
               <div>
                 <h2 class="flex items-center gap-3 text-2xl font-bold">
-                  ${docproIconHtml('redactor', 'Redactor Premium', 'docpro-icon docpro-icon--lg')}<span>Redactor Premium</span>
+                  ${docproIconHtml('redactor', 'Redactor asistido', 'docpro-icon docpro-icon--lg')}<span>Redactor asistido</span>
                 </h2>
                 <p id="redactor-recommendation" class="mt-1 text-xs text-[var(--dp-text-muted)]"></p>
               </div>
@@ -119,7 +119,7 @@ function buildRedactorEnhanced() {
             </div>
 
             <button id="save-redactor-btn" class="dp-btn dp-btn-primary w-full">
-              Guardar Redacción
+              Guardar redacción
             </button>
           </div>
         </div>
@@ -259,7 +259,7 @@ function buildRedactorEnhanced() {
     const btn = document.getElementById('save-redactor-btn');
     btn.textContent = 'Guardado';
     setTimeout(() => {
-      btn.textContent = 'Guardar Redacción';
+      btn.textContent = 'Guardar redacción';
     }, 2000);
   });
 

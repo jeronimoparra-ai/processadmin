@@ -14,7 +14,7 @@ function buildPanel() {
     : 'Sin fecha';
   const deliveryDateWarning = deliveryDate ? '' : 'Debes ingresar una fecha de entrega';
   const formatProfile = state.exportFormatProfile;
-  const formatLabel = formatProfile?.name || 'Sin formato cargado';
+  const formatLabel = formatProfile?.name || 'Ningún formato cargado';
   const formatDetail = formatProfile?.description || 'Carga una plantilla Word .docx opcional para reutilizarla al exportar.';
   const structureStorageKey = 'ws_document_structure_parts';
   const structureOpenStorageKey = 'ws_document_structure_open';
@@ -22,7 +22,7 @@ function buildPanel() {
   const structureToggleLabel = isStructureOpen ? 'Ocultar tabla' : 'Ver tabla';
   const structureStatusLabel = isStructureOpen ? 'Tabla desplegada' : 'Tabla recogida';
   const defaultStructureParts = [
-    'Portada profesional',
+    'Portada',
     'Introducción',
     'Planteamiento del problema',
     'Objetivos',
@@ -105,10 +105,28 @@ function buildPanel() {
       <div class="dp-card relative overflow-hidden p-12">
         <div class="absolute top-0 right-0 h-64 w-64 rounded-full bg-[rgba(201,169,110,0.12)] -mr-32 -mt-32 blur-3xl"></div>
         <div class="relative">
-          <h1 class="mb-3 flex items-center gap-4 text-5xl font-black"><span class="shrink-0">${docproIconHtml('redactor', 'Redactor académico', 'docpro-icon docpro-icon--lg')}</span><span>Redacta, organiza y exporta en APA 7</span></h1>
+          <h1 class="mb-3 flex items-center gap-4 text-5xl font-black"><span class="shrink-0">${docproIconHtml('redactor', 'Redacción académica en ProcessAdmin', 'docpro-icon docpro-icon--lg')}</span><span>ProcessAdmin: redacta y organiza trabajos académicos en APA 7</span></h1>
           <p class="max-w-2xl text-lg leading-relaxed text-[var(--dp-text-secondary)]">
-            Diseña trabajos académicos claros y consistentes con redacción guiada, organización de ideas, referencias APA 7 y exportación profesional a Word.
+            Redacta borradores académicos, organiza ideas, revisa referencias APA 7 y exporta en Word desde el navegador. El contenido se guarda en el dispositivo con localStorage.
           </p>
+          <div class="hero-pills mt-6">
+            <span class="header-pill header-pill--accent">Guardado local</span>
+            <span class="header-pill header-pill--success">Sin servidor</span>
+            <span class="header-pill">Actualizado 29 may 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dp-card p-6">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div class="space-y-2">
+            <h2 class="flex items-center gap-3 text-2xl font-bold">${docproIconHtml('panel', 'Transparencia del proyecto', 'docpro-icon docpro-icon--sm')}<span>Transparencia del proyecto</span></h2>
+            <p class="text-sm text-[var(--dp-text-secondary)]">Autoría visible, contacto sugerido y aviso de almacenamiento local para que la interfaz se lea como un producto completo.</p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" class="dp-btn dp-btn-ghost project-nav" data-view="legal">Ver privacidad y términos</button>
+            <button type="button" class="dp-btn dp-btn-primary project-nav" data-view="exportar">Ir a exportación</button>
+          </div>
         </div>
       </div>
 
@@ -119,7 +137,7 @@ function buildPanel() {
           ${docproIconHtml('panel', 'Indicadores de calidad', 'docpro-icon docpro-icon--lg')} <span>Indicadores de calidad</span>
           </h2>
         </div>
-        <p class="mb-8 text-sm text-[var(--dp-text-secondary)]">Seguimiento claro del avance en estructura, APA 7, criterios y formato Word</p>
+        <p class="mb-8 text-sm text-[var(--dp-text-secondary)]">Seguimiento del avance en estructura, APA 7, criterios y formato Word</p>
 
         <div class="dp-grid-4 mb-8">
           <div class="dp-stat">
@@ -230,7 +248,7 @@ function buildPanel() {
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
             <h3 class="mb-3 text-lg font-bold">Organiza tu tema</h3>
             <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
-              Usa el <strong>Organizador de Ideas</strong> para definir tema, problema, preguntas y objetivos.
+              Usa el <strong>Organizador de ideas</strong> para definir tema, problema, preguntas y objetivos.
             </p>
           </div>
 
@@ -238,7 +256,7 @@ function buildPanel() {
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">2</div>
             <h3 class="mb-3 text-lg font-bold">Redacta con apoyo</h3>
             <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
-              Usa el <strong>Redactor</strong> con contador de palabras y sugerencias de conectores académicos.
+              Usa el <strong>Redactor asistido</strong> con contador de palabras y sugerencias de conectores académicos.
             </p>
           </div>
 
@@ -246,7 +264,7 @@ function buildPanel() {
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold">3</div>
             <h3 class="mb-3 text-lg font-bold">Exporta a Word</h3>
             <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
-              Genera un <strong>documento Word profesional</strong> con portada, índice y formato APA 7 automático.
+              Genera un <strong>documento Word</strong> con portada, índice y formato APA 7 a partir del contenido guardado.
             </p>
           </div>
 
@@ -366,6 +384,9 @@ function buildPanel() {
 
   document.getElementById('main-workspace').innerHTML = html;
   document.querySelectorAll('.pending-nav').forEach(button => {
+    button.addEventListener('click', () => navigate(button.dataset.view));
+  });
+  document.querySelectorAll('.project-nav').forEach(button => {
     button.addEventListener('click', () => navigate(button.dataset.view));
   });
   document.querySelectorAll('.quick-start-card').forEach(card => {

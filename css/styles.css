@@ -73,6 +73,24 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: 10px;
+  z-index: 80;
+  padding: 10px 14px;
+  border-radius: var(--dp-r-sm);
+  background: var(--dp-text-primary);
+  color: var(--dp-text-inverse);
+  transform: translateY(-180%);
+  transition: transform var(--dp-t-fast);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 .page-root {
   min-height: 100vh;
   background:

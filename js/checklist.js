@@ -83,7 +83,7 @@ function buildChecklist() {
               <input id="deadline-date" type="datetime-local" aria-label="Fecha de entrega" class="dp-input mb-2 text-sm">
               <p class="mb-2 text-xs text-[var(--dp-text-muted)]">Fecha compartida con el panel y la exportación.</p>
               <div id="countdown-display" class="rounded-lg border border-[var(--dp-border)] bg-white px-3 py-3 text-center transition-colors">
-                <p class="text-sm font-bold text-[var(--dp-text-primary)]">Faltan días</p>
+                <p class="text-sm font-bold text-[var(--dp-text-primary)]">Pendiente de fecha</p>
               </div>
             </div>
           </div>

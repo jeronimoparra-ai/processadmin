@@ -35,7 +35,7 @@ function buildHistorial() {
       <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <h2 class="mb-2 flex items-center gap-3 text-3xl font-bold">${docproIconHtml('review', 'Historial de documentos', 'docpro-icon docpro-icon--lg')}<span>Historial de documentos</span></h2>
-          <p class="text-[var(--dp-text-secondary)]">Reabre, revisa o descarga versiones que ya exportaste.</p>
+          <p class="text-[var(--dp-text-secondary)]">Reabre, revisa o descarga versiones guardadas.</p>
         </div>
         <div class="flex items-center gap-3">
           <div class="dp-card px-4 py-3">
@@ -114,7 +114,7 @@ function buildHistorial() {
       list.innerHTML = `
         <div class="dp-card space-y-3 p-8 text-center">
           <div class="flex justify-center">${docproIconHtml('review', 'Sin documentos guardados', 'docpro-icon docpro-icon--xl')}</div>
-          <h3 class="text-2xl font-bold text-[var(--dp-text-primary)]">${searchTerm ? 'No hay coincidencias' : 'Aún no hay documentos guardados'}</h3>
+          <h3 class="text-2xl font-bold text-[var(--dp-text-primary)]">${searchTerm ? 'No se encontraron resultados' : 'Todavía no hay documentos guardados'}</h3>
           <p class="text-[var(--dp-text-secondary)]">${searchTerm ? 'Prueba con otro término o limpia el filtro.' : 'Cuando exportes un trabajo, aparecerá aquí para volver a abrirlo o descargarlo.'}</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
             <button id="empty-history-export" class="dp-btn dp-btn-primary">${searchTerm ? 'Limpiar filtro' : 'Crear primer documento'}</button>

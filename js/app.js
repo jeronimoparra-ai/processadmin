@@ -1,12 +1,13 @@
 const VIEW_META = {
-  panel: { title: 'Panel de Control', sub: 'Resumen del progreso de tu documento' },
-  redactor: { title: 'Redactor Premium', sub: 'Redacta cada sección con orientación APA 7' },
+  panel: { title: 'Panel de control', sub: 'Resumen del estado de tu documento y del guardado local' },
+  redactor: { title: 'Redactor asistido', sub: 'Redacta cada sección con orientación APA 7' },
   apa: { title: 'Gestor APA 7', sub: 'Genera y gestiona tus referencias bibliográficas' },
-  simulador: { title: 'Evaluador de Rúbrica', sub: 'Simula tu calificación antes de entregar' },
-  organizador: { title: 'Organizador de Ideas', sub: 'Estructura y organiza tus ideas principales' },
-  checklist: { title: 'Checklist Inteligente', sub: 'Verifica que tu documento cumple todos los requisitos' },
+  simulador: { title: 'Evaluador de rúbrica', sub: 'Revisa criterios y puntajes antes de entregar' },
+  organizador: { title: 'Organizador de ideas', sub: 'Estructura y organiza tus ideas principales' },
+  checklist: { title: 'Checklist inteligente', sub: 'Verifica los requisitos visibles del documento' },
   exportar: { title: 'Exportación a Word', sub: 'Descarga tu documento en formato compatible' },
-  historial: { title: 'Historial de documentos', sub: 'Reabre y administra tus exportaciones anteriores' }
+  historial: { title: 'Historial de documentos', sub: 'Reabre y administra tus exportaciones anteriores' },
+  legal: { title: 'Información legal', sub: 'Privacidad, términos, contacto y alcance del sitio' }
 };
 
 function getCanonicalViewId(viewId) {
@@ -137,6 +138,8 @@ function navigate(viewId) {
       return typeof buildChecklist === 'function' ? buildChecklist() : null;
     case 'historial':
       return typeof buildHistorial === 'function' ? buildHistorial() : null;
+    case 'legal':
+      return typeof buildLegalView === 'function' ? buildLegalView() : null;
     case 'exportar':
       return typeof buildExportador === 'function' ? buildExportador() : null;
     default:

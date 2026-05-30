@@ -45,7 +45,7 @@ function buildRubricaRebuilt() {
           <div class="dp-card p-6 space-y-4">
             <div class="flex items-center justify-between gap-3">
               <h3 class="dp-card-title">Criterios actuales</h3>
-              <button id="add-criteria-btn" class="dp-btn dp-btn-accent">Agregar criterio</button>
+              <button id="add-criteria-btn" class="dp-btn dp-btn-accent">Añadir criterio</button>
             </div>
             <div id="criteria-list" class="max-h-96 space-y-3 overflow-y-auto"></div>
           </div>
@@ -73,16 +73,16 @@ function buildRubricaRebuilt() {
           </div>
 
           <div class="dp-card p-6">
-            <button id="reset-rubric-btn" class="dp-btn dp-btn-ghost w-full">Restablecer</button>
+            <button id="reset-rubric-btn" class="dp-btn dp-btn-ghost w-full">Limpiar criterios</button>
             <p class="mt-3 text-xs text-[var(--dp-text-muted)]">Se borran solo los criterios activos y se conserva la biblioteca de plantillas guardadas.</p>
           </div>
 
           <div class="dp-card p-6">
             <p class="mb-2 text-xs font-bold tracking-[0.12em] text-[var(--dp-text-muted)]">ESCALA DE CUMPLIMIENTO:</p>
             <div class="space-y-1 text-xs text-[var(--dp-text-secondary)]">
-              <div><span class="font-bold text-[var(--dp-danger)]">0-59%</span> - Deficiente</div>
-              <div><span class="font-bold text-[var(--dp-warning)]">60-79%</span> - Aceptable</div>
-              <div><span class="font-bold text-[var(--dp-success)]">80-100%</span> - Excelente</div>
+              <div><span class="font-bold text-[var(--dp-danger)]">0-59%</span> - Por mejorar</div>
+              <div><span class="font-bold text-[var(--dp-warning)]">60-79%</span> - Adecuado</div>
+              <div><span class="font-bold text-[var(--dp-success)]">80-100%</span> - Muy alto</div>
             </div>
           </div>
         </div>
@@ -157,13 +157,13 @@ function buildRubricaRebuilt() {
     const label = document.getElementById('traffic-label');
     if (percent >= 80) {
       light.innerHTML = '<span class="traffic-badge traffic-badge--green"></span>';
-      label.textContent = 'Excelente: 80-100%';
+      label.textContent = 'Muy alto: 80-100%';
     } else if (percent >= 60) {
       light.innerHTML = '<span class="traffic-badge traffic-badge--yellow"></span>';
-      label.textContent = 'Aceptable: 60-79%';
+      label.textContent = 'Adecuado: 60-79%';
     } else {
       light.innerHTML = '<span class="traffic-badge traffic-badge--red"></span>';
-      label.textContent = 'Deficiente: 0-59%';
+      label.textContent = 'Por mejorar: 0-59%';
     }
   }
 
@@ -201,7 +201,7 @@ function buildRubricaRebuilt() {
               </select>
             </div>
             <div class="px-3 py-2 rounded border text-xs font-bold ${trafficClass}">
-              ${Math.round(ratio * 100)}% · ${ratio >= 0.8 ? 'Excelente' : ratio >= 0.6 ? 'Aceptable' : 'Deficiente'}
+              ${Math.round(ratio * 100)}% · ${ratio >= 0.8 ? 'Muy alto' : ratio >= 0.6 ? 'Adecuado' : 'Por mejorar'}
             </div>
           </div>
         </div>
@@ -302,7 +302,7 @@ function buildRubricaRebuilt() {
   });
 
   document.getElementById('reset-rubric-btn').addEventListener('click', () => {
-    if (!confirm('¿Restablecer la rúbrica actual?')) return;
+    if (!confirm('¿Vaciar la rúbrica actual?')) return;
     criteria = [];
     persistRubric();
     renderCriteria();
