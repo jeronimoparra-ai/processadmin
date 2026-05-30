@@ -16,30 +16,49 @@ function saveJSON(key, value) {
 }
 
 function saveField(key, value) {
-  const statusEl = document.getElementById('save-status');
-  if (statusEl) {
-    statusEl.textContent = 'Guardando...';
-    statusEl.classList.add('text-amber-400');
-  }
+  flashSaveIndicator();
 
   clearTimeout(state.saveTimer);
   state.saveTimer = setTimeout(() => {
     safeStorageSet(key, value);
-    if (statusEl) {
-      statusEl.textContent = 'Guardado automáticamente';
-      statusEl.classList.remove('text-amber-400');
-      statusEl.classList.add('text-green-600');
-    }
     updateWriterProgress();
     if (typeof updateSectionCompleteness === 'function') {
       updateSectionCompleteness();
     }
-    setTimeout(() => {
-      if (statusEl) {
-        statusEl.textContent = '';
-        statusEl.classList.remove('text-green-600');
-      }
-    }, 3000);
+  }, 800);
+}
+
+function flashSaveIndicator() {
+  const el = document.getElementById('save-indicator');
+  if (!el) return;
+
+  const pill = el.closest('.header-pill');
+  const label = pill?.querySelector('span');
+
+  el.classList.add('dp-saving');
+  el.innerHTML = `
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+    <path d="M7 3v6h10"></path>
+    <path d="M8 21v-8h8v8"></path>
+  `;
+
+  if (pill) {
+    pill.style.background = '#fdf6eb';
+    pill.style.color = '#9a6e28';
+    pill.style.borderColor = '#e8d5a8';
+  }
+
+  if (label) label.textContent = 'Guardando…';
+
+  clearTimeout(state.saveIndicatorTimer);
+  state.saveIndicatorTimer = setTimeout(() => {
+    el.classList.remove('dp-saving');
+    if (pill) {
+      pill.style.background = '#f0faf4';
+      pill.style.color = '#2d7a4e';
+      pill.style.borderColor = '#c6e8d4';
+    }
+    if (label) label.textContent = 'Guardado';
   }, 800);
 }
 
@@ -103,7 +122,7 @@ function updateCountdown() {
   if (!deliveryDate) {
     el.textContent = 'Opcional: agrega una fecha de entrega si quieres ver el conteo';
     el.classList.remove('text-red-600');
-    el.classList.add('text-slate-500');
+    el.classList.add('text-[var(--dp-text-muted)]');
     return;
   }
 
@@ -189,12 +208,22 @@ function updateScoreVisuals(score) {
     badgeText = 'Necesita revisión';
   }
 
-  card.className = `rounded-2xl border-4 bg-gradient-to-br ${bgClass} ${borderClass} p-10 text-center`;
+  card.className = 'dp-card dp-stat p-10 text-center';
+  card.style.background = bgClass === 'from-green-50 to-green-100'
+    ? 'linear-gradient(180deg, #f0faf4 0%, #e7f7ee 100%)'
+    : bgClass === 'from-amber-50 to-amber-100'
+      ? 'linear-gradient(180deg, #fdf6eb 0%, #fbefcf 100%)'
+      : 'linear-gradient(180deg, #fdf0ef 0%, #f9e4e1 100%)';
+  card.style.borderColor = borderClass.includes('border-green-500')
+    ? 'var(--dp-success-border)'
+    : borderClass.includes('border-amber-600')
+      ? 'var(--dp-warning-border)'
+      : 'var(--dp-danger-border)';
 
   const badge = document.getElementById('score-badge');
   if (badge) {
     badge.textContent = badgeText;
-    badge.className = `${badgeClass} rounded-full px-6 py-2 text-sm font-bold mt-4 inline-block shadow-lg`;
+    badge.className = `${badgeClass} dp-badge mt-4 inline-block`;
   }
 }
 

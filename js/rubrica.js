@@ -172,7 +172,7 @@ function buildRubricaRebuilt() {
     criteria = criteria.map(normalizeCriterion);
 
     if (criteria.length === 0) {
-      list.innerHTML = '<p class="text-slate-500 italic text-sm">Sin criterios activos.</p>';
+      list.innerHTML = '<p class="text-[var(--dp-text-muted)] italic text-sm">Sin criterios activos.</p>';
       updateSummary();
       persistRubric();
       return;
@@ -191,12 +191,12 @@ function buildRubricaRebuilt() {
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm items-end">
             <div>
-              <label class="text-xs font-bold text-slate-700 block mb-1">Máximo</label>
-              <input type="number" min="1" value="${normalized.max}" aria-label="Puntuación máxima del criterio" class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="${index}" data-field="max">
+              <label class="text-xs font-bold text-[var(--dp-text-secondary)] block mb-1">Máximo</label>
+              <input type="number" min="1" value="${normalized.max}" aria-label="Puntuación máxima del criterio" class="dp-input text-sm" data-idx="${index}" data-field="max">
             </div>
             <div>
-              <label class="text-xs font-bold text-slate-700 block mb-1">Obtenido</label>
-              <select aria-label="Puntuación obtenida del criterio" class="w-full border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400" data-idx="${index}" data-field="obtained">
+              <label class="text-xs font-bold text-[var(--dp-text-secondary)] block mb-1">Obtenido</label>
+              <select aria-label="Puntuación obtenida del criterio" class="dp-select text-sm" data-idx="${index}" data-field="obtained">
                 ${Array.from({ length: normalized.max + 1 }, (_, value) => `<option value="${value}" ${value === normalized.obtained ? 'selected' : ''}>${value}</option>`).join('')}
               </select>
             </div>

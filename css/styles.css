@@ -551,3 +551,183 @@ img, svg, video, canvas { max-width: 100%; height: auto; }
   .btn,
   .btn-primary { width: 100%; }
 }
+
+/* =====================================================
+   SISTEMA DE ANIMACIONES — ProcessAdmin
+   Todas son CSS puras, sin JS, sin librerías externas
+   ===================================================== */
+
+/* Entrada principal de vistas */
+@keyframes dpFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Entrada desde la izquierda (sidebar items) */
+@keyframes dpSlideInLeft {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Escala suave (modales, cards destacadas) */
+@keyframes dpScaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Pulso suave (indicador de guardado) */
+@keyframes dpPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
+}
+
+/* Shimmer (skeleton loading) */
+@keyframes dpShimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+/* Bounce ligero (confirmaciones de acción) */
+@keyframes dpBounce {
+  0%, 100% { transform: translateY(0); }
+  40%      { transform: translateY(-5px); }
+  60%      { transform: translateY(-2px); }
+}
+
+/* =====================================================
+   CLASES DE ANIMACIÓN REUTILIZABLES
+   ===================================================== */
+
+/* Vista completa — se aplica en navigate() */
+.dp-view {
+  animation: dpFadeIn 280ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Stagger — los hijos entran en cascada */
+.dp-stagger > * {
+  animation: dpFadeIn 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.dp-stagger > *:nth-child(1)  { animation-delay:   0ms; }
+.dp-stagger > *:nth-child(2)  { animation-delay:  55ms; }
+.dp-stagger > *:nth-child(3)  { animation-delay: 110ms; }
+.dp-stagger > *:nth-child(4)  { animation-delay: 165ms; }
+.dp-stagger > *:nth-child(5)  { animation-delay: 220ms; }
+.dp-stagger > *:nth-child(6)  { animation-delay: 275ms; }
+.dp-stagger > *:nth-child(7)  { animation-delay: 330ms; }
+.dp-stagger > *:nth-child(8)  { animation-delay: 385ms; }
+
+/* Entrada de modal */
+.dp-modal-anim {
+  animation: dpScaleIn 220ms cubic-bezier(0.34, 1.1, 0.64, 1) both;
+}
+
+/* Nav buttons del sidebar */
+.nav-btn {
+  animation: dpSlideInLeft 200ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.nav-btn:nth-child(1)  { animation-delay:  30ms; }
+.nav-btn:nth-child(2)  { animation-delay:  70ms; }
+.nav-btn:nth-child(3)  { animation-delay: 110ms; }
+.nav-btn:nth-child(4)  { animation-delay: 150ms; }
+.nav-btn:nth-child(5)  { animation-delay: 190ms; }
+.nav-btn:nth-child(6)  { animation-delay: 230ms; }
+.nav-btn:nth-child(7)  { animation-delay: 270ms; }
+.nav-btn:nth-child(8)  { animation-delay: 310ms; }
+
+/* Indicador de guardado — pulso activo */
+.dp-saving {
+  animation: dpPulse 1.2s ease-in-out infinite;
+}
+
+/* Skeleton placeholder */
+.dp-skeleton {
+  background: linear-gradient(90deg, #f0ede6 25%, #e8e4dc 50%, #f0ede6 75%);
+  background-size: 600px 100%;
+  animation: dpShimmer 1.4s infinite linear;
+  border-radius: var(--dp-r-sm);
+}
+
+/* Confirmación de acción exitosa */
+.dp-bounce {
+  animation: dpBounce 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+/* =====================================================
+   TRANSICIONES EN COMPONENTES
+   (hover, focus, active — sin keyframes)
+   ===================================================== */
+
+/* Cards — elevación al hover */
+.dp-card {
+  transition: box-shadow 250ms ease, transform 250ms ease;
+}
+.dp-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  transform: translateY(-2px);
+}
+
+/* Stat cards — borde dorado al hover */
+.dp-stat {
+  transition: box-shadow 250ms ease, border-color 250ms ease;
+}
+.dp-stat:hover {
+  border-color: var(--dp-accent-border);
+  box-shadow: 0 4px 16px rgba(201,169,110,0.12);
+}
+
+/* Botones — micro-interacción al click */
+.dp-btn {
+  transition: background 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+.dp-btn:active { transform: translateY(0) scale(0.98); }
+
+/* Inputs — expansión suave al focus */
+.dp-input, .dp-textarea, .dp-select {
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+/* Progress fill — crecimiento animado */
+.dp-progress-fill {
+  transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Slider thumb — escala al hover */
+.dp-slider::-webkit-slider-thumb {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.dp-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgba(201,169,110,0.2);
+}
+
+/* Ref item — borde izquierdo dorado expandible */
+.dp-ref-item {
+  transition: border-color 200ms ease, background 200ms ease;
+}
+.dp-ref-item:hover {
+  background: var(--dp-accent-light);
+  border-color: var(--dp-accent-border);
+}
+
+/* Nav btn — ya tiene transition en la regla base, solo añadir transform */
+.nav-btn:active { transform: scale(0.98); }
+
+/* Accordion chevron — ya definido, verificar que esté */
+.dp-accordion-btn .dp-chevron {
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.dp-accordion-btn.open .dp-chevron {
+  transform: rotate(180deg);
+}
+
+/* =====================================================
+   ACCESIBILIDAD — prefers-reduced-motion
+   OBLIGATORIO: respeta la configuración del usuario
+   ===================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

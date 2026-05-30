@@ -240,7 +240,7 @@ function buildOrganizador() {
   function renderVersions() {
     const list = document.getElementById('versions-list');
     if (state.organizerVersions.length === 0) {
-      list.innerHTML = '<p class="text-purple-700 italic">Sin versiones guardadas</p>';
+      list.innerHTML = '<p class="text-[var(--dp-text-muted)] italic">Sin versiones guardadas</p>';
       versionPreview.classList.add('hidden');
       return;
     }
@@ -250,9 +250,9 @@ function buildOrganizador() {
         <div class="flex justify-between items-center gap-2">
           <div>
             <div>v${index + 1}</div>
-            <div class="text-purple-700 text-xs">${escapeHtml(version.date)}</div>
+            <div class="text-[var(--dp-accent-dark)] text-xs">${escapeHtml(version.date)}</div>
           </div>
-          <span class="text-[10px] uppercase tracking-wide text-purple-700">${escapeHtml(workTypeLabels[version.type] || version.type)}</span>
+          <span class="text-[10px] uppercase tracking-wide text-[var(--dp-accent-dark)]">${escapeHtml(workTypeLabels[version.type] || version.type)}</span>
         </div>
         <div class="flex gap-2">
           <button class="dp-btn dp-btn-ghost flex-1 preview-version" data-idx="${index}">Vista previa</button>
@@ -267,7 +267,7 @@ function buildOrganizador() {
         versionPreview.classList.remove('hidden');
         versionPreview.innerHTML = `
           <p class="font-bold text-purple-900 mb-2">Vista previa: ${escapeHtml(version.date)}</p>
-          <pre class="whitespace-pre-wrap text-slate-700 font-mono">${escapeHtml(JSON.stringify(version.content, null, 2))}</pre>
+          <pre class="whitespace-pre-wrap text-[var(--dp-text-secondary)] font-mono">${escapeHtml(JSON.stringify(version.content, null, 2))}</pre>
         `;
       });
     });

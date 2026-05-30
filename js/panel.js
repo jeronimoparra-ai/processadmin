@@ -68,7 +68,7 @@ function buildPanel() {
           <button type="button" class="structure-item-delete dp-btn dp-btn-ghost dp-btn-sm text-red-600" data-id="${item.id}">Eliminar</button>
         </div>
       `).join('')
-      : '<p class="text-sm text-slate-500 italic">Todavía no has agregado partes al documento.</p>';
+      : '<p class="text-sm text-[var(--dp-text-muted)] italic">Todavía no has agregado partes al documento.</p>';
 
     container.querySelectorAll('.structure-item-check').forEach(input => {
       input.addEventListener('change', () => {
@@ -139,7 +139,7 @@ function buildPanel() {
         </div>
         <p class="mb-8 text-sm text-[var(--dp-text-secondary)]">Seguimiento del avance en estructura, APA 7, criterios y formato Word</p>
 
-        <div class="dp-grid-4 mb-8">
+        <div class="dp-grid-auto mb-8">
           <div class="dp-stat">
             <div class="flex justify-between items-center mb-2">
               <h3 class="dp-stat-label flex items-center gap-2 text-sm">${docproIconHtml('validation', 'Estructura', 'docpro-icon docpro-icon--sm')}<span>Estructura</span></h3>
@@ -243,9 +243,9 @@ function buildPanel() {
         <h2 class="mb-8 flex items-center gap-3 text-3xl font-bold">
           ${docproIconHtml('ideas', 'Guía de inicio', 'docpro-icon docpro-icon--lg')} <span>Guía de inicio</span>
         </h2>
-        <div class="dp-grid-4">
+        <div class="dp-grid-auto">
             <div class="dp-card relative cursor-pointer p-6 quick-start-card" data-view="organizador">
-            <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
+            <div class="dp-badge dp-badge-info absolute top-3 right-3 h-10 w-10 rounded-full justify-center">1</div>
             <h3 class="mb-3 text-lg font-bold">Organiza tu tema</h3>
             <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
               Usa el <strong>Organizador de ideas</strong> para definir tema, problema, preguntas y objetivos.
@@ -253,7 +253,7 @@ function buildPanel() {
           </div>
 
           <div class="dp-card relative cursor-pointer p-6 quick-start-card" data-view="redactor">
-            <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">2</div>
+            <div class="dp-badge dp-badge-accent absolute top-3 right-3 h-10 w-10 rounded-full justify-center">2</div>
             <h3 class="mb-3 text-lg font-bold">Redacta con apoyo</h3>
             <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
               Usa el <strong>Redactor asistido</strong> con contador de palabras y sugerencias de conectores académicos.
@@ -261,7 +261,7 @@ function buildPanel() {
           </div>
 
           <div class="dp-card relative cursor-pointer p-6 quick-start-card" data-view="exportar">
-            <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold">3</div>
+            <div class="dp-badge dp-badge-warning absolute top-3 right-3 h-10 w-10 rounded-full justify-center">3</div>
             <h3 class="mb-3 text-lg font-bold">Exporta a Word</h3>
             <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
               Genera un <strong>documento Word</strong> con portada, índice y formato APA 7 a partir del contenido guardado.

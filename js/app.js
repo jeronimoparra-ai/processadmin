@@ -58,9 +58,9 @@ function updateActiveNavigation(viewId) {
 function resetWorkspaceAnimation() {
   const workspace = document.getElementById('main-workspace');
   if (!workspace) return;
-  workspace.classList.remove('dp-view');
+  workspace.classList.remove('dp-view', 'dp-stagger');
   void workspace.offsetWidth;
-  workspace.classList.add('dp-view');
+  workspace.classList.add('dp-view', 'dp-stagger');
 }
 
 function openExportModal() {
@@ -68,6 +68,12 @@ function openExportModal() {
   if (!exportModal) return;
   exportModal.style.display = 'flex';
   exportModal.setAttribute('aria-hidden', 'false');
+  const modal = exportModal.querySelector('.modal-panel');
+  if (modal) {
+    modal.classList.remove('dp-modal-anim');
+    void modal.offsetWidth;
+    modal.classList.add('dp-modal-anim');
+  }
 }
 
 function closeExportModal() {
@@ -75,6 +81,12 @@ function closeExportModal() {
   if (!exportModal) return;
   exportModal.style.display = 'none';
   exportModal.setAttribute('aria-hidden', 'true');
+  const modal = exportModal.querySelector('.modal-panel');
+  if (modal) {
+    modal.classList.remove('dp-modal-anim');
+    void modal.offsetWidth;
+    modal.classList.add('dp-modal-anim');
+  }
 }
 
 function bindExportModalControls() {

@@ -101,7 +101,8 @@ const state = {
   exportFormatProfile: loadExportFormatProfile(),
   organizerSnapshotInterval: null,
   checklistDeadlineInterval: null,
-  exportValidationTimer: null
+  exportValidationTimer: null,
+  saveIndicatorTimer: null
 };
 
 function normalizeExportFormatProfile(profile) {

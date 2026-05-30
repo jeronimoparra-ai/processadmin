@@ -5,10 +5,10 @@
 function buildChecklist() {
   const html = `
     <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
-      <div class="flex gap-0 mb-6 overflow-x-auto border-b border-[var(--dp-border)]">
-        <button class="checklist-tab active border-b-4 border-transparent px-6 py-3 font-bold text-[var(--dp-text-secondary)] transition-all hover:text-[var(--dp-text-primary)]" data-tab="estructura">Estructura del trabajo</button>
-        <button class="checklist-tab border-b-4 border-transparent px-6 py-3 font-bold text-[var(--dp-text-secondary)] transition-all hover:text-[var(--dp-text-primary)]" data-tab="formato">Formato Word APA 7</button>
-        <button class="checklist-tab border-b-4 border-transparent px-6 py-3 font-bold text-[var(--dp-text-secondary)] transition-all hover:text-[var(--dp-text-primary)]" data-tab="criterios">Criterios del profesor</button>
+      <div class="flex gap-2 mb-6 overflow-x-auto">
+        <button class="checklist-tab dp-btn dp-btn-primary dp-btn-sm active" data-tab="estructura">Estructura del trabajo</button>
+        <button class="checklist-tab dp-btn dp-btn-ghost dp-btn-sm" data-tab="formato">Formato Word APA 7</button>
+        <button class="checklist-tab dp-btn dp-btn-ghost dp-btn-sm" data-tab="criterios">Criterios del profesor</button>
       </div>
 
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -140,12 +140,12 @@ function buildChecklist() {
     const items = checklists[tab];
 
     container.innerHTML = items.map((item, idx) => `
-      <div class="dp-card flex items-center gap-2 p-3 transition-colors group hover:bg-[var(--dp-surface-2)]">
-        <input type="checkbox" ${item.checked ? 'checked' : ''} aria-label="Marcar ítem como completado" class="w-4 h-4 accent-blue-600 checklist-input" data-tab="${tab}" data-idx="${idx}">
-        <input type="text" value="${escapeHtml(item.text)}" aria-label="Texto del ítem de checklist" class="flex-1 bg-transparent text-sm focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-400" data-tab="${tab}" data-idx="${idx}">
-        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="-1" aria-label="Mover ítem hacia arriba">▲</button>
-        <button class="text-slate-500 hover:text-slate-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="1" aria-label="Mover ítem hacia abajo">▼</button>
-        <button class="text-red-600 hover:text-red-700 font-bold opacity-0 group-hover:opacity-100 transition-opacity delete-item" data-tab="${tab}" data-idx="${idx}" aria-label="Eliminar ítem">Eliminar</button>
+      <div class="dp-check-item group">
+        <input type="checkbox" ${item.checked ? 'checked' : ''} aria-label="Marcar ítem como completado" class="checklist-input" data-tab="${tab}" data-idx="${idx}">
+        <input type="text" value="${escapeHtml(item.text)}" aria-label="Texto del ítem de checklist" class="dp-input flex-1 border-transparent bg-transparent px-0 py-0 text-sm shadow-none focus:border-transparent focus:ring-0" data-tab="${tab}" data-idx="${idx}">
+        <button class="text-[var(--dp-text-muted)] font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="-1" aria-label="Mover ítem hacia arriba">▲</button>
+        <button class="text-[var(--dp-text-muted)] font-bold opacity-0 group-hover:opacity-100 transition-opacity move-item" data-tab="${tab}" data-idx="${idx}" data-direction="1" aria-label="Mover ítem hacia abajo">▼</button>
+        <button class="text-[var(--dp-danger)] font-bold opacity-0 group-hover:opacity-100 transition-opacity delete-item" data-tab="${tab}" data-idx="${idx}" aria-label="Eliminar ítem">Eliminar</button>
       </div>
     `).join('');
 
@@ -220,9 +220,13 @@ function buildChecklist() {
   document.querySelectorAll('.checklist-tab').forEach(btn => {
     btn.addEventListener('click', () => {
       const tab = btn.dataset.tab;
-      document.querySelectorAll('.checklist-tab').forEach(tabButton => tabButton.classList.remove('active', 'text-blue-600', 'border-blue-600'));
+      document.querySelectorAll('.checklist-tab').forEach(tabButton => {
+        const isActive = tabButton === btn;
+        tabButton.classList.toggle('active', isActive);
+        tabButton.classList.toggle('dp-btn-primary', isActive);
+        tabButton.classList.toggle('dp-btn-ghost', !isActive);
+      });
       document.querySelectorAll('.checklist-tab-content').forEach(content => content.classList.add('hidden'));
-      btn.classList.add('active', 'text-blue-600', 'border-blue-600');
       document.querySelector(`[data-tab="${tab}"].checklist-tab-content`).classList.remove('hidden');
     });
   });

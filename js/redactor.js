@@ -56,7 +56,7 @@ function buildRedactorEnhanced() {
   const savedType = loadStoredString('redactor_work_type', 'ensayo');
 
   const html = `
-    <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
+    <div class="dp-stagger dp-view" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
       <div id="redactor-shell" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div id="redactor-side-panels" class="lg:col-span-4 space-y-4">
           <div class="dp-card p-4">
@@ -166,9 +166,9 @@ function buildRedactorEnhanced() {
           </div>
           <span class="shrink-0">${docproIconHtml(isReady ? 'validation' : 'review', isReady ? 'Sección validada' : 'Sección pendiente', 'docpro-icon docpro-icon--sm')}</span>
         </div>
-        <p class="text-xs text-slate-700 mb-2"><strong>Propósito:</strong> ${section.purpose}</p>
-        <p class="text-xs text-slate-700 mb-2"><strong>Qué incluir:</strong> ${section.include}</p>
-        <p class="text-xs text-slate-700"><strong>Evita:</strong> ${section.mistakes}</p>
+        <p class="text-xs text-[var(--dp-text-secondary)] mb-2"><strong>Propósito:</strong> ${section.purpose}</p>
+        <p class="text-xs text-[var(--dp-text-secondary)] mb-2"><strong>Qué incluir:</strong> ${section.include}</p>
+        <p class="text-xs text-[var(--dp-text-secondary)]"><strong>Evita:</strong> ${section.mistakes}</p>
       </div>
       `;
     }).join('');
@@ -178,10 +178,10 @@ function buildRedactorEnhanced() {
     const container = document.getElementById('connectors-content');
     container.innerHTML = Object.entries(connectors).map(([group, words]) => `
       <div>
-        <p class="font-semibold text-purple-700 text-xs mb-2 capitalize">${group.replace('_', ' y ')}:</p>
+        <p class="font-semibold text-[var(--dp-accent-dark)] text-xs mb-2 capitalize">${group.replace('_', ' y ')}:</p>
         <div class="flex flex-wrap gap-2">
           ${words.map(word => `
-            <button class="bg-purple-100 text-purple-900 px-2.5 py-1 rounded text-xs hover:bg-purple-200 transition-colors copy-connector" data-text="${escapeHtml(word)}">
+            <button class="dp-badge dp-badge-accent copy-connector" data-text="${escapeHtml(word)}">
               ${escapeHtml(word)}
             </button>
           `).join('')}
@@ -200,7 +200,7 @@ function buildRedactorEnhanced() {
       const hasHeading = normalizedText.includes(normalizeSpanishText(section.title));
       const minWords = parseInt(section.length.match(/\d+/)?.[0] || '0', 10);
       const isReady = hasHeading && totalWords >= minWords;
-      const warningClass = isReady ? 'border-green-200 bg-green-50 text-green-800' : 'border-yellow-200 bg-yellow-50 text-yellow-800';
+      const warningClass = isReady ? 'dp-badge dp-badge-success' : 'dp-badge dp-badge-warning';
       const warningIcon = isReady
         ? docproIconHtml('validation', 'Sección validada', 'docpro-icon docpro-icon--sm')
         : docproIconHtml('review', 'Sección pendiente', 'docpro-icon docpro-icon--sm');
