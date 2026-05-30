@@ -1,20 +1,29 @@
-// Archivo generado a partir del script inline en index.html
-// Contiene la lógica principal de la aplicación (migrado desde <script> inline).
+const VIEW_META = {
+  panel: { title: 'Panel de Control', sub: 'Resumen del progreso de tu documento' },
+  redactor: { title: 'Redactor Premium', sub: 'Redacta cada sección con orientación APA 7' },
+  apa: { title: 'Gestor APA 7', sub: 'Genera y gestiona tus referencias bibliográficas' },
+  simulador: { title: 'Evaluador de Rúbrica', sub: 'Simula tu calificación antes de entregar' },
+  organizador: { title: 'Organizador de Ideas', sub: 'Estructura y organiza tus ideas principales' },
+  checklist: { title: 'Checklist Inteligente', sub: 'Verifica que tu documento cumple todos los requisitos' },
+  exportar: { title: 'Exportación a Word', sub: 'Descarga tu documento en formato compatible' },
+  historial: { title: 'Historial de documentos', sub: 'Reabre y administra tus exportaciones anteriores' }
+};
 
-// State and configuration are defined in `js/config.js` to centralize shared state.
+function getCanonicalViewId(viewId) {
+  switch (viewId) {
+    case 'rubrica':
+      return 'simulador';
+    case 'organizer':
+      return 'organizador';
+    case 'export':
+      return 'exportar';
+    default:
+      return viewId || 'panel';
+  }
+}
 
-// Utilities are provided by js/utils.js and js/storage.js; avoid redefining them here.
-
-// ... el resto de las funciones y builders ...
-// Para mantener la migración intacta, se copió la totalidad del script inline original.
-// Debido al tamaño, el resto del archivo contiene exactamente el código original
-// movido desde index.html (constructores de vistas y router). Para brevedad en esta
-// vista se mantiene el archivo completo en el workspace.
-
-// Iniciar la app cuando el DOM esté listo
 function cleanupView() {
   try {
-    // Clear known intervals and timers stored on state
     if (state.countdownInterval) { clearInterval(state.countdownInterval); state.countdownInterval = null; }
     if (state.organizerSnapshotInterval) { clearInterval(state.organizerSnapshotInterval); state.organizerSnapshotInterval = null; }
     if (state.checklistDeadlineInterval) { clearInterval(state.checklistDeadlineInterval); state.checklistDeadlineInterval = null; }
@@ -26,85 +35,136 @@ function cleanupView() {
   }
 }
 
+function updateHeaderForView(viewId) {
+  const canonicalViewId = getCanonicalViewId(viewId);
+  const meta = VIEW_META[canonicalViewId] || VIEW_META.panel;
+  const title = document.getElementById('header-title');
+  const subtitle = document.getElementById('header-subtitle');
+
+  if (title) title.textContent = meta.title;
+  if (subtitle) subtitle.textContent = meta.sub;
+}
+
+function updateActiveNavigation(viewId) {
+  const canonicalViewId = getCanonicalViewId(viewId);
+  document.querySelectorAll('.nav-btn, .nav-item').forEach(button => {
+    if (!button.dataset || !button.dataset.view) return;
+    const buttonView = getCanonicalViewId(button.dataset.view);
+    button.classList.toggle('active', buttonView === canonicalViewId);
+  });
+}
+
+function resetWorkspaceAnimation() {
+  const workspace = document.getElementById('main-workspace');
+  if (!workspace) return;
+  workspace.classList.remove('dp-view');
+  void workspace.offsetWidth;
+  workspace.classList.add('dp-view');
+}
+
+function openExportModal() {
+  const exportModal = document.getElementById('exportModal');
+  if (!exportModal) return;
+  exportModal.style.display = 'flex';
+  exportModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeExportModal() {
+  const exportModal = document.getElementById('exportModal');
+  if (!exportModal) return;
+  exportModal.style.display = 'none';
+  exportModal.setAttribute('aria-hidden', 'true');
+}
+
+function bindExportModalControls() {
+  const closeExport = document.getElementById('closeExportModal');
+  const copyBtn = document.getElementById('copyMarkdownBtn');
+  const exportModal = document.getElementById('exportModal');
+
+  if (closeExport && !closeExport.dataset.bound) {
+    closeExport.dataset.bound = 'true';
+    closeExport.addEventListener('click', closeExportModal);
+  }
+
+  if (copyBtn && !copyBtn.dataset.bound) {
+    copyBtn.dataset.bound = 'true';
+    copyBtn.addEventListener('click', async () => {
+      const content = document.getElementById('markdownOutput')?.innerText || '';
+      try {
+        await navigator.clipboard.writeText(content);
+        const originalText = copyBtn.textContent || 'Copiar contenido';
+        copyBtn.textContent = 'Copiado';
+        setTimeout(() => {
+          copyBtn.textContent = originalText;
+        }, 1500);
+      } catch (error) {
+        alert('No se pudo copiar automáticamente.');
+      }
+    });
+  }
+
+  if (exportModal && !exportModal.dataset.bound) {
+    exportModal.dataset.bound = 'true';
+    exportModal.addEventListener('click', event => {
+      if (event.target === exportModal) closeExportModal();
+    });
+  }
+
+  window.openExportModal = openExportModal;
+  window.closeExportModal = closeExportModal;
+}
+
 function navigate(viewId) {
   cleanupView();
   state.activeView = viewId;
 
-  // update nav active states
-  document.querySelectorAll('.nav-btn, .nav-item').forEach(btn => {
-    if (btn.dataset && btn.dataset.view) {
-      btn.classList.toggle('active', btn.dataset.view === viewId);
-    }
-  });
+  updateHeaderForView(viewId);
+  updateActiveNavigation(viewId);
+  resetWorkspaceAnimation();
 
-  switch (viewId) {
-    case 'panel': return typeof buildPanel === 'function' ? buildPanel() : null;
-    case 'redactor': return typeof buildRedactorEnhanced === 'function' ? buildRedactorEnhanced() : null;
-    case 'apa': return typeof buildApaEnhanced === 'function' ? buildApaEnhanced() : null;
+  switch (getCanonicalViewId(viewId)) {
+    case 'panel':
+      return typeof buildPanel === 'function' ? buildPanel() : null;
+    case 'redactor':
+      return typeof buildRedactorEnhanced === 'function' ? buildRedactorEnhanced() : null;
+    case 'apa':
+      return typeof buildApaEnhanced === 'function' ? buildApaEnhanced() : null;
     case 'simulador':
-    case 'rubrica': return typeof buildRubricaRebuilt === 'function' ? buildRubricaRebuilt() : null;
+      return typeof buildRubricaRebuilt === 'function' ? buildRubricaRebuilt() : null;
     case 'organizador':
-    case 'organizer': return typeof buildOrganizador === 'function' ? buildOrganizador() : null;
-    case 'checklist': return typeof buildChecklist === 'function' ? buildChecklist() : null;
-    case 'historial': return typeof buildHistorial === 'function' ? buildHistorial() : null;
+      return typeof buildOrganizador === 'function' ? buildOrganizador() : null;
+    case 'checklist':
+      return typeof buildChecklist === 'function' ? buildChecklist() : null;
+    case 'historial':
+      return typeof buildHistorial === 'function' ? buildHistorial() : null;
     case 'exportar':
-    case 'export': return typeof buildExportador === 'function' ? buildExportador() : null;
-    default: return typeof buildPanel === 'function' ? buildPanel() : null;
+      return typeof buildExportador === 'function' ? buildExportador() : null;
+    default:
+      return typeof buildPanel === 'function' ? buildPanel() : null;
   }
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!safeStorageGet('ws_work_start', '')) {
-      safeStorageSet('ws_work_start', Date.now().toString());
-    }
-    updateSavedDocumentCounter();
-
-    document.querySelectorAll('.nav-btn, .nav-item').forEach(btn => {
-      btn.addEventListener('click', () => {
-        navigate(btn.dataset.view);
-      });
-    });
-
-    // Modal helpers (export modal)
-    const exportModal = document.getElementById('exportModal');
-    const closeExport = document.getElementById('closeExportModal');
-    const copyBtn = document.getElementById('copyMarkdownBtn');
-    function openExportModal(){
-      if(!exportModal) return;
-      exportModal.classList.add('active');
-      exportModal.setAttribute('aria-hidden','false');
-    }
-    function closeExportModal(){
-      if(!exportModal) return;
-      exportModal.classList.remove('active');
-      exportModal.setAttribute('aria-hidden','true');
-    }
-    if(closeExport) closeExport.addEventListener('click', closeExportModal);
-    if(copyBtn) copyBtn.addEventListener('click', () => {
-      const content = document.getElementById('markdownOutput')?.innerText || '';
-      try{ navigator.clipboard.writeText(content); copyBtn.textContent = 'Copiado'; setTimeout(()=> copyBtn.textContent = 'Copiar al Portapapeles',1500);}catch(e){alert('No se pudo copiar automáticamente.');}
-    });
-
-    navigate('panel');
-  });
-} else {
+function initApp() {
   if (!safeStorageGet('ws_work_start', '')) {
     safeStorageSet('ws_work_start', Date.now().toString());
   }
+
   updateSavedDocumentCounter();
-  document.querySelectorAll('.nav-btn, .nav-item').forEach(btn => {
-    btn.addEventListener('click', () => {
-      navigate(btn.dataset.view);
+  bindExportModalControls();
+
+  document.querySelectorAll('.nav-btn, .nav-item').forEach(button => {
+    if (button.dataset.bound === 'true') return;
+    button.dataset.bound = 'true';
+    button.addEventListener('click', () => {
+      navigate(button.dataset.view);
     });
   });
-  // same modal helpers for non-loading path
-  const exportModal = document.getElementById('exportModal');
-  const closeExport = document.getElementById('closeExportModal');
-  const copyBtn = document.getElementById('copyMarkdownBtn');
-  function openExportModal(){ if(!exportModal) return; exportModal.classList.add('active'); exportModal.setAttribute('aria-hidden','false'); }
-  function closeExportModal(){ if(!exportModal) return; exportModal.classList.remove('active'); exportModal.setAttribute('aria-hidden','true'); }
-  if(closeExport) closeExport.addEventListener('click', closeExportModal);
-  if(copyBtn) copyBtn.addEventListener('click', () => { const content = document.getElementById('markdownOutput')?.innerText || ''; try{ navigator.clipboard.writeText(content); copyBtn.textContent = 'Copiado'; setTimeout(()=> copyBtn.textContent = 'Copiar al Portapapeles',1500);}catch(e){alert('No se pudo copiar automáticamente.');} });
-  navigate('panel');
+
+  navigate(state.activeView || 'panel');
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
 }

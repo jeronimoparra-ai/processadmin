@@ -6,109 +6,142 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>DocPro™ | Redacción académica APA 7</title>
 
-  <!-- Google Fonts (elegant serif + readable sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Libre+Franklin:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/redesign.css">
 
-  <!-- Tailwind (optional) -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: { preflight: false },
+      theme: { extend: { colors: { accent: '#c9a96e', surface: '#faf9f6', dark: '#1c1b18' } } }
+    }
+  </script>
 
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- JSZip -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-
   <script src="js/ui-icons.js"></script>
-
 </head>
 <body class="page-root">
   <div class="app-wrap">
-    <!-- SIDEBAR -->
     <aside class="side-panel">
-      <div class="brand p-8">
-        <div class="flex items-center gap-3 mb-2">
-          <img src="assets/icons/redactor.svg" alt="Redactor académico" class="docpro-icon docpro-icon--xl">
+      <div class="brand">
+        <div class="flex items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#c9a96e] shadow-[0_8px_24px_rgba(0,0,0,0.14)]" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1c1b18" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+              <path d="M7 3.5h7.5L19 8v12.5A2.5 2.5 0 0 1 16.5 23h-9A2.5 2.5 0 0 1 5 20.5v-14A3 3 0 0 1 8 3.5z"></path>
+              <path d="M14.5 3.5V8H19"></path>
+              <path d="M8.5 12h7"></path>
+              <path d="M8.5 15.5h7"></path>
+            </svg>
+          </div>
           <div>
-            <h1 class="logo">DocPro</h1>
-            <p class="tag">Redacción académica APA 7</p>
+            <h1 class="logo">DocPro™</h1>
+            <p class="tag">APA 7 Professional</p>
           </div>
         </div>
       </div>
 
-      <nav class="nav-list">
+      <nav class="nav-list" aria-label="Navegación principal">
         <div class="nav-section">Herramientas</div>
-        <button class="nav-item" data-view="panel"><img src="assets/icons/panel.svg" alt="Panel principal" class="ico"><span>Panel principal</span></button>
-        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="redactor">
-          <span class="relative flex items-center gap-3"><img src="assets/icons/redactor.svg" alt="Redactor Premium" class="docpro-icon"><span>Redactor Premium</span></span>
+        <button class="nav-btn active" data-view="panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+          <span>Panel de Control</span>
         </button>
-        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="apa">
-          <span class="relative flex items-center gap-3"><img src="assets/icons/apa.svg" alt="Citas y referencias APA 7" class="docpro-icon"><span>Citas y referencias APA 7</span></span>
+        <button class="nav-btn" data-view="redactor">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5z"></path></svg>
+          <span>Redactor Premium</span>
         </button>
-        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="simulador">
-          <span class="relative flex items-center gap-3"><img src="assets/icons/validation.svg" alt="Evaluador de progreso" class="docpro-icon"><span>Evaluador de progreso</span></span>
+        <button class="nav-btn" data-view="apa">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 5.5h16"></path><path d="M7 5.5v13"></path><path d="M17 5.5v13"></path><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+          <span>Gestor APA 7</span>
         </button>
-        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="organizador">
-          <span class="relative flex items-center gap-3"><img src="assets/icons/ideas.svg" alt="Organizador de Ideas" class="docpro-icon"><span>Organizador de Ideas</span></span>
+        <button class="nav-btn" data-view="simulador">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 19h16"></path><path d="M6 15h3V7H6z"></path><path d="M11 15h3V4h-3z"></path><path d="M16 15h3v-6h-3z"></path></svg>
+          <span>Evaluador de Rúbrica</span>
+        </button>
+        <button class="nav-btn" data-view="organizador">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M8 6v12"></path></svg>
+          <span>Organizador de Ideas</span>
         </button>
 
-        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-2 mb-2 mt-4">Utilidades</div>
-        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="checklist">
-          <span class="relative flex items-center gap-3"><img src="assets/icons/validation.svg" alt="Checklist académico" class="docpro-icon"><span>Checklist académico</span></span>
+        <div class="sidebar-section-label mt-3">Utilidades</div>
+        <button class="nav-btn" data-view="checklist">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M7 12l3 3 7-7"></path></svg>
+          <span>Checklist Inteligente</span>
         </button>
-        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="historial">
-          <span class="relative flex items-center gap-3"><img src="assets/icons/review.svg" alt="Documentos guardados" class="docpro-icon"><span>Documentos guardados</span></span>
+        <button class="nav-btn" data-view="historial">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path><path d="M18 17v-6"></path><path d="M15 14l3 3 3-3"></path></svg>
+          <span>Documentos guardados</span>
         </button>
-        <button class="nav-item w-full text-left px-5 py-3.5 rounded-xl text-slate-200 hover:bg-slate-700/50 transition-all font-medium group relative overflow-hidden" data-view="exportar">
-          <span class="relative flex items-center gap-3"><img src="assets/icons/export-word.svg" alt="Exportar a Word" class="docpro-icon"><span>Exportar a Word</span></span>
+        <button class="nav-btn" data-view="exportar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M12 3v10"></path><path d="M8 9l4 4 4-4"></path><path d="M5 21h14"></path></svg>
+          <span>Exportación a Word</span>
         </button>
       </nav>
 
-      <div class="side-footer p-6">
-        <div class="meta"><div class="meta-label">Guardados</div><div id="saved-document-count" class="meta-value">0</div></div>
+      <div class="side-footer">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div class="meta">
+            <div>
+              <div class="meta-label">Documentos</div>
+              <div id="saved-document-count" class="meta-value">0</div>
+            </div>
+            <div class="text-right text-[11px] leading-5 text-white/45">
+              <div>Guardado local</div>
+              <div>Privacidad primero</div>
+            </div>
+          </div>
+        </div>
       </div>
     </aside>
 
-    <!-- MAIN -->
     <main class="main-area">
-      <header class="main-hero">
-        <div class="hero-inner">
+      <header class="main-hero workspace-header">
+        <div class="header-inner">
           <div>
-            <h2 class="hero-title">DocPro™</h2>
-            <p class="hero-sub">Redacta, organiza y exporta trabajos académicos con normas APA 7</p>
+            <h2 id="header-title" class="header-title">Panel de Control</h2>
+            <p id="header-subtitle" class="header-subtitle">Resumen del progreso de tu documento</p>
           </div>
-          <div class="hero-ornament" aria-hidden="true"></div>
+          <div class="header-pills">
+            <div class="header-pill header-pill--success">
+              <svg id="save-indicator" class="header-save-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <path d="M7 3v6h10"></path>
+                <path d="M8 21v-8h8v8"></path>
+              </svg>
+              <span>Guardado</span>
+            </div>
+            <div class="header-pill header-pill--accent">APA 7ª Ed.</div>
+          </div>
         </div>
       </header>
 
       <section class="content-area">
-        <div id="main-workspace" class="workspace"></div>
+        <div id="main-workspace" class="workspace" style="padding:36px 40px;background:#faf9f6;display:flex;flex-direction:column;gap:20px;max-width:1000px"></div>
       </section>
     </main>
   </div>
 
-  <!-- EXPORT MODAL -->
-  <div id="exportModal" class="modal-backdrop" aria-hidden="true">
+  <div id="exportModal" class="modal-backdrop" style="display:none" aria-hidden="true">
     <div class="modal-panel">
       <div class="modal-header">
-        <h2><img src="assets/icons/review.svg" alt="Vista previa en Markdown" class="docpro-icon docpro-icon--sm"> Vista previa en Markdown</h2>
-        <button id="closeExportModal" class="modal-close" aria-label="Cerrar vista previa en Markdown">Cerrar</button>
+        <h2 class="font-serif">Vista previa en Markdown</h2>
+        <button id="closeExportModal" class="modal-close" aria-label="Cerrar vista previa en Markdown">✕</button>
       </div>
       <div class="modal-body">
         <pre id="markdownOutput" class="markdown-output"></pre>
       </div>
       <div class="modal-footer">
-        <button id="copyMarkdownBtn" class="btn-primary">Copiar contenido</button>
+        <button id="copyMarkdownBtn" class="dp-btn dp-btn-primary">Copiar contenido</button>
       </div>
     </div>
   </div>
 
-  <!-- Módulos JS -->
   <script src="js/config.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/storage.js"></script>

@@ -18,67 +18,72 @@ function buildRubricaRebuilt() {
   }
 
   const html = `
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div class="lg:col-span-2 space-y-6">
-        <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">${docproIconHtml('achievement', 'Evaluador de rúbrica personalizable', 'docpro-icon docpro-icon--lg')}<span>Evaluador de rúbrica personalizable</span></h2>
+    <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+          <h2 class="mb-2 flex items-center gap-3 text-3xl font-bold">${docproIconHtml('achievement', 'Evaluador de rúbrica personalizable', 'docpro-icon docpro-icon--lg')}<span>Evaluador de rúbrica personalizable</span></h2>
 
-        <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md space-y-4">
-          <div class="flex flex-col gap-3">
-            <label class="block text-sm font-bold text-slate-900">Plantillas rápidas</label>
-            <select id="template-select" aria-label="Plantillas rápidas" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-              <option value="">Seleccionar plantilla...</option>
-              ${buildTemplateOptions()}
-            </select>
-            <button id="load-template-btn" class="w-full bg-blue-600 text-white rounded px-4 py-2 font-bold hover:bg-blue-700 transition-colors text-sm">Cargar plantilla</button>
+          <div class="dp-card p-6 space-y-4">
+            <div class="flex flex-col gap-3">
+              <label class="dp-label">Plantillas rápidas</label>
+              <select id="template-select" aria-label="Plantillas rápidas" class="dp-select">
+                <option value="">Seleccionar plantilla...</option>
+                ${buildTemplateOptions()}
+              </select>
+              <button id="load-template-btn" class="dp-btn dp-btn-primary w-full">Cargar plantilla</button>
+            </div>
+          </div>
+
+          <div class="dp-card p-6 space-y-4">
+            <div>
+              <h3 class="dp-card-title mb-2 flex items-center gap-2">${docproIconHtml('ideas', 'Criterios del profesor', 'docpro-icon docpro-icon--sm')}<span>Criterios del profesor</span></h3>
+              <textarea id="prof-input" rows="4" placeholder="Pega aquí lo que el profesor pidió..." aria-label="Criterios del profesor" class="dp-textarea"></textarea>
+            </div>
+            <button id="parse-prof-btn" class="dp-btn dp-btn-primary w-full">Convertir en criterios</button>
+          </div>
+
+          <div class="dp-card p-6 space-y-4">
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="dp-card-title">Criterios actuales</h3>
+              <button id="add-criteria-btn" class="dp-btn dp-btn-accent">Agregar criterio</button>
+            </div>
+            <div id="criteria-list" class="max-h-96 space-y-3 overflow-y-auto"></div>
           </div>
         </div>
 
-        <div class="bg-white rounded-lg border-2 border-orange-200 p-6 shadow-md space-y-4">
-          <div>
-            <h3 class="font-bold text-orange-900 mb-2 flex items-center gap-2">${docproIconHtml('ideas', 'Criterios del profesor', 'docpro-icon docpro-icon--sm')}<span>Criterios del profesor</span></h3>
-            <textarea id="prof-input" rows="4" placeholder="Pega aquí lo que el profesor pidió..." aria-label="Criterios del profesor" class="w-full border border-orange-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400"></textarea>
+        <div class="space-y-6">
+          <div class="dp-card sticky top-6 p-8 text-center">
+            <p class="mb-2 text-sm font-bold tracking-[0.12em] text-[var(--dp-text-muted)]">PUNTUACIÓN ACTUAL</p>
+            <p id="score-display-rubrica" class="text-5xl font-black text-[var(--dp-text-primary)]">0/0</p>
+            <p id="grade-display-rubrica" class="mt-2 text-lg font-bold text-[var(--dp-text-secondary)]">0.0/5 · 0.0/10</p>
+            <div id="traffic-light" class="mt-4 flex justify-center"><span class="traffic-badge traffic-badge--yellow"></span></div>
+            <p id="traffic-label" class="mt-2 text-sm font-bold text-[var(--dp-text-primary)]">Escala: 60-79%</p>
+            <div class="mt-4">
+              <input class="dp-slider" type="range" min="0" max="100" value="0" disabled aria-hidden="true">
+            </div>
+            <div class="dp-progress mt-4 h-3">
+              <div id="rubric-progress-bar" class="dp-progress-fill" style="width: 0%"></div>
+            </div>
           </div>
-          <button id="parse-prof-btn" class="w-full bg-orange-600 text-white rounded px-4 py-2 font-bold hover:bg-orange-700 transition-colors text-sm">Convertir en criterios</button>
-        </div>
 
-        <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md space-y-4">
-          <div class="flex justify-between items-center gap-3">
-            <h3 class="font-bold text-slate-900">Criterios actuales</h3>
-            <button id="add-criteria-btn" class="bg-green-600 text-white rounded px-3 py-1 text-sm font-bold hover:bg-green-700 transition-colors">Agregar criterio</button>
+          <div class="dp-card p-6">
+            <h3 class="dp-card-title mb-3 flex items-center gap-2">${docproIconHtml('validation', 'Guardar plantilla personalizada', 'docpro-icon docpro-icon--sm')}<span>Guardar plantilla personalizada</span></h3>
+            <input id="template-name" type="text" placeholder="Nombre de la plantilla" aria-label="Nombre de la plantilla" class="dp-input mb-2 text-sm">
+            <button id="save-template-btn" class="dp-btn dp-btn-primary w-full">Guardar como mi plantilla</button>
           </div>
-          <div id="criteria-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
-        </div>
-      </div>
 
-      <div class="space-y-6">
-        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-4 border-blue-600 p-8 text-center shadow-lg sticky top-6">
-          <p class="text-blue-700 text-sm font-bold mb-2">PUNTUACIÓN ACTUAL</p>
-          <p id="score-display-rubrica" class="text-5xl font-black text-blue-900">0/0</p>
-          <p id="grade-display-rubrica" class="text-lg font-bold text-blue-800 mt-2">0.0/5 · 0.0/10</p>
-          <div id="traffic-light" class="mt-4 flex justify-center"><span class="traffic-badge traffic-badge--yellow"></span></div>
-          <p id="traffic-label" class="text-blue-900 font-bold text-sm mt-2">Escala: 60-79%</p>
-          <div class="mt-4 h-3 bg-blue-200 rounded-full overflow-hidden">
-            <div id="rubric-progress-bar" class="h-full bg-blue-600 rounded-full transition-all" style="width: 0%"></div>
+          <div class="dp-card p-6">
+            <button id="reset-rubric-btn" class="dp-btn dp-btn-ghost w-full">Restablecer</button>
+            <p class="mt-3 text-xs text-[var(--dp-text-muted)]">Se borran solo los criterios activos y se conserva la biblioteca de plantillas guardadas.</p>
           </div>
-        </div>
 
-        <div class="bg-white rounded-lg border-2 border-purple-200 p-6 shadow-md">
-          <h3 class="font-bold text-purple-900 mb-3 flex items-center gap-2">${docproIconHtml('validation', 'Guardar plantilla personalizada', 'docpro-icon docpro-icon--sm')}<span>Guardar plantilla personalizada</span></h3>
-          <input id="template-name" type="text" placeholder="Nombre de la plantilla" aria-label="Nombre de la plantilla" class="w-full border border-purple-300 rounded px-3 py-2 text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-purple-400">
-          <button id="save-template-btn" class="w-full bg-purple-600 text-white rounded px-4 py-2 font-bold hover:bg-purple-700 transition-colors text-sm">Guardar como mi plantilla</button>
-        </div>
-
-        <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md">
-          <button id="reset-rubric-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 font-bold hover:bg-slate-700 transition-colors text-sm">Restablecer</button>
-          <p class="text-xs text-slate-500 mt-3">Se borran solo los criterios activos y se conserva la biblioteca de plantillas guardadas.</p>
-        </div>
-
-        <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-lg p-6">
-          <p class="text-xs text-slate-300 mb-2 font-bold">ESCALA DE CUMPLIMIENTO:</p>
-          <div class="space-y-1 text-xs">
-            <div><span class="text-red-400 font-bold">0-59%</span> - Deficiente</div>
-            <div><span class="text-yellow-400 font-bold">60-79%</span> - Aceptable</div>
-            <div><span class="text-green-400 font-bold">80-100%</span> - Excelente</div>
+          <div class="dp-card p-6">
+            <p class="mb-2 text-xs font-bold tracking-[0.12em] text-[var(--dp-text-muted)]">ESCALA DE CUMPLIMIENTO:</p>
+            <div class="space-y-1 text-xs text-[var(--dp-text-secondary)]">
+              <div><span class="font-bold text-[var(--dp-danger)]">0-59%</span> - Deficiente</div>
+              <div><span class="font-bold text-[var(--dp-warning)]">60-79%</span> - Aceptable</div>
+              <div><span class="font-bold text-[var(--dp-success)]">80-100%</span> - Excelente</div>
+            </div>
           </div>
         </div>
       </div>

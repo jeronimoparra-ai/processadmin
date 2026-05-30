@@ -62,48 +62,48 @@ function buildOrganizador() {
   const savedType = loadStoredString('organizer_work_type', 'investigacion');
 
   const html = `
-    <div class="max-w-5xl mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div class="lg:col-span-2">
-          <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">${docproIconHtml('ideas', 'Organizador de Ideas', 'docpro-icon docpro-icon--lg')}<span>Organizador de Ideas</span></h2>
-          <p class="text-gray-600 mb-6">Define tu investigación paso a paso y guarda cada avance automáticamente.</p>
+          <h2 class="mb-2 flex items-center gap-3 text-3xl font-bold">${docproIconHtml('ideas', 'Organizador de Ideas', 'docpro-icon docpro-icon--lg')}<span>Organizador de Ideas</span></h2>
+          <p class="mb-6 text-[var(--dp-text-secondary)]">Define tu investigación paso a paso y guarda cada avance automáticamente.</p>
 
-          <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-lg p-8 space-y-6">
+          <div class="dp-card space-y-6 p-8">
             <div>
-              <label class="block text-sm font-bold text-slate-900 mb-3">Selecciona tipo de trabajo:</label>
-              <select id="work-type" aria-label="Tipo de trabajo del organizador" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <label class="dp-label mb-3 block">Selecciona tipo de trabajo:</label>
+              <select id="work-type" aria-label="Tipo de trabajo del organizador" class="dp-select">
                 ${Object.entries(workTypeLabels).map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
               </select>
             </div>
 
-            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200 p-4">
-              <div class="flex justify-between items-center mb-2">
-                <h3 class="font-bold text-slate-900">Progreso del organizador</h3>
-                <span id="organizer-progress-label" class="text-sm font-bold text-blue-700">0%</span>
+            <div class="dp-card bg-[var(--dp-surface-2)] p-4">
+              <div class="mb-2 flex items-center justify-between">
+                <h3 class="font-bold text-[var(--dp-text-primary)]">Progreso del organizador</h3>
+                <span id="organizer-progress-label" class="text-sm font-bold text-[var(--dp-accent-dark)]">0%</span>
               </div>
-              <div class="h-3 bg-slate-200 rounded-full overflow-hidden">
-                <div id="organizer-progress-bar" class="h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transition-all" style="width: 0%"></div>
+              <div class="dp-progress h-3">
+                <div id="organizer-progress-bar" class="dp-progress-fill rounded-full transition-all" style="width: 0%"></div>
               </div>
             </div>
 
             <div id="outline-form" class="space-y-4"></div>
 
-            <div class="flex flex-col sm:flex-row gap-3">
-              <button id="save-outline-btn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors">Guardar avance</button>
-              <button id="create-version-btn" class="flex-1 bg-purple-600 text-white rounded-lg py-3 font-bold hover:bg-purple-700 transition-colors">Guardar versión</button>
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <button id="save-outline-btn" class="dp-btn dp-btn-primary flex-1">Guardar avance</button>
+              <button id="create-version-btn" class="dp-btn dp-btn-accent flex-1">Guardar versión</button>
             </div>
           </div>
         </div>
 
         <div class="space-y-6">
-          <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg border-2 border-purple-300 p-6">
-            <h3 class="font-bold text-purple-900 mb-4 flex items-center gap-2">${docproIconHtml('review', 'Historial de versiones', 'docpro-icon docpro-icon--sm')}<span>Historial de versiones</span></h3>
-            <div id="versions-list" class="space-y-2 max-h-64 overflow-y-auto text-xs"></div>
-            <div id="version-preview" class="hidden mt-4 bg-white rounded-lg border border-purple-200 p-4 text-xs"></div>
+          <div class="dp-card p-6">
+            <h3 class="mb-4 flex items-center gap-2 font-bold">${docproIconHtml('review', 'Historial de versiones', 'docpro-icon docpro-icon--sm')}<span>Historial de versiones</span></h3>
+            <div id="versions-list" class="max-h-64 space-y-2 overflow-y-auto text-xs"></div>
+            <div id="version-preview" class="hidden mt-4 rounded-lg border border-[var(--dp-border)] bg-white p-4 text-xs"></div>
           </div>
 
-          <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg border-2 border-yellow-300 p-6">
-            <h3 class="font-bold text-yellow-900 mb-4 flex items-center gap-2">${docproIconHtml('review', 'Notas de sección', 'docpro-icon docpro-icon--sm')}<span>Notas de sección</span></h3>
+          <div class="dp-card p-6">
+            <h3 class="mb-4 flex items-center gap-2 font-bold">${docproIconHtml('review', 'Notas de sección', 'docpro-icon docpro-icon--sm')}<span>Notas de sección</span></h3>
             <div id="section-notes-list" class="space-y-2"></div>
           </div>
         </div>
@@ -162,7 +162,7 @@ function buildOrganizador() {
   function renderNotes() {
     const steps = getCurrentSteps();
     notesList.innerHTML = steps.map(step => `
-      <div class="bg-white/80 rounded-lg border border-yellow-200 p-3">
+      <div class="dp-card p-3">
         <div class="flex justify-between items-center gap-2 mb-2">
           <p class="text-xs font-bold text-yellow-900">${step.label}</p>
           <button class="text-xs font-bold text-yellow-700 hover:text-yellow-900 toggle-note-panel" data-note-key="${step.key}">Nota</button>
@@ -199,12 +199,12 @@ function buildOrganizador() {
         : (outlineValues[step.key] || '');
 
       return `
-        <div class="bg-slate-50 rounded-lg border border-slate-200 p-4">
-          <label class="block text-sm font-bold text-slate-900 mb-2">Paso ${index + 1}: ${step.label}</label>
-          <p class="text-xs text-slate-500 mb-2">${step.hint}</p>
+        <div class="dp-card p-4">
+          <label class="mb-2 block text-sm font-bold text-[var(--dp-text-primary)]">Paso ${index + 1}: ${step.label}</label>
+          <p class="mb-2 text-xs text-[var(--dp-text-muted)]">${step.hint}</p>
           ${step.key === 'objetivos_especificos'
-            ? `<textarea rows="4" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="${step.key}" placeholder="Escribe un objetivo por línea..." aria-label="${escapeHtml(step.label)}">${escapeHtml(value)}</textarea>`
-            : `<textarea rows="3" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none outline-field" data-field="${step.key}" placeholder="Escribe aquí..." aria-label="${escapeHtml(step.label)}">${escapeHtml(value)}</textarea>`}
+            ? `<textarea rows="4" class="dp-textarea outline-field resize-none" data-field="${step.key}" placeholder="Escribe un objetivo por línea..." aria-label="${escapeHtml(step.label)}">${escapeHtml(value)}</textarea>`
+            : `<textarea rows="3" class="dp-textarea outline-field resize-none" data-field="${step.key}" placeholder="Escribe aquí..." aria-label="${escapeHtml(step.label)}">${escapeHtml(value)}</textarea>`}
         </div>
       `;
     }).join('');
@@ -246,7 +246,7 @@ function buildOrganizador() {
     }
 
     list.innerHTML = state.organizerVersions.map((version, index) => `
-      <div class="bg-purple-200 rounded p-2 text-purple-900 text-xs font-semibold space-y-2">
+      <div class="dp-card p-2 text-xs font-semibold space-y-2">
         <div class="flex justify-between items-center gap-2">
           <div>
             <div>v${index + 1}</div>
@@ -255,8 +255,8 @@ function buildOrganizador() {
           <span class="text-[10px] uppercase tracking-wide text-purple-700">${escapeHtml(workTypeLabels[version.type] || version.type)}</span>
         </div>
         <div class="flex gap-2">
-          <button class="flex-1 bg-purple-300 hover:bg-purple-400 rounded px-2 py-1 preview-version" data-idx="${index}">Vista previa</button>
-          <button class="flex-1 bg-purple-500 text-white hover:bg-purple-600 rounded px-2 py-1 restore-version" data-idx="${index}">Restaurar</button>
+          <button class="dp-btn dp-btn-ghost flex-1 preview-version" data-idx="${index}">Vista previa</button>
+          <button class="dp-btn dp-btn-primary flex-1 restore-version" data-idx="${index}">Restaurar</button>
         </div>
       </div>
     `).join('');

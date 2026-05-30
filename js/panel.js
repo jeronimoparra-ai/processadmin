@@ -62,10 +62,10 @@ function buildPanel() {
 
     container.innerHTML = structureItems.length > 0
       ? structureItems.map(item => `
-        <div class="grid grid-cols-[auto_1fr_auto] gap-3 items-center p-4 rounded-xl border border-slate-200 bg-slate-50">
-          <input type="checkbox" class="structure-item-check w-5 h-5 accent-blue-600 cursor-pointer" data-id="${item.id}" ${item.checked ? 'checked' : ''}>
-          <input type="text" class="structure-item-text w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-400" data-id="${item.id}" value="${escapeHtml(item.text)}">
-          <button type="button" class="structure-item-delete rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50" data-id="${item.id}">Eliminar</button>
+        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-xl border border-[var(--dp-border)] bg-[var(--dp-surface-2)] p-4">
+          <input type="checkbox" class="structure-item-check h-5 w-5 cursor-pointer accent-[var(--dp-accent)]" data-id="${item.id}" ${item.checked ? 'checked' : ''}>
+          <input type="text" class="structure-item-text w-full rounded-lg border border-[var(--dp-border)] bg-white px-3 py-2 text-sm font-medium text-[var(--dp-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--dp-accent)]" data-id="${item.id}" value="${escapeHtml(item.text)}">
+          <button type="button" class="structure-item-delete dp-btn dp-btn-ghost dp-btn-sm text-red-600" data-id="${item.id}">Eliminar</button>
         </div>
       `).join('')
       : '<p class="text-sm text-slate-500 italic">Todavía no has agregado partes al documento.</p>';
@@ -100,88 +100,90 @@ function buildPanel() {
   }
 
   const html = `
-    <div class="space-y-8 max-w-7xl mx-auto">
+    <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
       <!-- Welcome Section -->
-      <div class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 rounded-3xl shadow-2xl p-12 text-white relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+      <div class="dp-card relative overflow-hidden p-12">
+        <div class="absolute top-0 right-0 h-64 w-64 rounded-full bg-[rgba(201,169,110,0.12)] -mr-32 -mt-32 blur-3xl"></div>
         <div class="relative">
-          <h1 class="text-5xl font-black mb-3 flex items-center gap-4"><span class="shrink-0">${docproIconHtml('redactor', 'Redactor académico', 'docpro-icon docpro-icon--lg')}</span><span>Redacta, organiza y exporta en APA 7</span></h1>
-          <p class="text-lg text-blue-100 leading-relaxed max-w-2xl">
+          <h1 class="mb-3 flex items-center gap-4 text-5xl font-black"><span class="shrink-0">${docproIconHtml('redactor', 'Redactor académico', 'docpro-icon docpro-icon--lg')}</span><span>Redacta, organiza y exporta en APA 7</span></h1>
+          <p class="max-w-2xl text-lg leading-relaxed text-[var(--dp-text-secondary)]">
             Diseña trabajos académicos claros y consistentes con redacción guiada, organización de ideas, referencias APA 7 y exportación profesional a Word.
           </p>
         </div>
       </div>
 
       <!-- Quality Dashboard -->
-      <div class="bg-white rounded-2xl border-2 border-slate-200 p-10 shadow-lg">
-        <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">
+      <div class="dp-card p-10">
+        <div class="dp-card-header">
+          <h2 class="dp-card-title flex items-center gap-3 text-3xl">
           ${docproIconHtml('panel', 'Indicadores de calidad', 'docpro-icon docpro-icon--lg')} <span>Indicadores de calidad</span>
-        </h2>
-        <p class="text-gray-600 text-sm mb-8">Seguimiento claro del avance en estructura, APA 7, criterios y formato Word</p>
+          </h2>
+        </div>
+        <p class="mb-8 text-sm text-[var(--dp-text-secondary)]">Seguimiento claro del avance en estructura, APA 7, criterios y formato Word</p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-300">
+        <div class="dp-grid-4 mb-8">
+          <div class="dp-stat">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-blue-900 text-sm flex items-center gap-2">${docproIconHtml('validation', 'Estructura', 'docpro-icon docpro-icon--sm')}<span>Estructura</span></h3>
-              <span class="text-2xl font-bold text-blue-600">${metrics.structure}%</span>
+              <h3 class="dp-stat-label flex items-center gap-2 text-sm">${docproIconHtml('validation', 'Estructura', 'docpro-icon docpro-icon--sm')}<span>Estructura</span></h3>
+              <span class="text-2xl font-bold text-[var(--dp-accent-dark)]">${metrics.structure}%</span>
             </div>
-            <div class="h-2 bg-blue-200 rounded-full overflow-hidden">
-              <div class="h-full bg-blue-600 rounded-full transition-all" style="width: ${metrics.structure}%"></div>
+            <div class="dp-progress">
+              <div class="dp-progress-fill" style="width: ${metrics.structure}%"></div>
             </div>
-            <p class="text-xs text-blue-700 mt-2">Documento completado</p>
+            <p class="dp-stat-sub">Documento completado</p>
           </div>
 
-          <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-300">
+          <div class="dp-stat">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-purple-900 text-sm flex items-center gap-2">${docproIconHtml('apa', 'Normas APA 7', 'docpro-icon docpro-icon--sm')}<span>Normas APA 7</span></h3>
-              <span class="text-2xl font-bold text-purple-600">${metrics.apa}%</span>
+              <h3 class="dp-stat-label flex items-center gap-2 text-sm">${docproIconHtml('apa', 'Normas APA 7', 'docpro-icon docpro-icon--sm')}<span>Normas APA 7</span></h3>
+              <span class="text-2xl font-bold text-[var(--dp-accent-dark)]">${metrics.apa}%</span>
             </div>
-            <div class="h-2 bg-purple-200 rounded-full overflow-hidden">
-              <div class="h-full bg-purple-600 rounded-full transition-all" style="width: ${metrics.apa}%"></div>
+            <div class="dp-progress">
+              <div class="dp-progress-fill" style="width: ${metrics.apa}%"></div>
             </div>
-            <p class="text-xs text-purple-700 mt-2">Cumplimiento de normas</p>
+            <p class="dp-stat-sub">Cumplimiento de normas</p>
           </div>
 
-          <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-300">
+          <div class="dp-stat">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-green-900 text-sm flex items-center gap-2">${docproIconHtml('validation', 'Criterios docente', 'docpro-icon docpro-icon--sm')}<span>Criterios Docente</span></h3>
-              <span class="text-2xl font-bold text-green-600">${metrics.criteria}%</span>
+              <h3 class="dp-stat-label flex items-center gap-2 text-sm">${docproIconHtml('validation', 'Criterios docente', 'docpro-icon docpro-icon--sm')}<span>Criterios Docente</span></h3>
+              <span class="text-2xl font-bold text-[var(--dp-accent-dark)]">${metrics.criteria}%</span>
             </div>
-            <div class="h-2 bg-green-200 rounded-full overflow-hidden">
-              <div class="h-full bg-green-600 rounded-full transition-all" style="width: ${metrics.criteria}%"></div>
+            <div class="dp-progress">
+              <div class="dp-progress-fill" style="width: ${metrics.criteria}%"></div>
             </div>
-            <p class="text-xs text-green-700 mt-2">Criterios completados</p>
+            <p class="dp-stat-sub">Criterios completados</p>
           </div>
 
-          <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 border border-orange-300">
+          <div class="dp-stat">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-orange-900 text-sm flex items-center gap-2">${docproIconHtml('exportWord', 'Formato Word', 'docpro-icon docpro-icon--sm')}<span>Formato Word</span></h3>
-              <span class="text-2xl font-bold text-orange-600">${metrics.wordFormat}%</span>
+              <h3 class="dp-stat-label flex items-center gap-2 text-sm">${docproIconHtml('exportWord', 'Formato Word', 'docpro-icon docpro-icon--sm')}<span>Formato Word</span></h3>
+              <span class="text-2xl font-bold text-[var(--dp-accent-dark)]">${metrics.wordFormat}%</span>
             </div>
-            <div class="h-2 bg-orange-200 rounded-full overflow-hidden">
-              <div class="h-full bg-orange-600 rounded-full transition-all" style="width: ${metrics.wordFormat}%"></div>
+            <div class="dp-progress">
+              <div class="dp-progress-fill" style="width: ${metrics.wordFormat}%"></div>
             </div>
-            <p class="text-xs text-orange-700 mt-2">Listo para exportar</p>
+            <p class="dp-stat-sub">Listo para exportar</p>
           </div>
         </div>
 
         <!-- Overall Readiness -->
-        <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-xl p-8">
+        <div class="dp-card p-8">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-2xl font-bold flex items-center gap-3">${docproIconHtml('achievement', 'Preparación general', 'docpro-icon docpro-icon--lg')}<span>Preparación general</span></h3>
-            <span class="text-5xl font-black text-blue-300">${metrics.overall}%</span>
+            <span class="text-5xl font-black text-[var(--dp-accent-dark)]">${metrics.overall}%</span>
           </div>
-          <p class="text-lg text-slate-100 mb-4">${motivationalMsg}</p>
-          <div class="h-3 bg-slate-700 rounded-full overflow-hidden">
-            <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all" style="width: ${metrics.overall}%"></div>
+          <p class="mb-4 text-lg text-[var(--dp-text-secondary)]">${motivationalMsg}</p>
+          <div class="dp-progress h-3">
+            <div class="dp-progress-fill" style="width: ${metrics.overall}%"></div>
           </div>
         </div>
 
-        <div class="mt-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
-          <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">${docproIconHtml('review', 'Pendientes prioritarios', 'docpro-icon docpro-icon--sm')}<span>Pendientes prioritarios</span></h3>
+        <div class="dp-card mt-8 p-6">
+          <h3 class="mb-4 flex items-center gap-2 text-xl font-bold">${docproIconHtml('review', 'Pendientes prioritarios', 'docpro-icon docpro-icon--sm')}<span>Pendientes prioritarios</span></h3>
           <div class="space-y-2">
             ${pendingItems.length > 0 ? pendingItems.map(item => `
-              <button class="w-full text-left bg-white border border-amber-200 rounded-lg px-4 py-3 text-sm font-semibold text-slate-800 hover:bg-amber-50 transition-colors pending-nav" data-view="${item.view}">
+              <button class="dp-btn dp-btn-ghost w-full justify-start pending-nav" data-view="${item.view}">
                 ${item.label}
               </button>
             `).join('') : '<p class="text-sm text-emerald-700 font-semibold">No tienes pendientes críticos en este momento.</p>'}
@@ -190,68 +192,68 @@ function buildPanel() {
       </div>
 
       <!-- Key Metrics -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="group bg-white rounded-2xl border-2 border-blue-100 p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+      <div class="dp-grid-4">
+        <div class="dp-card p-8">
           <div class="mb-3">${docproIconHtml('review', 'Fecha de entrega', 'docpro-icon docpro-icon--xl')}</div>
-          <p class="text-slate-600 text-sm font-medium mb-2">Fecha de entrega</p>
-          <p id="delivery-date-label" class="text-3xl font-bold text-blue-900 mb-1">${deliveryDateLabel}</p>
-          <label class="block text-xs font-semibold text-slate-500 mb-2" for="delivery-date-input">Modificar fecha</label>
-          <input id="delivery-date-input" type="date" value="${deliveryDateInputValue}" class="w-full max-w-[220px] border border-blue-200 rounded-lg px-3 py-2 text-sm text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
-          <p id="delivery-date-sync-badge" class="mt-2 inline-flex items-center rounded-full ${deliveryDate ? 'bg-blue-50 text-blue-700 border-blue-100' : 'bg-slate-50 text-slate-600 border-slate-200'} px-3 py-1 text-[11px] font-semibold border">${deliveryDate ? 'Sincronizado con checklist y exportación' : 'Opcional: puedes agregar una fecha de entrega'}</p>
-          <p id="countdown" class="text-sm text-blue-600 font-semibold">Calculando...</p>
+          <p class="mb-2 text-sm font-medium text-[var(--dp-text-secondary)]">Fecha de entrega</p>
+          <p id="delivery-date-label" class="mb-1 text-3xl font-bold text-[var(--dp-text-primary)]">${deliveryDateLabel}</p>
+          <label class="mb-2 block text-xs font-semibold text-[var(--dp-text-muted)]" for="delivery-date-input">Modificar fecha</label>
+          <input id="delivery-date-input" type="date" value="${deliveryDateInputValue}" class="dp-input max-w-[220px] text-sm">
+          <p id="delivery-date-sync-badge" class="mt-2 inline-flex items-center rounded-full ${deliveryDate ? 'dp-badge dp-badge-info' : 'dp-badge dp-badge-neutral'}">${deliveryDate ? 'Sincronizado con checklist y exportación' : 'Opcional: puedes agregar una fecha de entrega'}</p>
+          <p id="countdown" class="text-sm font-semibold text-[var(--dp-accent-dark)]">Calculando...</p>
         </div>
 
-        <div class="group bg-white rounded-2xl border-2 border-purple-100 p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+        <div class="dp-card p-8">
           <div class="mb-3">${docproIconHtml('panel', 'Meta de calificación', 'docpro-icon docpro-icon--xl')}</div>
-          <p class="text-slate-600 text-sm font-medium mb-2">Meta de calificación</p>
-          <p class="text-3xl font-bold text-purple-900 mb-1">100 pts</p>
-          <p class="text-sm text-slate-500">Referencia de evaluación</p>
+          <p class="mb-2 text-sm font-medium text-[var(--dp-text-secondary)]">Meta de calificación</p>
+          <p class="mb-1 text-3xl font-bold text-[var(--dp-text-primary)]">100 pts</p>
+          <p class="text-sm text-[var(--dp-text-muted)]">Referencia de evaluación</p>
         </div>
 
-        <div class="group sm:col-span-2 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 p-8 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+        <div class="dp-card p-8">
           <div class="mb-3">${docproIconHtml('achievement', 'Progreso general', 'docpro-icon docpro-icon--xl')}</div>
-          <p class="text-slate-600 text-sm font-medium mb-2">Progreso general</p>
-          <p id="overall-progress-percent" class="text-3xl font-bold text-emerald-900 mb-2">${metrics.overall}%</p>
-          <div class="h-2.5 bg-emerald-200 rounded-full overflow-hidden">
-            <div id="overall-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-300" style="width: ${metrics.overall}%"></div>
+          <p class="mb-2 text-sm font-medium text-[var(--dp-text-secondary)]">Progreso general</p>
+          <p id="overall-progress-percent" class="mb-2 text-3xl font-bold text-[var(--dp-text-primary)]">${metrics.overall}%</p>
+          <div class="dp-progress h-2.5">
+            <div id="overall-progress-bar" class="dp-progress-fill" style="width: ${metrics.overall}%"></div>
           </div>
         </div>
       </div>
 
       <!-- Getting Started Guide -->
-      <div class="bg-white rounded-2xl border-2 border-slate-200 p-10 shadow-lg">
-        <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+      <div class="dp-card p-10">
+        <h2 class="mb-8 flex items-center gap-3 text-3xl font-bold">
           ${docproIconHtml('ideas', 'Guía de inicio', 'docpro-icon docpro-icon--lg')} <span>Guía de inicio</span>
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border-l-4 border-blue-600 hover:shadow-lg transition-all cursor-pointer" data-view="organizador">
+        <div class="dp-grid-4">
+            <div class="dp-card relative cursor-pointer p-6 quick-start-card" data-view="organizador">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div>
-            <h3 class="text-lg font-bold text-blue-900 mb-3">Organiza tu tema</h3>
-            <p class="text-slate-700 text-sm leading-relaxed">
+            <h3 class="mb-3 text-lg font-bold">Organiza tu tema</h3>
+            <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
               Usa el <strong>Organizador de Ideas</strong> para definir tema, problema, preguntas y objetivos.
             </p>
           </div>
 
-          <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border-l-4 border-purple-600 hover:shadow-lg transition-all cursor-pointer" data-view="redactor">
+          <div class="dp-card relative cursor-pointer p-6 quick-start-card" data-view="redactor">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">2</div>
-            <h3 class="text-lg font-bold text-purple-900 mb-3">Redacta con apoyo</h3>
-            <p class="text-slate-700 text-sm leading-relaxed">
+            <h3 class="mb-3 text-lg font-bold">Redacta con apoyo</h3>
+            <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
               Usa el <strong>Redactor</strong> con contador de palabras y sugerencias de conectores académicos.
             </p>
           </div>
 
-          <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 border-l-4 border-pink-600 hover:shadow-lg transition-all cursor-pointer" data-view="exportar">
+          <div class="dp-card relative cursor-pointer p-6 quick-start-card" data-view="exportar">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold">3</div>
-            <h3 class="text-lg font-bold text-pink-900 mb-3">Exporta a Word</h3>
-            <p class="text-slate-700 text-sm leading-relaxed">
+            <h3 class="mb-3 text-lg font-bold">Exporta a Word</h3>
+            <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
               Genera un <strong>documento Word profesional</strong> con portada, índice y formato APA 7 automático.
             </p>
           </div>
 
-          <div class="quick-start-card relative p-6 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 border-l-4 border-slate-600 hover:shadow-lg transition-all cursor-pointer" data-view="historial">
+          <div class="dp-card relative cursor-pointer p-6 quick-start-card" data-view="historial">
             <div class="absolute top-3 right-3 w-10 h-10 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold">4</div>
-            <h3 class="text-lg font-bold text-slate-900 mb-3">Consulta guardados</h3>
-            <p class="text-slate-700 text-sm leading-relaxed">
+            <h3 class="mb-3 text-lg font-bold">Consulta guardados</h3>
+            <p class="text-sm leading-relaxed text-[var(--dp-text-secondary)]">
               Revisa documentos guardados, vuelve a exportarlos o elimínalos cuando ya no los necesites.
             </p>
           </div>
@@ -259,103 +261,103 @@ function buildPanel() {
       </div>
 
       <!-- Document Structure Requirements -->
-      <div class="bg-white rounded-2xl border-2 border-slate-200 p-10 shadow-lg">
+      <div class="dp-card p-10">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
           <div>
-            <h2 class="text-3xl font-bold text-slate-900 flex items-center gap-3">
+            <h2 class="flex items-center gap-3 text-3xl font-bold">
               ${docproIconHtml('validation', 'Estructura de tu documento', 'docpro-icon docpro-icon--lg')} <span>Estructura de tu Documento</span>
             </h2>
-            <p id="structure-status" class="text-sm text-slate-500 mt-2">${structureStatusLabel}</p>
+            <p id="structure-status" class="mt-2 text-sm text-[var(--dp-text-muted)]">${structureStatusLabel}</p>
           </div>
           <div class="flex flex-wrap gap-3">
-            <button id="structure-toggle" type="button" class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">${structureToggleLabel}</button>
-            <button id="structure-add-btn" type="button" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white hover:bg-blue-700 transition-colors">+ Agregar parte</button>
+            <button id="structure-toggle" type="button" class="dp-btn dp-btn-ghost">${structureToggleLabel}</button>
+            <button id="structure-add-btn" type="button" class="dp-btn dp-btn-primary">+ Agregar parte</button>
           </div>
         </div>
         <div id="structure-table" class="mb-8 space-y-4 ${isStructureOpen ? '' : 'hidden'}"></div>
-        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
+        <div class="dp-card bg-[var(--dp-surface-2)] p-6">
           <div class="flex items-center gap-3 mb-3">
             ${docproIconHtml('panel', 'Tu progreso de completitud', 'docpro-icon docpro-icon--sm')}
-            <p class="font-bold text-slate-900">Tu Progreso de Completitud</p>
+            <p class="font-bold text-[var(--dp-text-primary)]">Tu Progreso de Completitud</p>
           </div>
-          <div class="h-3 bg-slate-200 rounded-full overflow-hidden mb-2">
-            <div id="section-progress" class="h-full bg-gradient-to-r from-blue-600 to-purple-600 w-0 transition-all duration-500 rounded-full"></div>
+          <div class="dp-progress h-3 mb-2">
+            <div id="section-progress" class="dp-progress-fill w-0 transition-all duration-500"></div>
           </div>
-          <p class="text-sm text-slate-600 font-semibold"><span id="section-count">0</span> partes configuradas</p>
+          <p class="text-sm font-semibold text-[var(--dp-text-secondary)]"><span id="section-count">0</span> partes configuradas</p>
         </div>
       </div>
 
       <!-- Section Progress Overview -->
-      <div class="bg-white rounded-2xl border-2 border-slate-200 p-10 shadow-lg">
-        <h2 class="text-3xl font-bold text-slate-900 mb-8 flex items-center gap-3">
+      <div class="dp-card p-10">
+        <h2 class="mb-8 flex items-center gap-3 text-3xl font-bold">
           ${docproIconHtml('review', 'Avance por sección', 'docpro-icon docpro-icon--lg')} <span>Avance por Sección</span>
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-300">
+        <div class="dp-grid-2">
+          <div class="dp-stat p-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-blue-900 flex items-center gap-2">${docproIconHtml('ideas', 'Planeación', 'docpro-icon docpro-icon--sm')}<span>Planeación</span></h3>
-              <span id="planeacion-status" class="text-2xl font-bold text-blue-600">0%</span>
+              <h3 class="text-lg font-bold flex items-center gap-2">${docproIconHtml('ideas', 'Planeación', 'docpro-icon docpro-icon--sm')}<span>Planeación</span></h3>
+              <span id="planeacion-status" class="text-2xl font-bold text-[var(--dp-accent-dark)]">0%</span>
             </div>
-            <div class="h-3 bg-blue-200 rounded-full overflow-hidden">
-              <div id="planeacion-bar" class="h-full bg-gradient-to-r from-blue-500 to-blue-700 w-0 transition-all duration-500"></div>
+            <div class="dp-progress h-3">
+              <div id="planeacion-bar" class="dp-progress-fill w-0 transition-all duration-500"></div>
             </div>
-            <p class="text-xs text-slate-600 mt-2">Meta: 250+ palabras</p>
+            <p class="mt-2 text-xs text-[var(--dp-text-secondary)]">Meta: 250+ palabras</p>
           </div>
 
-          <div class="p-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-300">
+          <div class="dp-stat p-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-purple-900 flex items-center gap-2">${docproIconHtml('redactor', 'Organización', 'docpro-icon docpro-icon--sm')}<span>Organización</span></h3>
-              <span id="organizacion-status" class="text-2xl font-bold text-purple-600">0%</span>
+              <h3 class="text-lg font-bold flex items-center gap-2">${docproIconHtml('redactor', 'Organización', 'docpro-icon docpro-icon--sm')}<span>Organización</span></h3>
+              <span id="organizacion-status" class="text-2xl font-bold text-[var(--dp-accent-dark)]">0%</span>
             </div>
-            <div class="h-3 bg-purple-200 rounded-full overflow-hidden">
-              <div id="organizacion-bar" class="h-full bg-gradient-to-r from-purple-500 to-purple-700 w-0 transition-all duration-500"></div>
+            <div class="dp-progress h-3">
+              <div id="organizacion-bar" class="dp-progress-fill w-0 transition-all duration-500"></div>
             </div>
-            <p class="text-xs text-slate-600 mt-2">Meta: 150+ palabras</p>
+            <p class="mt-2 text-xs text-[var(--dp-text-secondary)]">Meta: 150+ palabras</p>
           </div>
 
-          <div class="p-6 rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-300">
+          <div class="dp-stat p-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-orange-900 flex items-center gap-2">${docproIconHtml('review', 'Dirección', 'docpro-icon docpro-icon--sm')}<span>Dirección</span></h3>
-              <span id="direccion-status" class="text-2xl font-bold text-orange-600">0%</span>
+              <h3 class="text-lg font-bold flex items-center gap-2">${docproIconHtml('review', 'Dirección', 'docpro-icon docpro-icon--sm')}<span>Dirección</span></h3>
+              <span id="direccion-status" class="text-2xl font-bold text-[var(--dp-accent-dark)]">0%</span>
             </div>
-            <div class="h-3 bg-orange-200 rounded-full overflow-hidden">
-              <div id="direccion-bar" class="h-full bg-gradient-to-r from-orange-500 to-orange-700 w-0 transition-all duration-500"></div>
+            <div class="dp-progress h-3">
+              <div id="direccion-bar" class="dp-progress-fill w-0 transition-all duration-500"></div>
             </div>
-            <p class="text-xs text-slate-600 mt-2">Meta: 150+ palabras</p>
+            <p class="mt-2 text-xs text-[var(--dp-text-secondary)]">Meta: 150+ palabras</p>
           </div>
 
-          <div class="p-6 rounded-xl bg-gradient-to-br from-red-50 to-red-100 border border-red-300">
+          <div class="dp-stat p-6">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-red-900 flex items-center gap-2">${docproIconHtml('panel', 'Control', 'docpro-icon docpro-icon--sm')}<span>Control</span></h3>
-              <span id="control-status" class="text-2xl font-bold text-red-600">0%</span>
+              <h3 class="text-lg font-bold flex items-center gap-2">${docproIconHtml('panel', 'Control', 'docpro-icon docpro-icon--sm')}<span>Control</span></h3>
+              <span id="control-status" class="text-2xl font-bold text-[var(--dp-accent-dark)]">0%</span>
             </div>
-            <div class="h-3 bg-red-200 rounded-full overflow-hidden">
-              <div id="control-bar" class="h-full bg-gradient-to-r from-red-500 to-red-700 w-0 transition-all duration-500"></div>
+            <div class="dp-progress h-3">
+              <div id="control-bar" class="dp-progress-fill w-0 transition-all duration-500"></div>
             </div>
-            <p class="text-xs text-slate-600 mt-2">Meta: 150+ palabras</p>
+            <p class="mt-2 text-xs text-[var(--dp-text-secondary)]">Meta: 150+ palabras</p>
           </div>
         </div>
       </div>
 
       <!-- Quick Stats -->
-      <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl shadow-2xl p-10 text-white">
-        <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">${docproIconHtml('achievement', 'Estadísticas del proyecto', 'docpro-icon docpro-icon--lg')}<span>Estadísticas del Proyecto</span></h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          <div class="text-center">
-            <div class="text-4xl font-black text-blue-400 mb-2" id="stat-content-words">0</div>
-            <p class="text-slate-300 font-medium">Palabras Redactadas</p>
+      <div class="dp-card p-10">
+        <h2 class="mb-8 flex items-center gap-3 text-3xl font-bold">${docproIconHtml('achievement', 'Estadísticas del proyecto', 'docpro-icon docpro-icon--lg')}<span>Estadísticas del Proyecto</span></h2>
+        <div class="dp-grid-4">
+          <div class="text-center dp-stat p-6">
+            <div class="mb-2 text-4xl font-black text-[var(--dp-accent-dark)]" id="stat-content-words">0</div>
+            <p class="font-medium text-[var(--dp-text-secondary)]">Palabras Redactadas</p>
           </div>
-          <div class="text-center">
-            <div class="text-4xl font-black text-purple-400 mb-2" id="stat-work-time">0 min</div>
-            <p class="text-slate-300 font-medium">Tiempo de Trabajo</p>
+          <div class="text-center dp-stat p-6">
+            <div class="mb-2 text-4xl font-black text-[var(--dp-accent-dark)]" id="stat-work-time">0 min</div>
+            <p class="font-medium text-[var(--dp-text-secondary)]">Tiempo de Trabajo</p>
           </div>
-          <div class="text-center">
-            <div class="text-4xl font-black text-green-400 mb-2" id="stat-citations">0</div>
-            <p class="text-slate-300 font-medium">Referencias APA</p>
+          <div class="text-center dp-stat p-6">
+            <div class="mb-2 text-4xl font-black text-[var(--dp-accent-dark)]" id="stat-citations">0</div>
+            <p class="font-medium text-[var(--dp-text-secondary)]">Referencias APA</p>
           </div>
-          <div class="text-center">
-            <div class="text-4xl font-black text-pink-400 mb-2" id="stat-simulations">0</div>
-            <p class="text-slate-300 font-medium">Evaluaciones</p>
+          <div class="text-center dp-stat p-6">
+            <div class="mb-2 text-4xl font-black text-[var(--dp-accent-dark)]" id="stat-simulations">0</div>
+            <p class="font-medium text-[var(--dp-text-secondary)]">Evaluaciones</p>
           </div>
         </div>
       </div>

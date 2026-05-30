@@ -4,65 +4,67 @@
 
 function buildApaEnhanced() {
   const html = `
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div class="space-y-6">
-        <div class="bg-white rounded-lg border-2 border-green-200 p-6 shadow-md">
-          <h3 class="font-bold text-green-900 mb-4 flex items-center gap-2">${docproIconHtml('redactor', 'Generador de citas en texto', 'docpro-icon docpro-icon--sm')}<span>Generador de citas en texto</span></h3>
-          <div class="space-y-3">
-            <input id="cita-autor" type="text" placeholder="Apellido del autor" aria-label="Apellido del autor" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
-            <input id="cita-anio" type="number" placeholder="Año" aria-label="Año de publicación" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
-            <input id="cita-pagina" type="text" placeholder="Página (opcional)" aria-label="Página opcional" class="w-full border border-green-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
-            <button id="gen-cita-btn" class="w-full bg-green-600 text-white rounded px-4 py-2 font-bold hover:bg-green-700 transition-colors text-sm">Generar cita en texto</button>
-            <div class="flex items-center gap-2">
-              <div id="cita-resultado" class="hidden flex-1 bg-green-50 border border-green-300 p-3 rounded text-sm font-mono"></div>
-              <button id="copy-cita-btn" class="hidden bg-green-100 text-green-800 rounded px-3 py-2 text-xs font-bold hover:bg-green-200 transition-colors">Copiar</button>
+    <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          <div class="dp-card p-6">
+            <h3 class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('redactor', 'Generador de citas en texto', 'docpro-icon docpro-icon--sm')}<span>Generador de citas en texto</span></h3>
+            <div class="space-y-3">
+              <input id="cita-autor" type="text" placeholder="Apellido del autor" aria-label="Apellido del autor" class="dp-input text-sm">
+              <input id="cita-anio" type="number" placeholder="Año" aria-label="Año de publicación" class="dp-input text-sm">
+              <input id="cita-pagina" type="text" placeholder="Página (opcional)" aria-label="Página opcional" class="dp-input text-sm">
+              <button id="gen-cita-btn" class="dp-btn dp-btn-primary w-full">Generar cita en texto</button>
+              <div class="flex items-center gap-2">
+                <div id="cita-resultado" class="hidden flex-1 dp-ref-item font-mono text-sm"></div>
+                <button id="copy-cita-btn" class="hidden dp-btn dp-btn-ghost dp-btn-sm">Copiar</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="bg-white rounded-lg border-2 border-orange-200 p-6 shadow-md">
-          <h3 class="font-bold text-orange-900 mb-4 flex items-center gap-2">${docproIconHtml('validation', 'Validador de referencias', 'docpro-icon docpro-icon--sm')}<span>Validador de referencias</span></h3>
-          <textarea id="ref-validator" rows="4" placeholder="Pega una referencia aquí..." aria-label="Referencia para validar" class="w-full border border-orange-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-400 mb-2"></textarea>
-          <button id="validate-ref-btn" class="w-full bg-orange-600 text-white rounded px-4 py-2 font-bold hover:bg-orange-700 transition-colors text-sm">Validar referencia</button>
-          <div id="validator-resultado" class="hidden mt-3 space-y-2 text-xs"></div>
-        </div>
-
-        <div class="bg-white rounded-lg border-2 border-purple-200 p-6 shadow-md">
-          <h3 class="font-bold text-purple-900 mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Rastreador de fuentes', 'docpro-icon docpro-icon--sm')}<span>Rastreador de fuentes</span></h3>
-          <div class="space-y-2 text-sm mb-3">
-            <input id="source-titulo" type="text" placeholder="Título" aria-label="Título de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
-            <input id="source-autor" type="text" placeholder="Autor/Institución" aria-label="Autor o institución de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
-            <input id="source-url" type="text" placeholder="URL o libro" aria-label="URL o libro de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
-            <input id="source-fecha" type="date" aria-label="Fecha de consulta de la fuente" class="w-full border border-purple-300 rounded px-3 py-2">
-            <textarea id="source-notas" rows="2" placeholder="Notas..." aria-label="Notas de la fuente" class="w-full border border-purple-300 rounded px-3 py-2 resize-none"></textarea>
+          <div class="dp-card p-6">
+            <h3 class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('validation', 'Validador de referencias', 'docpro-icon docpro-icon--sm')}<span>Validador de referencias</span></h3>
+            <textarea id="ref-validator" rows="4" placeholder="Pega una referencia aquí..." aria-label="Referencia para validar" class="dp-textarea mb-2 text-sm"></textarea>
+            <button id="validate-ref-btn" class="dp-btn dp-btn-primary w-full">Validar referencia</button>
+            <div id="validator-resultado" class="hidden mt-3 space-y-2 text-xs"></div>
           </div>
-          <button id="add-source-btn" class="w-full bg-purple-600 text-white rounded px-4 py-2 font-bold hover:bg-purple-700 transition-colors text-sm">Registrar fuente</button>
-          <div id="sources-list" class="mt-4 space-y-2 max-h-40 overflow-y-auto text-xs"></div>
-        </div>
-      </div>
 
-      <div class="space-y-6">
-        <div class="bg-white rounded-lg border-2 border-slate-200 p-6 shadow-md sticky top-6">
-          <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span></h3>
-          <div id="apa-referencias" class="space-y-2 max-h-64 overflow-y-auto mb-4 text-xs"></div>
-          <div class="space-y-2">
-            <button id="sort-refs-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-slate-700 transition-colors">Ordenar referencias A-Z</button>
-            <button id="check-consistency-btn" class="w-full bg-slate-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-slate-700 transition-colors">Verificar consistencia</button>
-            <button id="clear-refs-btn" class="w-full bg-red-600 text-white rounded px-4 py-2 text-sm font-bold hover:bg-red-700 transition-colors">Limpiar todo</button>
+          <div class="dp-card p-6">
+            <h3 class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Rastreador de fuentes', 'docpro-icon docpro-icon--sm')}<span>Rastreador de fuentes</span></h3>
+            <div class="mb-3 space-y-2 text-sm">
+              <input id="source-titulo" type="text" placeholder="Título" aria-label="Título de la fuente" class="dp-input">
+              <input id="source-autor" type="text" placeholder="Autor/Institución" aria-label="Autor o institución de la fuente" class="dp-input">
+              <input id="source-url" type="text" placeholder="URL o libro" aria-label="URL o libro de la fuente" class="dp-input">
+              <input id="source-fecha" type="date" aria-label="Fecha de consulta de la fuente" class="dp-input">
+              <textarea id="source-notas" rows="2" placeholder="Notas..." aria-label="Notas de la fuente" class="dp-textarea"></textarea>
+            </div>
+            <button id="add-source-btn" class="dp-btn dp-btn-primary w-full">Registrar fuente</button>
+            <div id="sources-list" class="mt-4 max-h-40 space-y-2 overflow-y-auto text-xs"></div>
           </div>
         </div>
 
-        <div class="bg-white rounded-lg border-2 border-blue-200 p-6 shadow-md">
-          <h3 class="font-bold text-blue-900 mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Generador de referencia completa', 'docpro-icon docpro-icon--sm')}<span>Generador de referencia completa</span></h3>
-          <div class="space-y-2 text-sm mb-3">
-            <input id="apa-autor-full" type="text" placeholder="Autor/Institución" aria-label="Autor o institución de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
-            <input id="apa-anio-full" type="number" placeholder="Año" aria-label="Año de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
-            <input id="apa-titulo-full" type="text" placeholder="Título" aria-label="Título de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
-            <input id="apa-fuente-full" type="text" placeholder="Editorial/Revista" aria-label="Editorial o revista de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
-            <input id="apa-url-full" type="url" placeholder="URL (opcional)" aria-label="URL opcional de la referencia" class="w-full border border-blue-300 rounded px-3 py-2">
+        <div class="space-y-6">
+          <div class="dp-card p-6 sticky top-6">
+            <h3 class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span></h3>
+            <div id="apa-referencias" class="mb-4 max-h-64 space-y-2 overflow-y-auto text-xs"></div>
+            <div class="space-y-2">
+              <button id="sort-refs-btn" class="dp-btn dp-btn-ghost w-full">Ordenar referencias A-Z</button>
+              <button id="check-consistency-btn" class="dp-btn dp-btn-ghost w-full">Verificar consistencia</button>
+              <button id="clear-refs-btn" class="dp-btn dp-btn-ghost w-full text-red-600">Limpiar todo</button>
+            </div>
           </div>
-          <button id="gen-ref-btn" class="w-full bg-blue-600 text-white rounded px-4 py-2 font-bold hover:bg-blue-700 transition-colors text-sm">Generar referencia</button>
-          <div id="ref-resultado" class="hidden mt-3 bg-blue-50 border border-blue-300 p-3 rounded text-xs font-mono"></div>
+
+          <div class="dp-card p-6">
+            <h3 class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Generador de referencia completa', 'docpro-icon docpro-icon--sm')}<span>Generador de referencia completa</span></h3>
+            <div class="mb-3 space-y-2 text-sm">
+              <input id="apa-autor-full" type="text" placeholder="Autor/Institución" aria-label="Autor o institución de la referencia" class="dp-input">
+              <input id="apa-anio-full" type="number" placeholder="Año" aria-label="Año de la referencia" class="dp-input">
+              <input id="apa-titulo-full" type="text" placeholder="Título" aria-label="Título de la referencia" class="dp-input">
+              <input id="apa-fuente-full" type="text" placeholder="Editorial/Revista" aria-label="Editorial o revista de la referencia" class="dp-input">
+              <input id="apa-url-full" type="url" placeholder="URL (opcional)" aria-label="URL opcional de la referencia" class="dp-input">
+            </div>
+            <button id="gen-ref-btn" class="dp-btn dp-btn-primary w-full">Generar referencia</button>
+            <div id="ref-resultado" class="hidden mt-3 dp-ref-item text-xs font-mono"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -144,10 +146,10 @@ function buildApaEnhanced() {
     }
 
     list.innerHTML = sources.map((source, index) => `
-      <div class="bg-purple-50 border border-purple-300 p-2 rounded">
-        <div class="font-bold text-purple-900">${escapeHtml(source.titulo)}</div>
-        <div class="text-purple-700 text-xs">${escapeHtml(source.autor)}</div>
-        <button class="text-red-600 text-xs hover:text-red-700 delete-source" data-idx="${index}">Eliminar</button>
+      <div class="dp-ref-item">
+        <div class="font-bold text-[var(--dp-text-primary)]">${escapeHtml(source.titulo)}</div>
+        <div class="text-xs text-[var(--dp-text-secondary)]">${escapeHtml(source.autor)}</div>
+        <button class="delete-source mt-2 text-xs font-bold text-red-600 hover:text-red-700" data-idx="${index}">Eliminar</button>
       </div>
     `).join('');
 
@@ -228,9 +230,9 @@ function buildApaEnhanced() {
     }
 
     list.innerHTML = state.generatedCitations.map((reference, index) => `
-      <div class="bg-slate-50 border border-slate-300 p-2 rounded text-xs">
+      <div class="dp-ref-item text-xs">
         <div>${escapeHtml(reference.replace(/<\/?em>/g, ''))}</div>
-        <button class="text-red-600 text-xs hover:text-red-700 mt-1 delete-ref" data-idx="${index}">Eliminar</button>
+        <button class="delete-ref mt-1 text-xs font-bold text-red-600 hover:text-red-700" data-idx="${index}">Eliminar</button>
       </div>
     `).join('');
 

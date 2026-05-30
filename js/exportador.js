@@ -246,90 +246,90 @@ function buildExportador() {
   const formatLabel = formatProfile?.name || 'Sin formato cargado';
   const formatDetail = formatProfile?.description || 'Puedes cargar un formato JSON opcional para reutilizar datos y estructura.';
   const html = `
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold text-slate-900 mb-2 flex items-center gap-3">${docproIconHtml('exportWord', 'Exportación a Word', 'docpro-icon docpro-icon--lg')}<span>Exportación a Word (Formato APA 7)</span></h2>
-      <p class="text-gray-600 mb-8">Completa tus datos, revisa la validación y genera tu archivo local sin perder el formato.</p>
+    <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
+      <h2 class="mb-2 flex items-center gap-3 text-3xl font-bold">${docproIconHtml('exportWord', 'Exportación a Word', 'docpro-icon docpro-icon--lg')}<span>Exportación a Word (Formato APA 7)</span></h2>
+      <p class="mb-8 text-[var(--dp-text-secondary)]">Completa tus datos, revisa la validación y genera tu archivo local sin perder el formato.</p>
 
-      <div class="bg-white rounded-2xl border-2 border-dashed border-blue-200 p-5 mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div class="dp-card mb-8 flex flex-col gap-4 border-dashed lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p class="text-sm font-bold text-blue-900">Formato de trabajo</p>
-           <p class="text-sm text-slate-600">${escapeHtml(formatLabel)} · ${escapeHtml(formatDetail)}</p>
+          <p class="text-sm font-bold text-[var(--dp-text-primary)]">Formato de trabajo</p>
+          <p class="text-sm text-[var(--dp-text-secondary)]">${escapeHtml(formatLabel)} · ${escapeHtml(formatDetail)}</p>
         </div>
         <div class="flex flex-wrap gap-3">
-           <button id="load-format-btn" class="bg-blue-600 text-white rounded-lg px-4 py-2 font-bold hover:bg-blue-700 transition-colors text-sm">Cargar formato Word</button>
-          <button id="clear-format-btn" class="bg-white text-slate-700 rounded-lg px-4 py-2 font-bold border border-slate-200 hover:bg-slate-50 transition-colors text-sm">Quitar formato</button>
+          <button id="load-format-btn" class="dp-btn dp-btn-primary text-sm">Cargar formato Word</button>
+          <button id="clear-format-btn" class="dp-btn dp-btn-ghost text-sm">Quitar formato</button>
         </div>
       </div>
 
-       <input id="load-format-input" type="file" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx,application/json,.json" class="hidden">
+      <input id="load-format-input" type="file" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx,application/json,.json" class="hidden">
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 space-y-6">
-          <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-lg p-8 space-y-5">
+      <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div class="space-y-6 lg:col-span-2">
+          <div class="dp-card space-y-5 p-8">
             <div>
-              <label class="block text-sm font-bold text-slate-900 mb-2">Nombre completo *</label>
-              <input id="export-nombre" type="text" aria-label="Nombre completo" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <label class="dp-label mb-2 block">Nombre completo *</label>
+              <input id="export-nombre" type="text" aria-label="Nombre completo" class="dp-input">
             </div>
             <div>
-              <label class="block text-sm font-bold text-slate-900 mb-2">Código estudiantil</label>
-              <input id="export-codigo" type="text" aria-label="Código estudiantil" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <label class="dp-label mb-2 block">Código estudiantil</label>
+              <input id="export-codigo" type="text" aria-label="Código estudiantil" class="dp-input">
             </div>
             <div>
-              <label class="block text-sm font-bold text-slate-900 mb-2">Nombre del curso</label>
-              <input id="export-curso" type="text" aria-label="Nombre del curso" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
-                <div>
-                  <label class="block text-sm font-bold text-slate-900 mb-2">Modalidad</label>
-                  <select id="export-modalidad" aria-label="Modalidad del trabajo" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="">Seleccionar modalidad</option>
-                    <option value="Presencial">Presencial</option>
-                    <option value="Virtual">Virtual</option>
-                    <option value="Híbrida">Híbrida</option>
-                  </select>
-                </div>
-            <div>
-              <label class="block text-sm font-bold text-slate-900 mb-2">Nombre del docente</label>
-              <input id="export-docente" type="text" aria-label="Nombre del docente" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <label class="dp-label mb-2 block">Nombre del curso</label>
+              <input id="export-curso" type="text" aria-label="Nombre del curso" class="dp-input">
             </div>
             <div>
-              <label class="block text-sm font-bold text-slate-900 mb-2">Institución</label>
-              <input id="export-institucion" type="text" aria-label="Institución" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <label class="dp-label mb-2 block">Modalidad</label>
+              <select id="export-modalidad" aria-label="Modalidad del trabajo" class="dp-select">
+                <option value="">Seleccionar modalidad</option>
+                <option value="Presencial">Presencial</option>
+                <option value="Virtual">Virtual</option>
+                <option value="Híbrida">Híbrida</option>
+              </select>
             </div>
             <div>
-              <label class="block text-sm font-bold text-slate-900 mb-2">Ciudad</label>
-              <input id="export-ciudad" type="text" aria-label="Ciudad" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <label class="dp-label mb-2 block">Nombre del docente</label>
+              <input id="export-docente" type="text" aria-label="Nombre del docente" class="dp-input">
             </div>
             <div>
-              <label class="block text-sm font-bold text-slate-900 mb-2">Fecha de entrega</label>
-              <input id="export-fecha" type="date" aria-label="Fecha de entrega" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-              <p id="export-fecha-help" class="mt-2 text-xs text-slate-500">Opcional: agrega la fecha si quieres incluirla en la exportación.</p>
+              <label class="dp-label mb-2 block">Institución</label>
+              <input id="export-institucion" type="text" aria-label="Institución" class="dp-input">
+            </div>
+            <div>
+              <label class="dp-label mb-2 block">Ciudad</label>
+              <input id="export-ciudad" type="text" aria-label="Ciudad" class="dp-input">
+            </div>
+            <div>
+              <label class="dp-label mb-2 block">Fecha de entrega</label>
+              <input id="export-fecha" type="date" aria-label="Fecha de entrega" class="dp-input">
+              <p id="export-fecha-help" class="mt-2 text-xs text-[var(--dp-text-muted)]">Opcional: agrega la fecha si quieres incluirla en la exportación.</p>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-3 pt-2">
-              <button id="generate-docx-btn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors">Generar archivo Word</button>
-              <button id="export-anyway-btn" class="flex-1 bg-slate-600 text-white rounded-lg py-3 font-bold hover:bg-slate-700 transition-colors">Exportar de todos modos</button>
+            <div class="flex flex-col gap-3 pt-2 sm:flex-row">
+              <button id="generate-docx-btn" class="dp-btn dp-btn-primary flex-1">Generar archivo Word</button>
+              <button id="export-anyway-btn" class="dp-btn dp-btn-ghost flex-1">Exportar de todos modos</button>
             </div>
           </div>
 
-          <div class="bg-white rounded-2xl border-2 border-slate-200 shadow-lg p-6">
-            <h3 class="font-bold text-slate-900 mb-3 flex items-center gap-2">${docproIconHtml('review', 'Vista previa del documento', 'docpro-icon docpro-icon--sm')}<span>Vista previa del documento</span></h3>
-            <div id="document-preview" class="bg-slate-50 rounded-lg border border-slate-200 p-6 max-h-[42rem] overflow-y-auto"></div>
+          <div class="dp-card p-6">
+            <h3 class="mb-3 flex items-center gap-2 font-bold">${docproIconHtml('review', 'Vista previa del documento', 'docpro-icon docpro-icon--sm')}<span>Vista previa del documento</span></h3>
+            <div id="document-preview" class="max-h-[42rem] overflow-y-auto rounded-lg border border-[var(--dp-border)] bg-[var(--dp-surface-2)] p-6"></div>
           </div>
         </div>
 
         <div class="space-y-6">
-          <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg border-2 border-green-300 p-6">
-            <h3 class="font-bold text-green-900 mb-4 flex items-center gap-2">${docproIconHtml('validation', 'Validación pre-exportación', 'docpro-icon docpro-icon--sm')}<span>Validación pre-exportación</span></h3>
+          <div class="dp-card p-6">
+            <h3 class="mb-4 flex items-center gap-2 font-bold">${docproIconHtml('validation', 'Validación pre-exportación', 'docpro-icon docpro-icon--sm')}<span>Validación pre-exportación</span></h3>
             <div id="validation-checklist" class="space-y-2 text-sm"></div>
             <div id="export-summary" class="mt-4 space-y-3 text-xs"></div>
             <div class="mt-4 space-y-2">
-              <button id="fix-issues-btn" class="w-full bg-green-600 text-white rounded px-4 py-2 font-bold hover:bg-green-700 transition-colors text-sm">Ir a revisar pendientes</button>
-              <button id="history-shortcut-btn" class="w-full bg-white text-slate-700 rounded px-4 py-2 font-bold border border-green-200 hover:bg-green-50 transition-colors text-sm">Ver historial de documentos</button>
+              <button id="fix-issues-btn" class="dp-btn dp-btn-accent w-full text-sm">Ir a revisar pendientes</button>
+              <button id="history-shortcut-btn" class="dp-btn dp-btn-ghost w-full text-sm">Ver historial de documentos</button>
             </div>
           </div>
 
-          <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-blue-300 p-6">
-            <h3 class="font-bold text-blue-900 mb-3 flex items-center gap-2">${docproIconHtml('review', 'Pendientes directos', 'docpro-icon docpro-icon--sm')}<span>Pendientes directos</span></h3>
+          <div class="dp-card p-6">
+            <h3 class="mb-3 flex items-center gap-2 font-bold">${docproIconHtml('review', 'Pendientes directos', 'docpro-icon docpro-icon--sm')}<span>Pendientes directos</span></h3>
             <div id="export-pending-list" class="space-y-2 text-xs"></div>
           </div>
         </div>
@@ -452,16 +452,16 @@ function buildExportador() {
       const templateLoaded = state.exportFormatProfile?.kind === 'word-template';
 
     return `
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-slate-900" style="font-family: 'Times New Roman', serif; line-height: 2;">
-        <div class="text-center min-h-[16rem] flex flex-col justify-center border-b border-slate-200 pb-8 mb-8">
-           ${templateLoaded ? '<p class="text-xs uppercase tracking-[0.2em] text-blue-600 mb-4">Plantilla Word cargada</p>' : ''}
+      <div class="dp-card p-6 text-[var(--dp-text-primary)]" style="font-family: 'Times New Roman', serif; line-height: 2;">
+        <div class="min-h-[16rem] border-b border-[var(--dp-border)] pb-8 mb-8 text-center flex flex-col justify-center">
+          ${templateLoaded ? '<p class="mb-4 text-xs uppercase tracking-[0.2em] text-[var(--dp-accent-dark)]">Plantilla Word cargada</p>' : ''}
           <p class="text-base">${escapeHtml(data.institucion || 'Institución')}</p>
           <p class="text-base mt-1">${escapeHtml(data.curso || 'Nombre del curso')}</p>
           <p class="text-base mt-1">${escapeHtml(data.modalidad || '')}</p>
           <p class="text-base mt-1">${escapeHtml(data.docente || 'Nombre del docente')}</p>
           <div class="flex-1"></div>
-          <h1 class="text-2xl font-bold mt-6">${escapeHtml(data.titulo || 'Título del trabajo')}</h1>
-          <div class="mt-6 text-base space-y-1">
+          <h1 class="mt-6 text-2xl font-bold">${escapeHtml(data.titulo || 'Título del trabajo')}</h1>
+          <div class="mt-6 space-y-1 text-base">
             <p>${escapeHtml(data.nombre || 'Nombre completo')}</p>
             <p>${escapeHtml(data.codigo || 'Código estudiantil')}</p>
             <p>${escapeHtml([data.ciudad || '', data.modalidad || '', data.fecha || ''].filter(Boolean).join(' · ') || 'Ciudad · Modalidad · Fecha')}</p>
@@ -469,21 +469,21 @@ function buildExportador() {
         </div>
 
         <div class="mb-6">
-          <h2 class="text-lg font-bold mb-3">Tabla de contenido</h2>
-          <ol class="list-decimal list-inside text-sm space-y-1">
+          <h2 class="mb-3 text-lg font-bold">Tabla de contenido</h2>
+          <ol class="list-decimal list-inside space-y-1 text-sm">
             ${(formatSections.length > 0 ? formatSections : ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias']).map(entry => `<li>${escapeHtml(entry)}</li>`).join('')}
           </ol>
         </div>
 
         <div class="mb-6">
-          <h2 class="text-lg font-bold mb-3">Cuerpo del documento</h2>
-          <p class="text-sm whitespace-pre-wrap">${escapeHtml(redactorContent || Object.values(outlineValues).flat().join('\n'))}</p>
+          <h2 class="mb-3 text-lg font-bold">Cuerpo del documento</h2>
+          <p class="whitespace-pre-wrap text-sm">${escapeHtml(redactorContent || Object.values(outlineValues).flat().join('\n'))}</p>
         </div>
 
         <div>
-          <h2 class="text-lg font-bold mb-3">Referencias</h2>
+          <h2 class="mb-3 text-lg font-bold">Referencias</h2>
           <div class="space-y-2 text-sm">
-            ${references.length > 0 ? references.map(reference => `<p class="pl-4 -indent-4">${escapeHtml(reference)}</p>`).join('') : '<p class="italic text-slate-500">Sin referencias aún</p>'}
+            ${references.length > 0 ? references.map(reference => `<p class="pl-4 -indent-4">${escapeHtml(reference)}</p>`).join('') : '<p class="italic text-[var(--dp-text-muted)]">Sin referencias aún</p>'}
           </div>
         </div>
       </div>
@@ -508,9 +508,9 @@ function buildExportador() {
     ];
 
     checklist.innerHTML = validations.map(item => `
-      <div class="flex items-center gap-2">
-        <span class="${item.ok ? 'text-green-600' : 'text-red-600'} text-lg">${item.ok ? '✓' : '✗'}</span>
-        <span class="text-slate-700">${item.name}</span>
+      <div class="dp-ref-item flex items-center gap-2">
+        <span style="color: ${item.ok ? 'var(--dp-success)' : 'var(--dp-danger)'}" class="text-lg">${item.ok ? '✓' : '✗'}</span>
+        <span class="text-[var(--dp-text-primary)]">${item.name}</span>
       </div>
     `).join('');
 
@@ -519,12 +519,12 @@ function buildExportador() {
       <div><span class="font-bold">APA 7:</span> ${metrics.apa}%</div>
       <div><span class="font-bold">Criterios:</span> ${metrics.criteria}%</div>
       <div><span class="font-bold">Formato Word:</span> ${metrics.wordFormat}%</div>
-      <div class="border-t pt-2 mt-2"><span class="font-bold text-blue-900">General: ${metrics.overall}%</span></div>
+      <div class="border-t border-[var(--dp-border)] pt-2 mt-2"><span class="font-bold text-[var(--dp-text-primary)]">General: ${metrics.overall}%</span></div>
     `;
 
     pendingList.innerHTML = pendingItems.length > 0
-      ? pendingItems.map(item => `<button class="w-full text-left bg-white border border-blue-200 rounded px-3 py-2 hover:bg-blue-50 transition-colors pending-export-nav" data-view="${item.view}">${item.label}</button>`).join('')
-      : '<p class="text-emerald-700 font-semibold">No hay pendientes críticos.</p>';
+      ? pendingItems.map(item => `<button class="dp-btn dp-btn-ghost w-full justify-start text-left pending-export-nav" data-view="${item.view}">${item.label}</button>`).join('')
+      : '<p style="color: var(--dp-success)" class="font-semibold">No hay pendientes críticos.</p>';
 
     preview.innerHTML = buildDocumentPreview({
       ...savedData,

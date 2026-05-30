@@ -56,70 +56,72 @@ function buildRedactorEnhanced() {
   const savedType = loadStoredString('redactor_work_type', 'ensayo');
 
   const html = `
-    <div id="redactor-shell" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div id="redactor-side-panels" class="lg:col-span-4 space-y-4">
-        <div class="bg-white rounded-lg border-2 border-blue-200 p-4 shadow-md">
-          <label class="text-sm font-bold text-blue-900 mb-2 block">Tipo de trabajo</label>
-          <select id="work-type-select" aria-label="Tipo de trabajo" class="w-full border border-blue-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            ${workTypeOptions.map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
-          </select>
+    <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
+      <div id="redactor-shell" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div id="redactor-side-panels" class="lg:col-span-4 space-y-4">
+          <div class="dp-card p-4">
+            <label class="dp-label mb-2 block">Tipo de trabajo</label>
+            <select id="work-type-select" aria-label="Tipo de trabajo" class="dp-select">
+              ${workTypeOptions.map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
+            </select>
+          </div>
+
+          <div class="dp-accordion">
+            <button class="dp-accordion-btn accordion-btn-red" data-accordion-red="0">
+              <span class="flex items-center gap-2 font-semibold">${docproIconHtml('review', 'Guía de estructura', 'docpro-icon docpro-icon--sm')}<span>Guía de estructura</span></span>
+              <span class="dp-chevron accordion-chevron-red open text-xl">▼</span>
+            </button>
+            <div class="dp-accordion-body accordion-content-red open max-h-[26rem] overflow-y-auto p-4 text-sm text-[var(--dp-text-secondary)]">
+              <div id="structure-guide-content" class="space-y-3"></div>
+            </div>
+          </div>
+
+          <div class="dp-accordion">
+            <button class="dp-accordion-btn accordion-btn-red" data-accordion-red="1">
+              <span class="flex items-center gap-2 font-semibold">${docproIconHtml('ideas', 'Conectores académicos', 'docpro-icon docpro-icon--sm')}<span>Conectores académicos</span></span>
+              <span class="dp-chevron accordion-chevron-red text-xl">▼</span>
+            </button>
+            <div class="dp-accordion-body accordion-content-red p-4 text-sm">
+              <div id="connectors-content" class="space-y-3"></div>
+            </div>
+          </div>
         </div>
 
-        <div class="bg-white rounded-lg border border-blue-200 overflow-hidden shadow-md">
-          <button class="accordion-btn-red w-full flex justify-between items-center p-4 hover:bg-blue-50 transition-colors border-b border-blue-200" data-accordion-red="0">
-            <span class="font-semibold text-blue-900 flex items-center gap-2">${docproIconHtml('review', 'Guía de estructura', 'docpro-icon docpro-icon--sm')}<span>Guía de estructura</span></span>
-            <span class="accordion-chevron-red open text-xl">▼</span>
-          </button>
-          <div class="accordion-content-red open p-4 text-gray-700 text-sm space-y-3 max-h-[26rem] overflow-y-auto">
-            <div id="structure-guide-content" class="space-y-3"></div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-lg border border-purple-200 overflow-hidden shadow-md">
-          <button class="accordion-btn-red w-full flex justify-between items-center p-4 hover:bg-purple-50 transition-colors border-b border-purple-200" data-accordion-red="1">
-            <span class="font-semibold text-purple-900 flex items-center gap-2">${docproIconHtml('ideas', 'Conectores académicos', 'docpro-icon docpro-icon--sm')}<span>Conectores académicos</span></span>
-            <span class="accordion-chevron-red text-xl">▼</span>
-          </button>
-          <div class="accordion-content-red p-4 text-sm space-y-3">
-            <div id="connectors-content" class="space-y-3"></div>
-          </div>
-        </div>
-      </div>
-
-      <div id="redactor-editor-panel" class="lg:col-span-8">
-        <div class="bg-white rounded-2xl shadow-lg border-2 border-blue-200 p-8 space-y-6">
-          <div class="flex justify-between items-center gap-3">
-            <div>
-              <h2 class="text-2xl font-bold text-blue-900 flex items-center gap-3">
-                ${docproIconHtml('redactor', 'Redactor Premium', 'docpro-icon docpro-icon--lg')}<span>Redactor Premium</span>
-              </h2>
-              <p id="redactor-recommendation" class="text-xs text-slate-500 mt-1"></p>
+        <div id="redactor-editor-panel" class="lg:col-span-8">
+          <div class="dp-card p-8 space-y-6">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <h2 class="flex items-center gap-3 text-2xl font-bold">
+                  ${docproIconHtml('redactor', 'Redactor Premium', 'docpro-icon docpro-icon--lg')}<span>Redactor Premium</span>
+                </h2>
+                <p id="redactor-recommendation" class="mt-1 text-xs text-[var(--dp-text-muted)]"></p>
+              </div>
+              <button id="focus-mode-btn" class="dp-btn dp-btn-ghost dp-btn-sm" title="Modo Enfoque">Modo Enfoque</button>
             </div>
-            <button id="focus-mode-btn" class="text-sm font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors" title="Modo Enfoque">Modo Enfoque</button>
+
+            <textarea id="redactor-main" rows="20" placeholder="Redacta aquí tu contenido..." aria-label="Contenido principal de redacción" class="dp-textarea dp-mono resize-none"></textarea>
+
+            <div id="section-warning-list" class="space-y-2"></div>
+
+            <div id="redactor-metrics" class="dp-grid-auto rounded-xl bg-[var(--dp-surface-2)] p-4">
+              <div class="text-center dp-stat p-4">
+                <p id="word-count" class="text-2xl font-bold text-[var(--dp-accent-dark)]">0</p>
+                <p class="text-xs text-[var(--dp-text-muted)]">Palabras</p>
+              </div>
+              <div class="text-center dp-stat p-4">
+                <p id="para-count" class="text-2xl font-bold text-[var(--dp-accent-dark)]">0</p>
+                <p class="text-xs text-[var(--dp-text-muted)]">Párrafos</p>
+              </div>
+              <div class="text-center dp-stat p-4">
+                <p id="char-count" class="text-2xl font-bold text-[var(--dp-accent-dark)]">0</p>
+                <p class="text-xs text-[var(--dp-text-muted)]">Caracteres</p>
+              </div>
+            </div>
+
+            <button id="save-redactor-btn" class="dp-btn dp-btn-primary w-full">
+              Guardar Redacción
+            </button>
           </div>
-
-          <textarea id="redactor-main" rows="20" placeholder="Redacta aquí tu contenido..." aria-label="Contenido principal de redacción" class="w-full border-2 border-blue-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all resize-none font-mono text-sm"></textarea>
-
-          <div id="section-warning-list" class="space-y-2"></div>
-
-          <div id="redactor-metrics" class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-blue-50 rounded-lg p-4">
-            <div class="text-center">
-              <p id="word-count" class="text-2xl font-bold text-blue-600">0</p>
-              <p class="text-xs text-gray-600">Palabras</p>
-            </div>
-            <div class="text-center">
-              <p id="para-count" class="text-2xl font-bold text-blue-600">0</p>
-              <p class="text-xs text-gray-600">Párrafos</p>
-            </div>
-            <div class="text-center">
-              <p id="char-count" class="text-2xl font-bold text-blue-600">0</p>
-              <p class="text-xs text-gray-600">Caracteres</p>
-            </div>
-          </div>
-
-          <button id="save-redactor-btn" class="w-full bg-blue-600 text-white rounded-lg py-3 font-bold hover:bg-blue-700 transition-colors shadow-lg">
-            Guardar Redacción
-          </button>
         </div>
       </div>
     </div>
