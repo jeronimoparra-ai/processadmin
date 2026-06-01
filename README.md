@@ -1,309 +1,96 @@
-# 📝 DocPro™ - Generador Profesional APA 7
-
 <div align="center">
 
-![DocPro Logo](https://img.shields.io/badge/DocPro%E2%84%A2-Professional%20APA%207-blue)
-![Version](https://img.shields.io/badge/version-1.0.0-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Status](https://img.shields.io/badge/status-Active-success)
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=170&color=0:0f172a,40:1e293b,100:2563eb&text=DocPro™&fontColor=ffffff&fontAlignY=34&desc=Gestor%20académico%20APA%207%20%7C%20SPA%20moderna&descAlignY=55" alt="DocPro header" />
 
-**Herramienta profesional para diseñar documentos académicos de calidad con normas APA 7ª edición**
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=600&size=22&pause=1200&color=2563EB&center=true&vCenter=true&width=900&lines=Genera+documentos+acad%C3%A9micos+con+estilo+profesional;Organiza+tu+proyecto%2C+cita+en+APA+7+y+eval%C3%BAa+tu+r%C3%BAbrica;Todo+en+una+aplicaci%C3%B3n+web+ligera+y+sin+backend)](https://github.com/jeronimoparra-ai/processadmin)
 
-[Características](#características) • [Uso](#uso) • [Estructura](#estructura) • [Tecnología](#tecnología)
+![Status](https://img.shields.io/badge/estado-activo-22c55e?style=for-the-badge)
+![Vanilla JS](https://img.shields.io/badge/JavaScript-Vanilla-f7df1e?style=for-the-badge&logo=javascript&logoColor=000)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-CDN-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=fff)
+![License](https://img.shields.io/badge/Licencia-MIT-2563eb?style=for-the-badge)
 
 </div>
 
----
+## 🚀 ¿Qué es DocPro?
 
-## 🎯 Descripción
+**DocPro™** es una aplicación web tipo SPA para construir trabajos académicos con enfoque en **normas APA 7**. Integra panel de progreso, redacción asistida, gestor de referencias, rúbrica de evaluación, checklist y exportación, todo desde el navegador y con persistencia local.
 
-**DocPro™** es una aplicación web moderna e interactiva diseñada para ayudarte a crear documentos académicos de calidad siguiendo estrictamente las normas **APA 7ª edición**. Combina elegancia visual con funcionalidad avanzada para mejorar tu experiencia de redacción y citación.
+## ✨ Características principales
 
-### Enfoque Principal
-- ✅ **Diseño de documentos profesionales** según estándares académicos
-- ✅ **Generación automática de citas APA 7**
-- ✅ **Seguimiento de progreso en tiempo real**
-- ✅ **Interfaz elegante e intuitiva**
-- ✅ **Evaluación mediante rúbrica integrada**
+- 📊 **Panel de control** con métricas y progreso del documento.
+- ✍️ **Redactor por secciones** con guardado automático en `localStorage`.
+- 📚 **Gestor de citas APA 7** con historial y validación.
+- 📈 **Rúbrica interactiva** para simular y mejorar la calificación.
+- ✅ **Checklist académico** para control de calidad antes de entregar.
+- 🧭 **Organizador de proyecto** para mantener el flujo de trabajo.
+- 📤 **Exportador** para consolidar el contenido final.
 
----
+## 🧩 Arquitectura del proyecto
 
-## ✨ Características
-
-### 📊 Panel de Control
-- Estadísticas en tiempo real (fecha entrega, progreso, puntuación)
-- Guía de inicio con 3 pasos claros
-- Estructura de documento con 12 checklist items
-- Avance por sección independiente (Planeación, Organización, Dirección, Control)
-- Métricas del proyecto (palabras, tiempo de trabajo, citas, evaluaciones)
-
-### ✍️ Redactor Premium
-- 4 acordeones educativos con contenido detallado por sección
-- Editor de texto con 5 campos independientes
-- Contador de palabras en tiempo real
-- Guardado automático en localStorage
-- Validación de completitud
-- Tips y recomendaciones contextuales
-
-### 📚 Gestor APA 7ª Edición
-- Formulario completo para generación de citas
-- Campos: Autor/Institución, Año, Título, Editorial, URL
-- Validación avanzada de datos
-- Historial de referencias generadas
-- Checklist de calidad (12 criterios)
-- Feedback visual de completitud
-
-### 📈 Evaluador de Rúbrica
-- 4 sliders dinámicos para evaluación
-- Cálculo automático de puntuación (máx. 100 pts)
-- Visualización con gráfico de donas
-- Descriptores de desempeño
-- Historial de simulaciones
-
-### 🔒 Características de Seguridad
-- 100% datos locales (localStorage)
-- Privacidad garantizada
-- Sin conexión a servidores externos
-- Datos persistentes en el navegador
-
----
-
-## 🚀 Uso
-
-### Instalación
-1. **Clona el repositorio**
-   ```bash
-   git clone https://github.com/tuusuario/docpro.git
-   cd docpro
-   ```
-
-2. **Abre en el navegador**
-   - Simplemente abre el archivo `index.html` en tu navegador favorito
-   - No requiere servidor, funciona completamente en el cliente
-
-### Flujo de Trabajo
-
-1. **📊 Comienza en el Panel**
-   - Revisa la guía de inicio
-   - Verifica los requisitos de estructura
-
-2. **✍️ Redacta en el Redactor Premium**
-   - Completa los 5 campos principales
-   - Monitorea el progreso de palabras
-   - El sistema guarda automáticamente
-
-3. **📚 Cita con el Gestor APA 7**
-   - Genera citas automáticamente
-   - Crea tu lista de referencias
-   - Verifica el checklist de calidad
-
-4. **📈 Evalúa con la Rúbrica**
-   - Simula tu puntuación
-   - Mejora antes de entregar
-   - Consulta el historial de evaluaciones
-
----
-
-## 📁 Estructura
-
-```
-docpro/
-├── index.html          # Aplicación principal (SPA)
+```text
+/tmp/workspace/jeronimoparra-ai/processadmin
+├── index.html
 ├── css/
-│   └── styles.css      # Estilos personalizados y variables CSS
-├── .gitignore          # Archivos ignorados por Git
-├── README.md           # Este archivo
-└── LICENSE             # Licencia MIT
+│   ├── styles.css
+│   └── components.css
+├── js/
+│   ├── app.js
+│   ├── config.js
+│   ├── panel.js
+│   ├── redactor.js
+│   ├── apa.js
+│   ├── rubrica.js
+│   ├── checklist.js
+│   ├── organizador.js
+│   ├── exportador.js
+│   ├── storage.js
+│   └── utils.js
+├── README.md
+└── LICENSE
 ```
 
-### Componentes Principales
-- **Single Page Application (SPA)**: Toda la lógica en un archivo HTML
-- **Sin dependencias externas**: Usa CDN para Tailwind CSS y Chart.js
-- **localStorage API**: Persistencia de datos
-- **Responsive Design**: Funciona en desktop, tablet y mobile
+## 🛠️ Stack tecnológico
 
----
+- **HTML5 + CSS3**
+- **JavaScript Vanilla (sin framework)**
+- **Tailwind CSS vía CDN**
+- **Chart.js vía CDN**
+- **Persistencia local con localStorage**
 
-## 🎨 Diseño Visual
+## ⚡ Inicio rápido
 
-### Paleta de Colores
-- **Primario**: Azul (#3b82f6)
-- **Secundario**: Púrpura (#7c3aed)
-- **Acentos**: Rosa (#ec4899), Verde (#10b981)
-- **Fondo Sidebar**: Slate oscuro (#0f172a)
+1. Clona el repositorio:
 
-### Tipografía
-- **Fuente**: Plus Jakarta Sans (Google Fonts)
-- **Pesos**: 400, 500, 600, 700
-
-### Componentes UI
-- Tarjetas con sombras y bordes redondeados
-- Gradientes modernos
-- Animaciones suaves (fade, slide)
-- Efectos hover interactivos
-
----
-
-## 💻 Tecnología
-
-### Frontend
-- **HTML5**: Estructura semántica
-- **CSS3**: Tailwind CSS + Custom CSS
-- **JavaScript Vanilla**: Sin frameworks
-- **Responsive**: Mobile-first design
-
-### Librerías
-- **Tailwind CSS**: Utility-first CSS framework
-- **Chart.js**: Visualización de datos
-- **Plus Jakarta Sans**: Tipografía Google Fonts
-
-### Almacenamiento
-- **localStorage API**: Persistencia de datos
-- **Debounced auto-save**: Guardado automático (800ms)
-
----
-
-## 🎓 Normas APA 7ª Edición
-
-DocPro™ implementa completamente los requisitos de citación APA 7:
-
-### Elementos de Citación Generados
-- Autor/Institución
-- Año de publicación
-- Título completo
-- Editorial/Revista
-- URL (para fuentes en línea)
-
-### Requisitos de Documento
-- Portada completa
-- Introducción (mín. 200 palabras)
-- Misión y Visión
-- Matriz DOFA
-- Organigrama
-- Análisis de liderazgo
-- Indicadores de gestión (KPIs)
-- Conclusiones (mín. 150 palabras)
-- Referencias en APA 7
-- Entrega antes de la fecha límite
-
----
-
-## 🔐 Privacidad y Seguridad
-
-✅ **100% Local**: Todos los datos se guardan en tu navegador
-✅ **Sin conexión externa**: No requiere servidor
-✅ **Datos privados**: Nadie accede a tu información
-✅ **Persistente**: Los datos se mantienen entre sesiones
-✅ **Auto-guardado**: Se actualiza cada 800ms
-
----
-
-## 📋 Requisitos
-
-- **Navegador moderno**: Chrome, Firefox, Safari, Edge
-- **JavaScript habilitado**: Necesario para funcionamiento
-- **Storage local**: Navegador debe soportar localStorage
-
----
-
-## 🛠️ Desarrollo
-
-### Estructura de Código
-```javascript
-// State management
-const state = {
-  activeView: 'panel',
-  currentScore: 0,
-  generatedCitations: [],
-  // ... más propiedades
-}
-
-// Main navigation
-function navigate(viewId) { /* ... */ }
-
-// View builders
-function buildPanel() { /* ... */ }
-function buildRedactor() { /* ... */ }
-function buildSimulador() { /* ... */ }
-function buildAPA() { /* ... */ }
-
-// Utilities
-function saveField(key, value) { /* Auto-save */ }
-function updateWordCount(fieldId) { /* Real-time counting */ }
-function updateSectionCompleteness() { /* Progress tracking */ }
+```bash
+git clone https://github.com/jeronimoparra-ai/processadmin.git
+cd processadmin
 ```
 
-### Extender la Aplicación
+2. Abre `index.html` en tu navegador.
 
-Para agregar nuevas funcionalidades:
+> No requiere instalación de dependencias ni backend.
 
-1. **Agregar vista nueva**
-   ```javascript
-   function buildNewView() {
-     const html = `...`; // Tu contenido HTML
-     document.getElementById('workspace').innerHTML = html;
-     // Agregar event listeners
-   }
-   ```
+## 🔒 Privacidad y seguridad
 
-2. **Actualizar navegación**
-   - Agregar botón en sidebar
-   - Actualizar switch en función navigate()
+- Toda la información se guarda localmente en el navegador.
+- No se envían datos a servidores externos del proyecto.
+- Ideal para trabajo académico con control de datos personales.
 
-3. **Guardar datos**
-   ```javascript
-   saveField('tusCampo', valor); // Auto-guardado en localStorage
-   ```
+## 🤝 Contribuir
 
----
+1. Haz un fork del repositorio.
+2. Crea una rama para tu mejora.
+3. Realiza commits claros.
+4. Abre un Pull Request con descripción del cambio.
 
-## 📝 Licencia
+## 📄 Licencia
 
-Este proyecto está bajo licencia **MIT**. Ver archivo `LICENSE` para más detalles.
-
----
-
-## 👨‍💻 Autor
-
-Desarrollado con ❤️ para mejorar la calidad de documentos académicos
-
----
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Para contribuir:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
----
-
-## 🐛 Reportar Problemas
-
-¿Encontraste un bug? Por favor abre un issue en GitHub con:
-- Descripción del problema
-- Pasos para reproducirlo
-- Navegador y versión
-- Screenshots si es posible
-
----
-
-## 📞 Soporte
-
-Para preguntas o soporte:
-- Abre un issue en GitHub
-- Consulta la documentación en el panel de ayuda de la aplicación
+Este proyecto está bajo licencia **MIT**. Revisa `LICENSE` para más detalles.
 
 ---
 
 <div align="center">
 
-**DocPro™ v1.0.0** | Hecho con 💙 para la excelencia académica
-
-![GitHub last commit](https://img.shields.io/github/last-commit/tuusuario/docpro)
-![GitHub stars](https://img.shields.io/github/stars/tuusuario/docpro?style=social)
+Hecho con 💙 para elevar la calidad de trabajos académicos.
 
 </div>
