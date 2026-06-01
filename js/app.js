@@ -175,6 +175,14 @@ function initApp() {
     });
   });
 
+  document.querySelectorAll('.header-quick').forEach(button => {
+    if (button.dataset.bound === 'true') return;
+    button.dataset.bound = 'true';
+    button.addEventListener('click', () => {
+      navigate(button.dataset.view);
+    });
+  });
+
   navigate(state.activeView || 'panel');
 }
 

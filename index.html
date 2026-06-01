@@ -4,30 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="ProcessAdmin es una herramienta web para redactar, organizar y exportar trabajos académicos en APA 7 con guardado local en el navegador.">
-  <meta name="author" content="ProcessAdmin">
-  <meta name="application-name" content="ProcessAdmin">
+  <meta name="description" content="DocPro es una plataforma académica para redactar, organizar y exportar trabajos en APA 7 con guardado local en el navegador.">
+  <meta name="author" content="DocPro">
+  <meta name="application-name" content="DocPro">
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-  <meta name="theme-color" content="#0f3b73">
+  <meta name="theme-color" content="#1b3f8c">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="ProcessAdmin | Redacción académica y APA 7">
-  <meta property="og:description" content="Redacta, organiza y exporta trabajos académicos en el navegador con guardado local y orientación APA 7.">
+  <meta property="og:title" content="DocPro | Redacción académica y APA 7">
+  <meta property="og:description" content="Redacta, organiza y exporta trabajos académicos con un flujo académico premium y guardado local.">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="ProcessAdmin | Redacción académica y APA 7">
+  <meta name="twitter:title" content="DocPro | Redacción académica y APA 7">
   <meta name="twitter:description" content="Redacción académica, organización APA 7 y exportación local desde el navegador.">
-  <title>ProcessAdmin | Redacción académica y APA 7</title>
+  <title>DocPro | Redacción académica y APA 7</title>
 
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "ProcessAdmin",
+      "name": "DocPro",
       "applicationCategory": "EducationalApplication",
       "operatingSystem": "Web",
       "description": "Herramienta web para redactar, organizar y exportar trabajos académicos con orientación APA 7 y guardado local en el navegador.",
       "author": {
         "@type": "Organization",
-        "name": "ProcessAdmin"
+        "name": "DocPro"
       },
       "softwareVersion": "1.0.0"
     }
@@ -69,8 +69,8 @@
             </svg>
           </div>
           <div>
-            <div class="logo">ProcessAdmin</div>
-            <p class="tag">Redacción académica y APA 7</p>
+            <div class="logo">DocPro™</div>
+            <p class="tag">Documentación académica premium</p>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@
           <div class="meta">
             <div>
               <div class="meta-label">Proyecto</div>
-              <div class="meta-value text-[28px] leading-none">ProcessAdmin</div>
+              <div class="meta-value text-[28px] leading-none">DocPro™</div>
             </div>
             <div class="text-right text-[11px] leading-5 text-white/45">
               <div>Última actualización</div>
@@ -138,21 +138,64 @@
 
     <main id="app-main" class="main-area" tabindex="-1">
       <header class="main-hero workspace-header">
-        <div class="header-inner">
-          <div>
-            <h2 id="header-title" class="header-title">Panel de Control</h2>
-            <p id="header-subtitle" class="header-subtitle">Resumen del progreso de tu documento</p>
-          </div>
-          <div class="header-pills">
-            <div class="header-pill header-pill--success">
-              <svg id="save-indicator" class="header-save-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                <path d="M7 3v6h10"></path>
-                <path d="M8 21v-8h8v8"></path>
-              </svg>
-              <span>Guardado</span>
+        <div class="header-shell">
+          <div class="header-top">
+            <div class="header-brand">
+              <div class="header-brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                  <path d="M7 3.5h7.5L19 8v12.5A2.5 2.5 0 0 1 16.5 23h-9A2.5 2.5 0 0 1 5 20.5v-14A3 3 0 0 1 8 3.5z"></path>
+                  <path d="M14.5 3.5V8H19"></path>
+                  <path d="M8.5 12h7"></path>
+                  <path d="M8.5 15.5h7"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="header-app-title">DocPro™</div>
+                <p class="header-app-subtitle">Genera documentos académicos profesionales bajo normas APA.</p>
+              </div>
             </div>
-            <div class="header-pill header-pill--accent">APA 7ª Ed.</div>
+
+            <div class="header-controls">
+              <div class="header-search" role="search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
+                </svg>
+                <input id="global-search" type="search" placeholder="Buscar documentos, secciones o APA..." aria-label="Búsqueda global" class="header-search-input">
+              </div>
+
+              <div class="header-actions" aria-label="Acciones rápidas">
+                <button class="header-action header-quick" data-view="redactor">Continuar</button>
+                <button class="header-action header-quick" data-view="organizador">Nuevo doc</button>
+                <button class="header-action header-quick" data-view="exportar">Exportar</button>
+              </div>
+
+              <div class="header-profile" aria-label="Perfil de usuario">
+                <div class="header-avatar" aria-hidden="true">DP</div>
+                <div class="header-profile-meta">
+                  <div class="header-profile-name">Docente invitado</div>
+                  <div class="header-profile-role">Espacio local</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="header-bottom">
+            <div>
+              <h2 id="header-title" class="header-title">Panel de Control</h2>
+              <p id="header-subtitle" class="header-subtitle">Resumen del progreso de tu documento</p>
+            </div>
+            <div class="header-pills">
+              <div class="header-pill header-pill--success">
+                <svg id="save-indicator" class="header-save-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <path d="M7 3v6h10"></path>
+                  <path d="M8 21v-8h8v8"></path>
+                </svg>
+                <span>Guardado</span>
+              </div>
+              <div class="header-pill header-pill--accent">APA 7ª Ed.</div>
+            </div>
           </div>
         </div>
       </header>
