@@ -257,7 +257,7 @@ function buildChecklist() {
     const diff = deadline - Date.now();
 
     if (diff <= 0) {
-      countdownDisplay.className = 'text-center py-3 bg-red-50 rounded border border-red-300 transition-colors animate-pulse';
+      countdownDisplay.className = 'text-center py-3 dp-badge dp-badge-danger transition-colors animate-pulse';
       countdownDisplay.innerHTML = '<p class="text-lg font-bold text-red-600">Fecha de entrega vencida</p>';
       return;
     }
@@ -269,10 +269,10 @@ function buildChecklist() {
 
     if (days < 1) {
       colorClass = 'text-red-600';
-      panelClass = 'bg-red-50 border-red-300 animate-pulse';
+      panelClass = 'dp-badge dp-badge-danger animate-pulse';
     } else if (days <= 3) {
       colorClass = 'text-yellow-600';
-      panelClass = 'bg-yellow-50 border-yellow-300';
+      panelClass = 'dp-badge dp-badge-warning';
     }
 
     countdownDisplay.className = `text-center py-3 rounded border transition-colors ${panelClass}`;

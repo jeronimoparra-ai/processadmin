@@ -181,7 +181,7 @@ function buildRubricaRebuilt() {
     list.innerHTML = criteria.map((criterion, index) => {
       const normalized = normalizeCriterion(criterion);
       const ratio = normalized.max > 0 ? normalized.obtained / normalized.max : 0;
-      const trafficClass = ratio >= 0.8 ? 'text-green-600 bg-green-50 border-green-200' : ratio >= 0.6 ? 'text-yellow-600 bg-yellow-50 border-yellow-200' : 'text-red-600 bg-red-50 border-red-200';
+      const trafficClass = ratio >= 0.8 ? 'dp-badge dp-badge-success' : ratio >= 0.6 ? 'dp-badge dp-badge-warning' : 'dp-badge dp-badge-danger';
 
       return `
         <div class="border-2 border-slate-300 rounded p-4 space-y-3">

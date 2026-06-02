@@ -559,7 +559,7 @@ function buildPanel() {
         if (deliveryDateLabelEl) deliveryDateLabelEl.textContent = 'Sin fecha';
         if (deliveryDateSyncBadge) {
           deliveryDateSyncBadge.textContent = 'Debes ingresar una fecha de entrega';
-          deliveryDateSyncBadge.className = 'mt-2 inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-[11px] font-semibold text-red-700 border border-red-200';
+          deliveryDateSyncBadge.className = 'mt-2 inline-flex items-center rounded-full dp-badge dp-badge-danger px-3 py-1 text-[11px] font-semibold';
         }
         if (typeof updateCountdown === 'function') updateCountdown();
         return;
@@ -571,7 +571,7 @@ function buildPanel() {
       }
       if (deliveryDateSyncBadge) {
         deliveryDateSyncBadge.textContent = 'Fecha actualizada y sincronizada';
-        deliveryDateSyncBadge.className = 'mt-2 inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700 border border-emerald-200';
+        deliveryDateSyncBadge.className = 'mt-2 inline-flex items-center rounded-full dp-badge dp-badge-success px-3 py-1 text-[11px] font-semibold';
       }
       if (typeof updateCountdown === 'function') updateCountdown();
       if (typeof updateSectionCompleteness === 'function') updateSectionCompleteness();

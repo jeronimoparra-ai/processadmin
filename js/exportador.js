@@ -40,8 +40,11 @@ function buildWordParagraph(text, options = {}) {
   const size = options.size || 24;
   const style = options.style ? `<w:pStyle w:val="${options.style}"/>` : '';
   const spacing = options.double ? '<w:spacing w:line="480" w:lineRule="auto"/>' : '';
-  const indent = options.hanging ? '<w:ind w:hanging="720"/>' : '';
-  return `<w:p><w:pPr><w:jc w:val="${align}"/>${style}${spacing}${indent}</w:pPr><w:r><w:rPr>${bold}<w:sz w:val="${size}"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
+  const firstLine = options.firstLine ? '<w:ind w:firstLine="720"/>' : '';
+  const hanging = options.hanging ? '<w:ind w:left="720" w:hanging="720"/>' : '';
+  const italic = options.italic ? '<w:i/>' : '';
+  const indent = firstLine || hanging;
+  return `<w:p><w:pPr><w:jc w:val="${align}"/>${style}${spacing}${indent}</w:pPr><w:r><w:rPr>${bold}${italic}<w:sz w:val="${size}"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
 }
 
 function replaceXmlText(xml, token, value) {
@@ -107,27 +110,22 @@ function getExportReferences(snapshot = {}) {
     return fromState.map(reference => String(reference || '').replace(/<\/?em>/g, '').trim()).filter(Boolean);
   }
 
-  const storedRaw = readFirstStoredValue('apa_generated_citations', 'apa_sources', 'docpro_referencias', 'processadmin_referencias', 'docpro_citas', 'pa_citas');
-  if (!storedRaw) return [];
-
-  return parseStoredReferences(storedRaw);
+  let refsList = [];
+  try {
+    const raw = localStorage.getItem('apa_generated_citations');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      refsList = Array.isArray(parsed)
+        ? parsed.map(c => c.formatted || c.texto || c.referencia || c.citation || String(c))
+        : [];
+    }
+  } catch(e) { console.warn('Error leyendo referencias:', e); }
+  return refsList;
 }
 
 function formatApaDate(value) {
-  if (!value) return '';
-
-  const source = String(value).trim();
-  const candidate = source.includes('T') ? source : `${source}T00:00:00`;
-  const parsed = new Date(candidate);
-
-  if (Number.isNaN(parsed.getTime())) {
-    return source;
-  }
-
-  return parsed.toLocaleDateString('es-CO', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  return new Date().toLocaleDateString('es-CO', {
+    year: 'numeric', month: 'long', day: 'numeric'
   });
 }
 
@@ -171,22 +169,25 @@ function buildGeneratedDocxPackage(data, snapshot = {}) {
   paragraphs.push(buildWordParagraph(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
   if (data.modalidad) paragraphs.push(buildWordParagraph(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
   paragraphs.push(buildWordParagraph(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
-  paragraphs.push(buildWordParagraph(title, { align: 'center', size: 44, bold: true }));
-  paragraphs.push(buildWordParagraph(data.nombre || 'Nombre completo', { align: 'center', size: 24 }));
+  paragraphs.push('<w:p><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:p>');
+  paragraphs.push(buildWordParagraph(title, { align: 'center', size: 24, bold: true }));
+  paragraphs.push('<w:p><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:p>');
+  paragraphs.push(buildWordParagraph(data.nombre || 'Nombre completo', { align: 'center', size: 24, bold: true }));
   paragraphs.push(buildWordParagraph(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
   paragraphs.push(buildWordParagraph(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
   if (formattedDate) paragraphs.push(buildWordParagraph(formattedDate, { align: 'center', size: 24 }));
   paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
   paragraphs.push(buildToCFieldParagraph());
   paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-  paragraphs.push(buildWordParagraph('Introducción', { style: 'Heading1', bold: true, size: 28 }));
+  paragraphs.push(buildWordParagraph(title, { align: 'center', bold: true, size: 24, double: true }));
   const formatBody = formatSections.length > 0 ? formatSections.join('\n\n') : Object.values(outlineValues).flat().join('\n');
   (redactorContent || formatBody || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
-    if (paragraph.trim()) paragraphs.push(buildWordParagraph(paragraph.trim(), { size: 24, double: true }));
+    if (paragraph.trim()) paragraphs.push(buildWordParagraph(paragraph.trim(), { size: 24, double: true, firstLine: true }));
   });
-  paragraphs.push(buildWordParagraph('Referencias', { style: 'Heading1', bold: true, size: 28 }));
+  paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
+  paragraphs.push(buildWordParagraph('Referencias', { style: 'Heading1', bold: true, size: 28, align: 'center' }));
   if (references.length === 0) {
-    paragraphs.push(buildWordParagraph('Sin referencias registradas.', { size: 24, hanging: true }));
+    paragraphs.push(buildWordParagraph('No se han generado referencias aún.', { size: 24, italic: true }));
   } else {
     references.forEach(reference => paragraphs.push(buildWordParagraph(reference, { size: 24, hanging: true })));
   }
@@ -651,16 +652,21 @@ function buildExportador() {
       const size = options.size || 24;
       const style = options.style ? `<w:pStyle w:val="${options.style}"/>` : '';
       const spacing = options.double ? '<w:spacing w:line="480" w:lineRule="auto"/>' : '';
-      const indent = options.hanging ? '<w:ind w:hanging="720"/>' : '';
-      return `<w:p><w:pPr><w:jc w:val="${align}"/>${style}${spacing}${indent}</w:pPr><w:r><w:rPr>${bold}<w:sz w:val="${size}"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
+      const firstLine = options.firstLine ? '<w:ind w:firstLine="720"/>' : '';
+      const hanging = options.hanging ? '<w:ind w:left="720" w:hanging="720"/>' : '';
+      const italic = options.italic ? '<w:i/>' : '';
+      const indent = firstLine || hanging;
+      return `<w:p><w:pPr><w:jc w:val="${align}"/>${style}${spacing}${indent}</w:pPr><w:r><w:rPr>${bold}${italic}<w:sz w:val="${size}"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
     };
 
     paragraphs.push(p(data.institucion || 'Institución', { align: 'center', size: 24, double: false }));
     paragraphs.push(p(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
     if (data.modalidad) paragraphs.push(p(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
     paragraphs.push(p(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
-    paragraphs.push(p(title, { align: 'center', size: 44, bold: true }));
-    paragraphs.push(p(data.nombre || 'Nombre completo', { align: 'center', size: 24 }));
+    paragraphs.push('<w:p><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:p>');
+    paragraphs.push(p(title, { align: 'center', size: 24, bold: true }));
+    paragraphs.push('<w:p><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:p>');
+    paragraphs.push(p(data.nombre || 'Nombre completo', { align: 'center', size: 24, bold: true }));
     paragraphs.push(p(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
     paragraphs.push(p(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
     paragraphs.push(p(formattedDate || 'Fecha de entrega', { align: 'center', size: 24 }));
@@ -668,13 +674,14 @@ function buildExportador() {
     paragraphs.push(p('Tabla de contenido', { style: 'Heading1', bold: true, size: 28 }));
     paragraphs.push(p('Actualice la tabla de contenido en Word.', { size: 22 }));
     paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-    paragraphs.push(p('Introducción', { style: 'Heading1', bold: true, size: 28 }));
+    paragraphs.push(p(title, { align: 'center', bold: true, size: 24, double: true }));
     (safeStorageGet('redactor_content', '') || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
-      if (paragraph.trim()) paragraphs.push(p(paragraph.trim(), { size: 24, double: true }));
+      if (paragraph.trim()) paragraphs.push(p(paragraph.trim(), { size: 24, double: true, firstLine: true }));
     });
-    paragraphs.push(p('Referencias', { style: 'Heading1', bold: true, size: 28 }));
+    paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
+    paragraphs.push(p('Referencias', { style: 'Heading1', bold: true, size: 28, align: 'center' }));
     if (references.length === 0) {
-      paragraphs.push(p('Sin referencias registradas.', { size: 24, hanging: true }));
+      paragraphs.push(p('No se han generado referencias aún.', { size: 24, italic: true }));
     } else {
       references.forEach(reference => paragraphs.push(p(reference, { size: 24, hanging: true }))); 
     }
