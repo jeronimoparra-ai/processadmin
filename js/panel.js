@@ -453,6 +453,29 @@ function buildPanel() {
           </div>
         </div>
       </section>
+
+      <div class="dp-card">
+        <div class="dp-card-header">
+          <h3 class="dp-card-title">¿Quién usa ProcessAdmin?</h3>
+          <span class="dp-badge dp-badge-accent">Comunidad</span>
+        </div>
+        <div class="dp-grid-2">
+          <div style="padding:16px; background:var(--dp-surface-2); border-radius:var(--dp-r-md); border:1px solid var(--dp-border);">
+            <p style="font-size:13px; font-style:italic; color:var(--dp-text-secondary); line-height:1.7; margin:0 0 12px;">
+              "ProcessAdmin me ahorró horas de formateo. Entrego mis trabajos con confianza de que el APA está correcto."
+            </p>
+            <p style="font-size:12px; font-weight:700; color:var(--dp-text-primary); margin:0;">Estudiante — IU Digital de Antioquia</p>
+            <p style="font-size:11px; color:var(--dp-text-muted); margin:2px 0 0;">Tecnología en Desarrollo de Software</p>
+          </div>
+          <div style="padding:16px; background:var(--dp-surface-2); border-radius:var(--dp-r-md); border:1px solid var(--dp-border);">
+            <p style="font-size:13px; font-style:italic; color:var(--dp-text-secondary); line-height:1.7; margin:0 0 12px;">
+              "El evaluador de rúbrica es increíble. Me permite saber mi nota antes de entregar y mejorar lo necesario."
+            </p>
+            <p style="font-size:12px; font-weight:700; color:var(--dp-text-primary); margin:0;">Aprendiz — SENA</p>
+            <p style="font-size:11px; color:var(--dp-text-muted); margin:2px 0 0;">Centro de Formación Ambiental · Caucasia</p>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 

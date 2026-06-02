@@ -2,35 +2,87 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="ProcessAdmin es una plataforma académica para redactar, organizar y exportar trabajos en APA 7 con guardado local en el navegador. Sin servidor, sin cuenta, 100% privado.">
-  <meta name="author" content="ProcessAdmin">
-  <meta name="application-name" content="ProcessAdmin">
-  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
-  <meta name="theme-color" content="#1c1b18">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="ProcessAdmin | Redacción académica y APA 7">
-  <meta property="og:description" content="Redacta, organiza y exporta trabajos académicos con normas APA 7. Guardado local sin servidores.">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="ProcessAdmin | Redacción académica y APA 7">
-  <meta name="twitter:description" content="Plataforma académica con APA 7, exportación a Word y guardado local desde el navegador.">
+  <meta name="viewport"           content="width=device-width, initial-scale=1.0">
+  <meta name="application-name"   content="ProcessAdmin">
+  <meta name="author"             content="Andrés Jeronimo Parra">
+  <meta name="theme-color"        content="#1c1b18">
+  <meta name="robots"             content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+
+  <!-- SEO -->
+  <meta name="description"
+        content="ProcessAdmin: redacta, organiza y exporta trabajos académicos con normas APA 7 completas. Guardado local en el navegador, sin servidor, sin cuenta, 100% privado.">
+  <meta name="keywords"
+        content="APA 7, trabajos académicos, redacción académica, referencias bibliográficas, exportar Word, normas APA, Colombia">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://processadmin.vercel.app">
+  <meta property="og:title"       content="ProcessAdmin | Redacción académica y APA 7">
+  <meta property="og:description" content="Redacta, organiza y exporta trabajos académicos con normas APA 7. Sin servidor, sin cuenta, 100% privado.">
+  <meta property="og:image"       content="https://processadmin.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale"      content="es_CO">
+  <meta property="og:site_name"   content="ProcessAdmin">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="ProcessAdmin | Redacción académica y APA 7">
+  <meta name="twitter:description" content="Herramienta académica para redactar y exportar trabajos en APA 7 desde el navegador.">
+  <meta name="twitter:image"       content="https://processadmin.vercel.app/og-image.png">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://processadmin.vercel.app">
+
   <title>ProcessAdmin | Redacción académica y APA 7</title>
 
+  <!-- SCHEMA.ORG — FIX 2 -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "ProcessAdmin",
-      "applicationCategory": "EducationalApplication",
-      "operatingSystem": "Web",
-      "description": "Herramienta web para redactar, organizar y exportar trabajos académicos con orientación APA 7 y guardado local en el navegador.",
-      "author": {
-        "@type": "Organization",
-        "name": "ProcessAdmin"
-      },
-      "softwareVersion": "1.0.0"
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ProcessAdmin",
+    "url": "https://processadmin.vercel.app",
+    "description": "Plataforma académica para redactar, organizar y exportar trabajos con normas APA 7. Guardado local en el navegador sin servidor ni telemetría.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web Browser",
+    "browserRequirements": "Requires JavaScript. Requires localStorage.",
+    "softwareVersion": "1.0.0",
+    "inLanguage": "es-CO",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "COP"
+    },
+    "featureList": [
+      "Redactor académico con guardado automático",
+      "Gestor de referencias APA 7",
+      "Exportación a Word (.docx) con formato APA completo",
+      "Evaluador de rúbrica con simulación de calificación",
+      "Organizador de ideas y estructura del documento",
+      "Checklist inteligente de requisitos APA 7",
+      "100% local — sin servidor ni cuenta de usuario"
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "Andrés Jeronimo Parra",
+      "email": "andresjeroparra@gmail.com",
+      "affiliation": {
+        "@type": "EducationalOrganization",
+        "name": "Institución Universitaria Digital de Antioquia"
+      }
+    },
+    "maintainer": {
+      "@type": "Person",
+      "name": "Andrés Jeronimo Parra"
+    },
+    "sourceOrganization": {
+      "@type": "EducationalOrganization",
+      "name": "Institución Universitaria Digital de Antioquia",
+      "url": "https://www.iudigital.edu.co"
     }
+  }
   </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -115,6 +167,14 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M4 6h16"></path><path d="M7 6v12"></path><path d="M17 6v12"></path><path d="M9 12h6"></path></svg>
           <span>Privacidad y términos</span>
         </button>
+        <button class="nav-btn" data-view="acerca">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          Acerca del autor
+        </button>
       </nav>
 
       <div class="side-footer">
@@ -130,6 +190,22 @@
             </div>
           </div>
           <div id="saved-document-count" class="text-sm font-medium text-white/70">0 documentos guardados</div>
+          <a href="https://github.com/jeronimoparra-ai/processadmin"
+             target="_blank" rel="noopener noreferrer"
+             style="
+               display:flex; align-items:center; gap:7px;
+               margin-top:12px; font-size:11px; color:rgba(255,255,255,0.3);
+               text-decoration:none;
+               transition:color 0.15s;
+             "
+             onmouseover="this.style.color='rgba(255,255,255,0.6)'"
+             onmouseout="this.style.color='rgba(255,255,255,0.3)'"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            Código abierto en GitHub
+          </a>
           <p class="text-[11px] leading-5 text-white/45">Contacto: <a class="underline decoration-dotted underline-offset-2" href="mailto:andresjeroparra@gmail.com">andresjeroparra@gmail.com</a></p>
           <p class="text-[11px] leading-5 text-white/45">El contenido se guarda en el navegador con localStorage. No usa servidor ni telemetría propia.</p>
         </div>
@@ -232,6 +308,7 @@
   <script src="js/organizador.js"></script>
   <script src="js/historial.js"></script>
   <script src="js/legal.js"></script>
+  <script src="js/acerca.js"></script>
   <script src="js/exportador.js"></script>
   <script src="js/app.js"></script>
 </body>

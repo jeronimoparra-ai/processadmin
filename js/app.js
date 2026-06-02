@@ -7,7 +7,8 @@ const VIEW_META = {
   checklist: { title: 'Checklist inteligente', sub: 'Verifica los requisitos visibles del documento' },
   exportar: { title: 'Exportación a Word', sub: 'Descarga tu documento en formato compatible' },
   historial: { title: 'Historial de documentos', sub: 'Reabre y administra tus exportaciones anteriores' },
-  legal: { title: 'Información legal', sub: 'Privacidad, términos, contacto y alcance del sitio' }
+  legal: { title: 'Información legal', sub: 'Privacidad, términos, contacto y alcance del sitio' },
+  acerca: { title: 'Acerca del autor', sub: 'Sobre el proyecto y su creador' }
 };
 
 function getCanonicalViewId(viewId) {
@@ -152,6 +153,8 @@ function navigate(viewId) {
       return typeof buildHistorial === 'function' ? buildHistorial() : null;
     case 'legal':
       return typeof buildLegalView === 'function' ? buildLegalView() : null;
+    case 'acerca':
+      return typeof buildAcercaView === 'function' ? buildAcercaView() : null;
     case 'exportar':
       return typeof buildExportador === 'function' ? buildExportador() : null;
     default:

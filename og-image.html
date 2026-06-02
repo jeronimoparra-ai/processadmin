@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px; height: 630px; overflow: hidden;
+      background: #faf9f6;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      display: flex;
+    }
+    .sidebar {
+      width: 280px; height: 100%; background: #1c1b18;
+      display: flex; flex-direction: column; padding: 40px 28px;
+    }
+    .logo-box {
+      width: 44px; height: 44px; background: #c9a96e;
+      border-radius: 10px; display: flex; align-items: center;
+      justify-content: center; margin-bottom: 16px;
+    }
+    .logo-box svg { width: 22px; height: 22px; }
+    .logo-title { font-size: 22px; font-weight: 700; color: #faf9f6; margin-bottom: 4px; }
+    .logo-sub { font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.08em; }
+    .nav-items { margin-top: 32px; display: flex; flex-direction: column; gap: 4px; }
+    .nav-item { padding: 8px 10px; border-radius: 7px; font-size: 13px; color: rgba(255,255,255,0.55); }
+    .nav-item.active { background: rgba(201,169,110,0.12); color: #faf9f6; border-left: 2px solid #c9a96e; }
+    .main { flex: 1; padding: 48px 56px; display: flex; flex-direction: column; justify-content: center; }
+    .eyebrow { font-size: 12px; font-weight: 700; color: #c9a96e; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+    .headline { font-size: 52px; font-weight: 700; color: #1c1b18; line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.02em; }
+    .headline span { color: #c9a96e; }
+    .sub { font-size: 18px; color: #5c5650; line-height: 1.5; max-width: 580px; margin-bottom: 32px; }
+    .tags { display: flex; gap: 10px; }
+    .tag { padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+    .tag-gold { background: #fdf6eb; color: #9a6e28; border: 1px solid #e8d5a8; }
+    .tag-dark { background: #1c1b18; color: #faf9f6; }
+    .url { margin-top: auto; font-size: 13px; color: #9a9389; }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1c1b18" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+    </div>
+    <div class="logo-title">ProcessAdmin</div>
+    <div class="logo-sub">APA 7 Professional</div>
+    <div class="nav-items">
+      <div class="nav-item active">Panel de control</div>
+      <div class="nav-item">Redactor asistido</div>
+      <div class="nav-item">Gestor APA 7</div>
+      <div class="nav-item">Exportación a Word</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="eyebrow">Herramienta académica gratuita</div>
+    <div class="headline">Redacta y exporta<br>trabajos en <span>APA 7</span></div>
+    <div class="sub">Sin servidor. Sin cuenta. Todo guardado en tu navegador. Exporta a Word con formato académico completo.</div>
+    <div class="tags">
+      <div class="tag tag-gold">APA 7ª Edición</div>
+      <div class="tag tag-gold">Exportación Word</div>
+      <div class="tag tag-dark">100% Gratis</div>
+    </div>
+    <div class="url">processadmin.vercel.app</div>
+  </div>
+</body>
+</html>
