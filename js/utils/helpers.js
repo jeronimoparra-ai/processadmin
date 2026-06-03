@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════════════════════════════════════
-// UTILS.JS - Funciones utilitarias reutilizables
+// HELPERS.JS - Reusable pure functions and utilities
 // ═══════════════════════════════════════════════════════════════════════
 
 function debounce(fn, delay) {
   return function(...args) {
-    clearTimeout(state.saveTimer);
-    state.saveTimer = setTimeout(() => fn(...args), delay);
+    clearTimeout(window.state.saveTimer);
+    window.state.saveTimer = setTimeout(() => fn(...args), delay);
   };
 }
 
@@ -16,6 +16,23 @@ function escapeHtml(text) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function xmlEscape(text) {
+  return String(text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function wordToHtml(text) {
+  if (!text) return '';
+  return escapeHtml(text)
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br>');
 }
 
 function countWords(text) {
@@ -38,6 +55,14 @@ function formatDateTimeValue(value) {
   });
 }
 
+function formatDate(date) {
+  return date.toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+}
+
 function normalizeSpanishText(text) {
   return String(text || '')
     .toLowerCase()
@@ -54,13 +79,11 @@ function extractCitationAuthor(citation) {
   return match ? match[1].trim() : '';
 }
 
-function xmlEscape(text) {
-  return String(text || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
+function generateInTextCitation(author, year, page) {
+  if (page) {
+    return `(${author}, ${year}, p. ${page})`;
+  }
+  return `(${author}, ${year})`;
 }
 
 function utf8Bytes(text) {
@@ -103,38 +126,24 @@ function createZipBlob(files) {
 
     const localHeader = Uint8Array.from([
       0x50, 0x4b, 0x03, 0x04,
-      0x14, 0x00,
-      0x00, 0x00,
-      0x00, 0x00,
-      ...writeUint16(0),
-      ...writeUint16(0),
+      0x14, 0x00, 0x00, 0x00, 0x00, 0x00,
+      ...writeUint16(0), ...writeUint16(0),
       ...writeUint32(checksum),
-      ...writeUint32(size),
-      ...writeUint32(size),
-      ...writeUint16(nameBytes.length),
-      ...writeUint16(0)
+      ...writeUint32(size), ...writeUint32(size),
+      ...writeUint16(nameBytes.length), ...writeUint16(0)
     ]);
 
     fileParts.push(localHeader, nameBytes, contentBytes);
 
     const centralHeader = Uint8Array.from([
       0x50, 0x4b, 0x01, 0x02,
-      0x14, 0x00,
-      0x14, 0x00,
-      0x00, 0x00,
-      0x00, 0x00,
-      ...writeUint16(0),
-      ...writeUint16(0),
+      0x14, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00,
+      ...writeUint16(0), ...writeUint16(0),
       ...writeUint32(checksum),
-      ...writeUint32(size),
-      ...writeUint32(size),
-      ...writeUint16(nameBytes.length),
-      ...writeUint16(0),
-      ...writeUint16(0),
-      ...writeUint16(0),
-      ...writeUint16(0),
-      ...writeUint32(0),
-      ...writeUint32(offset)
+      ...writeUint32(size), ...writeUint32(size),
+      ...writeUint16(nameBytes.length), ...writeUint16(0),
+      ...writeUint16(0), ...writeUint16(0), ...writeUint16(0),
+      ...writeUint32(0), ...writeUint32(offset)
     ]);
 
     centralParts.push(centralHeader, nameBytes);
@@ -145,12 +154,9 @@ function createZipBlob(files) {
   const centralOffset = fileParts.reduce((sum, part) => sum + part.length, 0);
   const eocd = Uint8Array.from([
     0x50, 0x4b, 0x05, 0x06,
-    ...writeUint16(0),
-    ...writeUint16(0),
-    ...writeUint16(files.length),
-    ...writeUint16(files.length),
-    ...writeUint32(centralSize),
-    ...writeUint32(centralOffset),
+    ...writeUint16(0), ...writeUint16(0),
+    ...writeUint16(files.length), ...writeUint16(files.length),
+    ...writeUint32(centralSize), ...writeUint32(centralOffset),
     0x00, 0x00
   ]);
 
@@ -158,10 +164,7 @@ function createZipBlob(files) {
 }
 
 async function writeClipboardText(text) {
-  if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') {
-    return false;
-  }
-
+  if (!navigator.clipboard || typeof navigator.clipboard.writeText !== 'function') return false;
   try {
     await navigator.clipboard.writeText(String(text || ''));
     return true;
@@ -180,19 +183,4 @@ function copyToClipboard(text, event) {
       if (btn && btn.textContent !== undefined) btn.textContent = original;
     }, 2000);
   });
-}
-
-function formatDate(date) {
-  return date.toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-}
-
-function generateInTextCitation(author, year, page) {
-  if (page) {
-    return `(${author}, ${year}, p. ${page})`;
-  }
-  return `(${author}, ${year})`;
 }

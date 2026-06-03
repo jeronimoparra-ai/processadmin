@@ -1,0 +1,78 @@
+/* ═══════════════════════════════════════════════════════════════════
+   UTILITIES.CSS — Helper Classes (Grids, Spacing, Display)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── GRIDS ── */
+.dp-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.dp-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.dp-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.dp-grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+
+.section-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 768px) { 
+  .dp-grid-2, .dp-grid-3, .dp-grid-4 { grid-template-columns: 1fr; } 
+}
+
+/* ── SPACING & MARGINS ── */
+.mt-0 { margin-top: 0 !important; }
+.mb-0 { margin-bottom: 0 !important; }
+.mt-4 { margin-top: 16px !important; }
+.mb-4 { margin-bottom: 16px !important; }
+.mt-8 { margin-top: 32px !important; }
+.mb-8 { margin-bottom: 32px !important; }
+
+/* ── DISPLAY ── */
+.d-none { display: none !important; }
+.d-flex { display: flex !important; }
+.d-block { display: block !important; }
+
+/* ── TEXT ── */
+.text-center { text-align: center !important; }
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+.text-primary { color: var(--dp-text-primary) !important; }
+.text-secondary { color: var(--dp-text-secondary) !important; }
+.text-muted { color: var(--dp-text-muted) !important; }
+
+/* ── SECTION LABEL (from components) ── */
+.dp-section-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dp-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dp-section-label::after { content: ''; flex: 1; height: 1px; background: var(--dp-border); }
+
+/* ── BADGES & MISC UTILITIES ── */
+.template-badge {
+  display: inline-flex;
+  align-self: center;
+  margin-bottom: 20px;
+  border: 1px solid var(--dp-teal-border);
+  border-radius: var(--dp-r-full);
+  background: var(--dp-teal-light);
+  color: var(--dp-teal-dark);
+  padding: 4px 12px;
+  font-family: var(--dp-font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}

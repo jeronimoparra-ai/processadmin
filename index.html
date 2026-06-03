@@ -101,11 +101,12 @@
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
 
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/redesign.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/utilities.css">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="js/ui-icons.js"></script>
 
   <!-- Open Graph / Redes sociales -->
   <meta property="og:title" content="DocPro™ | Generador APA 7 Profesional">
@@ -287,19 +288,36 @@
   </script>
 
   <!-- Módulos JS con defer: se descargan en paralelo y ejecutan en orden tras parsear el HTML -->
+  <!-- State and Config -->
   <script src="js/config.js" defer></script>
-  <script src="js/utils.js" defer></script>
-  <script src="js/storage.js" defer></script>
-  <script src="js/panel.js" defer></script>
-  <script src="js/redactor.js" defer></script>
-  <script src="js/apa.js" defer></script>
-  <script src="js/rubrica.js" defer></script>
-  <script src="js/checklist.js" defer></script>
-  <script src="js/organizador.js" defer></script>
-  <script src="js/historial.js" defer></script>
-  <script src="js/legal.js" defer></script>
-  <script src="js/acerca.js" defer></script>
-  <script src="js/exportador.js" defer></script>
+  <script src="js/state/store.js" defer></script>
+  <script src="js/state/persistence.js" defer></script>
+
+  <!-- Utils -->
+  <script src="js/utils/helpers.js" defer></script>
+  <script src="js/utils/icons.js" defer></script>
+
+  <!-- Services -->
+  <script src="js/services/storage.js" defer></script>
+  <script src="js/services/apa.js" defer></script>
+  <script src="js/services/export.js" defer></script>
+
+  <!-- Components -->
+  <script src="js/components/header.js" defer></script>
+  <script src="js/components/sidebar.js" defer></script>
+  <script src="js/components/uiComponents.js" defer></script>
+
+  <!-- Views -->
+  <script src="js/views/panel.js" defer></script>
+  <script src="js/views/redactor.js" defer></script>
+  <script src="js/views/apa.js" defer></script>
+  <script src="js/views/rubrica.js" defer></script>
+  <script src="js/views/checklist.js" defer></script>
+  <script src="js/views/organizador.js" defer></script>
+  <script src="js/views/historial.js" defer></script>
+  <script src="js/views/legal.js" defer></script>
+  <script src="js/views/acerca.js" defer></script>
+  <script src="js/views/exportador.js" defer></script>
   <script src="js/app.js" defer></script>
 </body>
 </html>

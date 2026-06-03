@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════
-// UI-ICONS.JS - Rutas compartidas para íconos visuales de la interfaz
+// ICONS.JS - UI icons paths and renderer
 // ═══════════════════════════════════════════════════════════════════════
 
 function docproEscapeAttr(value) {
