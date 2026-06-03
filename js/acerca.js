@@ -1,5 +1,8 @@
 function buildAcercaView() {
-  document.getElementById('main-workspace').innerHTML = `
+  const workspace = document.getElementById('main-workspace');
+  if (!workspace) return;
+
+  workspace.innerHTML = `
     <div class="dp-stagger" style="display:flex; flex-direction:column; gap:20px; max-width:760px;">
 
       <!-- Tarjeta del autor -->
@@ -75,18 +78,20 @@ function buildAcercaView() {
             <p class="dp-section-label">Tecnologías</p>
             <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px;">
               ${[
-                ['HTML5 + CSS3 + JS Vanilla','Sin frameworks'],
-                ['Tailwind CSS','Via CDN'],
-                ['Chart.js','Gráficos de rúbrica'],
-                ['docx.js v8.5.0','Exportación Word real'],
-                ['Google Fonts','Lora + Plus Jakarta Sans'],
-              ].map(([name, desc]) => \`
+      ['HTML5 + CSS3 + JS Vanilla', 'Sin frameworks'],
+      ['Tailwind CSS', 'Via CDN'],
+      ['Chart.js', 'Gráficos de rúbrica'],
+      ['docx.js v8.5.0', 'Exportación Word real'],
+      ['Google Fonts', 'Lora + Plus Jakarta Sans'],
+    ].map(([name, desc]) => `
                 <li style="font-size:13px; display:flex; align-items:center; gap:8px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--dp-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span style="color:var(--dp-text-primary); font-weight:500;">\${name}</span>
-                  <span style="color:var(--dp-text-muted);">— \${desc}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--dp-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span style="color:var(--dp-text-primary); font-weight:500;">${name}</span>
+                  <span style="color:var(--dp-text-muted);">— ${desc}</span>
                 </li>
-              \`).join('')}
+              `).join('')}
             </ul>
           </div>
 
@@ -94,15 +99,21 @@ function buildAcercaView() {
             <p class="dp-section-label">Módulos</p>
             <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px;">
               ${[
-                'Panel de control','Redactor asistido','Gestor APA 7',
-                'Evaluador de rúbrica','Organizador de ideas',
-                'Checklist inteligente','Exportación a Word',
-              ].map(m => \`
+      'Panel de control',
+      'Redactor asistido',
+      'Gestor APA 7',
+      'Evaluador de rúbrica',
+      'Organizador de ideas',
+      'Checklist inteligente',
+      'Exportación a Word',
+    ].map(m => `
                 <li style="font-size:13px; display:flex; align-items:center; gap:8px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--dp-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span style="color:var(--dp-text-secondary);">\${m}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--dp-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span style="color:var(--dp-text-secondary);">${m}</span>
                 </li>
-              \`).join('')}
+              `).join('')}
             </ul>
           </div>
         </div>
@@ -156,5 +167,5 @@ function buildAcercaView() {
       </div>
 
     </div>
-  \`;
+  `;
 }

@@ -371,3 +371,24 @@ function validateReference(ref) {
     validation
   };
 }
+
+/**
+ * Actualiza el contador de documentos del sidebar
+ * leyendo las claves de docpro_ en localStorage.
+ */
+function updateSidebarDocCount() {
+  const countEl = document.getElementById('sidebar-doc-count') || document.getElementById('saved-document-count');
+  if (!countEl) return;
+
+  // Contar entradas de documentos (excluir claves de configuración/UI)
+  const docKeys = Object.keys(localStorage).filter(key =>
+    key.startsWith('docpro_') && !key.includes('_config') && !key.includes('_ui')
+  );
+  // Solo actualizamos si realmente hay elementos docpro_ (compatibilidad)
+  if (docKeys.length > 0) {
+    countEl.textContent = docKeys.length;
+  }
+}
+
+// Ejecutar al inicializar
+document.addEventListener('DOMContentLoaded', updateSidebarDocCount);

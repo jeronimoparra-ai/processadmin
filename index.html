@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
   <meta name="viewport"           content="width=device-width, initial-scale=1.0">
   <meta name="application-name"   content="ProcessAdmin">
   <meta name="author"             content="Andrés Jeronimo Parra">
@@ -89,22 +90,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
+  <!-- Tailwind CSS v3 — Play CDN (solo desarrollo). Para producción migrar a CLI build -->
   <script>
-    window.tailwind = window.tailwind || {};
-    tailwind.config = {
+    // Configuración mínima para evitar advertencias del Play CDN
+    window.tailwindConfig = {
       corePlugins: { preflight: false },
       theme: { extend: { colors: { accent: '#2563eb', surface: '#f6f8fb', dark: '#0f172a', teal: '#0f766e' } } }
-    }
+    };
   </script>
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
 
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/redesign.css">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="js/ui-icons.js"></script>
+
+  <!-- Open Graph / Redes sociales -->
+  <meta property="og:title" content="DocPro™ | Generador APA 7 Profesional">
+  <meta property="og:description" content="Diseña trabajos académicos de calidad con normas APA 7. Sin instalaciones, 100% en tu navegador.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://processadmin.vercel.app/">
+  <meta name="description" content="DocPro™ — Generador de documentos académicos APA 7 para estudiantes e investigadores. Redacción asistida, citas automáticas, rúbrica de evaluación y exportación. Sin servidores, 100% privado.">
 </head>
 <body class="page-root">
   <a class="skip-link" href="#app-main">Saltar al contenido principal</a>
@@ -139,37 +147,37 @@
         <div class="nav-section">Herramientas</div>
         <button class="nav-btn active" data-view="panel">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
-          <span>Panel de Control</span>
+          <span class="hidden md:inline">Panel de Control</span>
         </button>
         <button class="nav-btn" data-view="redactor">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5z"></path></svg>
-          <span>Redactor</span>
+          <span class="hidden md:inline">Redactor</span>
         </button>
         <button class="nav-btn" data-view="apa">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 5.5h16"></path><path d="M7 5.5v13"></path><path d="M17 5.5v13"></path><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
-          <span>Gestor APA 7</span>
+          <span class="hidden md:inline">Gestor APA 7</span>
         </button>
         <button class="nav-btn" data-view="simulador">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 19h16"></path><path d="M6 15h3V7H6z"></path><path d="M11 15h3V4h-3z"></path><path d="M16 15h3v-6h-3z"></path></svg>
-          <span>Rúbrica</span>
+          <span class="hidden md:inline">Rúbrica</span>
         </button>
         <button class="nav-btn" data-view="organizador">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M8 6v12"></path></svg>
-          <span>Organizador</span>
+          <span class="hidden md:inline">Organizador</span>
         </button>
 
         <div class="nav-section">Utilidades</div>
         <button class="nav-btn" data-view="checklist">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M7 12l3 3 7-7"></path></svg>
-          <span>Checklist</span>
+          <span class="hidden md:inline">Checklist</span>
         </button>
         <button class="nav-btn" data-view="historial">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path><path d="M18 17v-6"></path><path d="M15 14l3 3 3-3"></path></svg>
-          <span>Historial</span>
+          <span class="hidden md:inline">Historial</span>
         </button>
         <button class="nav-btn" data-view="exportar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 3v10"></path><path d="M8 9l4 4 4-4"></path><path d="M5 21h14"></path></svg>
-          <span>Exportar Word</span>
+          <span class="hidden md:inline">Exportar Word</span>
         </button>
       </nav>
 
@@ -177,14 +185,14 @@
         <div class="side-footer-row">
           <button class="nav-btn nav-btn--subtle" data-view="legal">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span>Legal</span>
+            <span class="hidden md:inline">Legal</span>
           </button>
           <button class="nav-btn nav-btn--subtle" data-view="acerca">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <span>Acerca</span>
+            <span class="hidden md:inline">Acerca</span>
           </button>
         </div>
         <div class="side-meta">
@@ -220,7 +228,14 @@
       </header>
 
       <section class="content-area">
-        <div id="main-workspace" class="workspace"></div>
+        <div id="main-workspace" class="workspace">
+          <!-- Estado de carga inicial — JS lo reemplaza al inicializar -->
+          <div id="workspace-loader" class="flex flex-col items-center justify-center h-full min-h-96 gap-4 text-slate-400">
+            <div class="text-5xl animate-pulse">📝</div>
+            <p class="text-lg font-medium">Cargando DocPro™...</p>
+            <p class="text-sm text-slate-400">Si esta pantalla no desaparece, recarga la página (F5)</p>
+          </div>
+        </div>
       </section>
     </main>
   </div>
@@ -245,19 +260,46 @@
     </div>
   </div>
 
-  <script src="js/config.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/panel.js"></script>
-  <script src="js/redactor.js"></script>
-  <script src="js/apa.js"></script>
-  <script src="js/rubrica.js"></script>
-  <script src="js/checklist.js"></script>
-  <script src="js/organizador.js"></script>
-  <script src="js/historial.js"></script>
-  <script src="js/legal.js"></script>
-  <script src="js/acerca.js"></script>
-  <script src="js/exportador.js"></script>
-  <script src="js/app.js"></script>
+  <!-- Manejo global de errores JS -->
+  <script>
+    window.addEventListener('error', function(e) {
+      const workspace = document.getElementById('main-workspace');
+      if (workspace && workspace.querySelector('#workspace-loader')) {
+        workspace.innerHTML = `
+          <div class="flex flex-col items-center justify-center h-full min-h-96 gap-4 text-red-400 p-8">
+            <div class="text-5xl">⚠️</div>
+            <p class="text-xl font-bold text-slate-700">Error al cargar DocPro™</p>
+            <p class="text-sm text-slate-500 text-center max-w-md">
+              No se pudo inicializar la aplicación. 
+              Verifica tu conexión a internet y recarga la página.
+            </p>
+            <p class="text-xs text-slate-400 font-mono bg-slate-100 p-3 rounded-lg max-w-lg break-all">
+              ${e.filename ? e.filename.split('/').pop() : 'script'}: ${e.message}
+            </p>
+            <button onclick="location.reload()" 
+              class="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+              Recargar página
+            </button>
+          </div>
+        `;
+      }
+    });
+  </script>
+
+  <!-- Módulos JS con defer: se descargan en paralelo y ejecutan en orden tras parsear el HTML -->
+  <script src="js/config.js" defer></script>
+  <script src="js/utils.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/panel.js" defer></script>
+  <script src="js/redactor.js" defer></script>
+  <script src="js/apa.js" defer></script>
+  <script src="js/rubrica.js" defer></script>
+  <script src="js/checklist.js" defer></script>
+  <script src="js/organizador.js" defer></script>
+  <script src="js/historial.js" defer></script>
+  <script src="js/legal.js" defer></script>
+  <script src="js/acerca.js" defer></script>
+  <script src="js/exportador.js" defer></script>
+  <script src="js/app.js" defer></script>
 </body>
 </html>
