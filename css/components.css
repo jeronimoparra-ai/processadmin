@@ -8,24 +8,24 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 16px;
-  border-radius: var(--dp-r-sm);
+  padding: 10px 18px;
+  border-radius: var(--dp-r-md);
   font-family: var(--dp-font-sans);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all var(--dp-t-fast);
+  transition: all var(--dp-t-normal);
   white-space: nowrap;
   line-height: 1.2;
 }
 .btn, .btn-primary, .dp-btn-primary { 
-  background: var(--dp-text-primary); 
+  background: var(--dp-primary); 
   color: var(--dp-text-inverse); 
   box-shadow: var(--dp-shadow-xs);
 }
 .btn:hover, .btn-primary:hover, .dp-btn-primary:hover { 
-  background: var(--dp-text-secondary); 
+  background: #1D4ED8; 
   transform: translateY(-2px); 
   box-shadow: var(--dp-shadow-md); 
 }
@@ -68,12 +68,12 @@
 }
 .dp-input::placeholder, .dp-textarea::placeholder { color: var(--dp-text-muted); }
 .dp-input:focus, .dp-textarea:focus, .dp-select:focus {
-  border-color: var(--dp-accent);
-  box-shadow: 0 0 0 3px var(--dp-accent-glow);
+  border-color: var(--dp-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 .dp-textarea { min-height: 120px; resize: vertical; }
 .dp-textarea.dp-mono { font-family: var(--dp-font-mono); font-size: 13px; line-height: 1.6; }
-.dp-label { display: block; font-size: 13px; font-weight: 600; color: var(--dp-text-primary); margin-bottom: 8px; }
+.dp-label { display: block; font-size: 14px; font-weight: 600; color: var(--dp-text-primary); margin-bottom: 8px; }
 .dp-field { margin-bottom: 24px; }
 .dp-input.has-error, .dp-textarea.has-error, .dp-select.has-error { border-color: var(--dp-danger); box-shadow: 0 0 0 3px var(--dp-danger-bg); }
 .dp-input.has-success, .dp-textarea.has-success, .dp-select.has-success { border-color: var(--dp-success); box-shadow: 0 0 0 3px var(--dp-success-bg); }
@@ -82,14 +82,15 @@
 .dp-card {
   background: var(--dp-surface);
   border: 1px solid var(--dp-border);
-  border-radius: var(--dp-r-xl);
+  border-radius: var(--dp-r-2xl);
   padding: 32px;
   box-shadow: var(--dp-shadow-sm);
   transition: all var(--dp-t-normal);
+  overflow: hidden;
 }
 .dp-card:hover { 
   box-shadow: var(--dp-shadow-lg); 
-  border-color: var(--dp-accent-border);
+  border-color: var(--dp-border-strong);
   transform: translateY(-4px);
 }
 

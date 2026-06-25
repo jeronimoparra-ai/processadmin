@@ -716,7 +716,7 @@ function buildExportador() {
 
     checklist.innerHTML = validations.map(item => `
       <div class="dp-ref-item flex items-center gap-2">
-        <span style="color: ${item.ok ? 'var(--dp-success)' : 'var(--dp-danger)'}" class="text-lg">${item.ok ? '✓' : '✗'}</span>
+        <span style="color: ${item.ok ? 'var(--dp-success)' : 'var(--dp-danger)'}" class="text-lg flex items-center justify-center">${docproIconHtml('validation', item.ok ? 'Válido' : 'Inválido', 'docpro-icon docpro-icon--sm')}</span>
         <span class="text-[var(--dp-text-primary)]">${item.name}</span>
       </div>
     `).join('');

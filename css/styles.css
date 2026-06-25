@@ -30,19 +30,20 @@
   --sidebar-mark: var(--primary);
   --sidebar-width: 260px;
 
-  /* ── Typography (Phase 8) ── */
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  /* ── Typography (Phase 9) ── */
+  --font-sans: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-serif: 'Lora', Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Fluid Type Scale */
-  --text-xs: clamp(0.6875rem, 0.65rem + 0.15vw, 0.75rem); /* 11px - 12px */
-  --text-sm: clamp(0.8125rem, 0.78rem + 0.18vw, 0.875rem); /* 13px - 14px */
-  --text-base: clamp(0.875rem, 0.84rem + 0.18vw, 1rem); /* 14px - 16px */
-  --text-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16px - 18px */
-  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem); /* 20px - 24px */
-  --text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 2rem); /* 24px - 32px */
-  --text-3xl: clamp(1.875rem, 1.6rem + 1.25vw, 2.5rem); /* 30px - 40px */
+  /* Fluid Type Scale (clamp) */
+  --text-xs: clamp(0.70rem, 0.68rem + 0.10vw, 0.75rem); /* 11px - 12px */
+  --text-sm: clamp(0.80rem, 0.76rem + 0.20vw, 0.875rem); /* 13px - 14px */
+  --text-base: clamp(0.90rem, 0.85rem + 0.25vw, 1rem); /* 14px - 16px */
+  --text-lg: clamp(1.05rem, 0.98rem + 0.35vw, 1.125rem); /* 16px - 18px */
+  --text-xl: clamp(1.20rem, 1.10rem + 0.5vw, 1.5rem); /* 20px - 24px */
+  --text-2xl: clamp(1.40rem, 1.25rem + 0.75vw, 2rem); /* 24px - 32px */
+  --text-3xl: clamp(1.75rem, 1.50rem + 1.25vw, 2.5rem); /* 28px - 40px */
+  --text-4xl: clamp(2.25rem, 2.00rem + 1.5vw, 3rem); /* 36px - 48px */
 
   /* ── Spacing ── */
   --space-1: 4px;
@@ -53,13 +54,15 @@
   --space-6: 24px;
   --space-7: 32px;
   --space-8: 40px;
+  --space-12: 60px;
+  --space-16: 80px;
 
   /* ── Shadows ── */
   --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 2px 4px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 6px 12px -2px rgba(15, 23, 42, 0.06), 0 3px 6px -3px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 6px 12px -6px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 24px 48px -6px rgba(15, 23, 42, 0.1), 0 12px 24px -8px rgba(15, 23, 42, 0.04);
 
   /* ── Radius ── */
   --radius-xs: 4px;
@@ -67,12 +70,14 @@
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
+  --radius-2xl: 24px;
   --radius-full: 9999px;
 
   /* ── Transitions ── */
   --t-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --t-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --t-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --t-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ── DP Compat Aliases ── */
   --dp-bg: var(--background);
