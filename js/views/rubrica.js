@@ -8,8 +8,13 @@ function buildRubricaRebuilt() {
   let criteria = Array.isArray(state.currentRubric) ? state.currentRubric : [];
 
   function buildTemplateOptions() {
-    const builtinOptions = Object.entries(baseTemplates).map(([key, template]) => `<option value="builtin:${key}">${template.label}</option>`).join('');
-    const customOptions = Object.keys(savedTemplates).map(name => `<option value="custom:${encodeURIComponent(name)}">${escapeHtml(name)}</option>`).join('');
+    const builtinOptions = Object.entries(baseTemplates)
+      .map(([key, template]) => `<option value="builtin:${key}">${escapeHtml(template.label)}</option>`)
+      .join('');
+    const customOptions = Object.keys(savedTemplates)
+      .map(name => `<option value="custom:${encodeURIComponent(name)}">${escapeHtml(name)}</option>`)
+      .join('');
+
     return `
       <option value="builtin:blank">Personalizado (vacío)</option>
       ${builtinOptions}
@@ -25,21 +30,21 @@ function buildRubricaRebuilt() {
 
           <div class="dp-card p-6 space-y-4">
             <div class="flex flex-col gap-3">
-              <label class="dp-label">Plantillas rápidas</label>
-              <select id="template-select" aria-label="Plantillas rápidas" class="dp-select">
+              <label class="dp-label" for="select-plantilla">Plantillas rápidas</label>
+              <select id="select-plantilla" aria-label="Plantillas rápidas" class="dp-select">
                 <option value="">Seleccionar plantilla...</option>
                 ${buildTemplateOptions()}
               </select>
-              <button id="load-template-btn" class="dp-btn dp-btn-primary w-full">Cargar plantilla</button>
+              <button id="btn-cargar-plantilla" class="dp-btn dp-btn-primary w-full">Cargar plantilla</button>
             </div>
           </div>
 
           <div class="dp-card p-6 space-y-4">
             <div>
               <h3 class="dp-card-title mb-2 flex items-center gap-2">${docproIconHtml('ideas', 'Criterios del profesor', 'docpro-icon docpro-icon--sm')}<span>Criterios del profesor</span></h3>
-              <textarea id="prof-input" rows="4" placeholder="Pega aquí lo que el profesor pidió..." aria-label="Criterios del profesor" class="dp-textarea"></textarea>
+              <textarea id="textarea-criterios-profesor" rows="4" placeholder="Pega aquí lo que el profesor pidió..." aria-label="Criterios del profesor" class="dp-textarea"></textarea>
             </div>
-            <button id="parse-prof-btn" class="dp-btn dp-btn-primary w-full">Convertir en criterios</button>
+            <button id="btn-convertir-criterios" class="dp-btn dp-btn-primary w-full">Convertir en criterios</button>
           </div>
 
           <div class="dp-card p-6 space-y-4">
@@ -59,10 +64,13 @@ function buildRubricaRebuilt() {
             <div id="traffic-light" class="mt-4 flex justify-center"><span class="traffic-badge traffic-badge--yellow"></span></div>
             <p id="traffic-label" class="mt-2 text-sm font-bold text-[var(--dp-text-primary)]">Escala: 60-79%</p>
             <div class="mt-4">
-              <input class="dp-slider" type="range" min="0" max="100" value="0" disabled aria-hidden="true">
+              <input id="rubrica-score-slider" class="dp-slider" type="range" min="0" max="100" value="0" disabled aria-hidden="true">
             </div>
             <div class="dp-progress mt-4 h-3">
               <div id="rubric-progress-bar" class="dp-progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="mt-5 min-h-48">
+              <canvas id="rubrica-chart" aria-label="Gráfico de rúbrica"></canvas>
             </div>
           </div>
 
@@ -119,8 +127,8 @@ function buildRubricaRebuilt() {
       .map(part => part.trim())
       .filter(Boolean)
       .map(part => {
-        const pointsMatch = part.match(/(\d+)\s*puntos?/i);
-        const name = part.replace(/\d+\s*puntos?/i, '').replace(/[:.-]+$/g, '').trim();
+        const pointsMatch = part.match(/(\d+)\s*(puntos?|pts?|%)/i);
+        const name = part.replace(/\d+\s*(puntos?|pts?|%)/i, '').replace(/[:.-]+$/g, '').trim();
         return {
           name: name || part.substring(0, 80),
           max: pointsMatch ? parseInt(pointsMatch[1], 10) : 10,
@@ -141,6 +149,54 @@ function buildRubricaRebuilt() {
     return { ...criterion, id, name, max, obtained };
   }
 
+  function destroyRubricaChart() {
+    if (typeof Chart !== 'undefined' && window.rubricaChart instanceof Chart) {
+      window.rubricaChart.destroy();
+      window.rubricaChart = null;
+    }
+  }
+
+  function renderRubricaChart() {
+    const canvas = document.getElementById('rubrica-chart');
+    if (!canvas || typeof Chart === 'undefined') return;
+
+    destroyRubricaChart();
+    if (criteria.length === 0) return;
+
+    window.rubricaChart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: criteria.map(item => item.name),
+        datasets: [
+          {
+            label: 'Obtenido',
+            data: criteria.map(item => item.obtained),
+            backgroundColor: 'rgba(201, 169, 110, 0.75)',
+            borderColor: '#c9a96e',
+            borderWidth: 1
+          },
+          {
+            label: 'Máximo',
+            data: criteria.map(item => item.max),
+            backgroundColor: 'rgba(92, 86, 80, 0.18)',
+            borderColor: '#5c5650',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
   function updateSummary() {
     const totalObtained = criteria.reduce((sum, item) => sum + (parseInt(item.obtained, 10) || 0), 0);
     const totalMax = criteria.reduce((sum, item) => sum + (parseInt(item.max, 10) || 0), 0);
@@ -152,6 +208,7 @@ function buildRubricaRebuilt() {
     document.getElementById('score-display-rubrica').textContent = totalMax > 0 ? `${score100}%` : '0/0';
     document.getElementById('grade-display-rubrica').textContent = totalMax > 0 ? `${totalObtained}/${totalMax} pts · ${grade5}/5 · ${grade10}/10` : '0% · 0.0/5 · 0.0/10';
     document.getElementById('rubric-progress-bar').style.width = `${percent}%`;
+    document.getElementById('rubrica-score-slider').value = percent;
 
     const light = document.getElementById('traffic-light');
     const label = document.getElementById('traffic-label');
@@ -165,6 +222,8 @@ function buildRubricaRebuilt() {
       light.innerHTML = '<span class="traffic-badge traffic-badge--red"></span>';
       label.textContent = 'Por mejorar: 0-59%';
     }
+
+    renderRubricaChart();
   }
 
   function renderCriteria() {
@@ -195,10 +254,8 @@ function buildRubricaRebuilt() {
               <input type="number" min="1" value="${normalized.max}" aria-label="Puntuación máxima del criterio" class="dp-input text-sm" data-idx="${index}" data-field="max">
             </div>
             <div>
-              <label class="text-xs font-bold text-[var(--dp-text-secondary)] block mb-1">Obtenido</label>
-              <select aria-label="Puntuación obtenida del criterio" class="dp-select text-sm" data-idx="${index}" data-field="obtained">
-                ${Array.from({ length: normalized.max + 1 }, (_, value) => `<option value="${value}" ${value === normalized.obtained ? 'selected' : ''}>${value}</option>`).join('')}
-              </select>
+              <label class="text-xs font-bold text-[var(--dp-text-secondary)] block mb-1">Obtenido: ${normalized.obtained}</label>
+              <input type="range" min="0" max="${normalized.max}" value="${normalized.obtained}" aria-label="Puntuación obtenida del criterio" class="dp-slider w-full" data-idx="${index}" data-field="obtained">
             </div>
             <div class="px-3 py-2 rounded border text-xs font-bold ${trafficClass}">
               ${Math.round(ratio * 100)}% · ${ratio >= 0.8 ? 'Muy alto' : ratio >= 0.6 ? 'Adecuado' : 'Por mejorar'}
@@ -208,7 +265,7 @@ function buildRubricaRebuilt() {
       `;
     }).join('');
 
-    list.querySelectorAll('input, select').forEach(element => {
+    list.querySelectorAll('[data-field]').forEach(element => {
       element.addEventListener('change', () => {
         const index = parseInt(element.dataset.idx, 10);
         const field = element.dataset.field;
@@ -238,25 +295,59 @@ function buildRubricaRebuilt() {
     persistRubric();
   }
 
-  document.getElementById('add-criteria-btn').addEventListener('click', () => {
+  function onPlantillaChange() {
+    const select = document.getElementById('select-plantilla');
+    const button = document.getElementById('btn-cargar-plantilla');
+    if (button) button.disabled = !select?.value;
+  }
+
+  function cargarPlantilla() {
+    const select = document.getElementById('select-plantilla');
+    const plantillaId = select?.value;
+    if (!plantillaId) return;
+
+    destroyRubricaChart();
+    criteria = loadCriteria(plantillaId).map(normalizeCriterion);
+    persistRubric();
+    renderCriteria();
+
+    const button = document.getElementById('btn-cargar-plantilla');
+    button.textContent = 'Cargada';
+    setTimeout(() => { button.textContent = 'Cargar plantilla'; }, 2000);
+  }
+
+  function convertirCriterios() {
+    const text = document.getElementById('textarea-criterios-profesor')?.value.trim();
+    if (!text) {
+      alert('Pega los criterios del profesor');
+      return;
+    }
+
+    const parsedCriteria = [...text.matchAll(/([^,\n]+?)\s*(\d+)\s*(puntos?|pts?|%)/gi)].map(match => ({
+      name: match[1].trim(),
+      max: parseInt(match[2], 10),
+      obtained: 0
+    }));
+
+    criteria = (parsedCriteria.length > 0 ? parsedCriteria : parseProfessorText(text)).map(normalizeCriterion);
+    persistRubric();
+    renderCriteria();
+
+    const button = document.getElementById('btn-convertir-criterios');
+    button.textContent = 'Convertidos';
+    setTimeout(() => { button.textContent = 'Convertir en criterios'; }, 2000);
+  }
+
+  document.getElementById('add-criteria-btn')?.addEventListener('click', () => {
     criteria.push({ id: createCriterionId(), name: 'Nuevo criterio', max: 10, obtained: 0 });
     persistRubric();
     renderCriteria();
   });
 
-  document.getElementById('load-template-btn').addEventListener('click', () => {
-    const selected = document.getElementById('template-select').value;
-    if (!selected) return;
-    criteria = loadCriteria(selected).map(normalizeCriterion);
-    persistRubric();
-    renderCriteria();
+  document.getElementById('btn-cargar-plantilla')?.addEventListener('click', cargarPlantilla);
+  document.getElementById('select-plantilla')?.addEventListener('change', onPlantillaChange);
 
-    const button = document.getElementById('load-template-btn');
-    button.textContent = 'Cargada';
-    setTimeout(() => { button.textContent = 'Cargar plantilla'; }, 2000);
-  });
-
-  document.getElementById('save-template-btn').addEventListener('click', () => {
+  document.getElementById('save-template-btn')?.addEventListener('click', () => {
     const name = document.getElementById('template-name').value.trim();
     if (!name) {
       alert('Ingresa nombre para la plantilla');
@@ -267,46 +358,30 @@ function buildRubricaRebuilt() {
     saveJSON('rubrica_templates', state.rubricTemplates);
     document.getElementById('template-name').value = '';
 
-    const select = document.getElementById('template-select');
+    const select = document.getElementById('select-plantilla');
     const customValue = `custom:${encodeURIComponent(name)}`;
     const option = document.createElement('option');
     option.value = customValue;
     option.textContent = name;
     select.appendChild(option);
+    select.value = customValue;
+    onPlantillaChange();
 
     const button = document.getElementById('save-template-btn');
     button.textContent = 'Guardada';
     setTimeout(() => { button.textContent = 'Guardar como mi plantilla'; }, 2000);
   });
 
-  document.getElementById('parse-prof-btn').addEventListener('click', () => {
-    const text = document.getElementById('prof-input').value.trim();
-    if (!text) {
-      alert('Pega los criterios del profesor');
-      return;
-    }
+  document.getElementById('btn-convertir-criterios')?.addEventListener('click', convertirCriterios);
 
-    const parsedCriteria = [...text.matchAll(/([^,\n]+?)\s*(\d+)\s*puntos?/gi)].map(match => ({
-      name: match[1].trim(),
-      max: parseInt(match[2], 10),
-      obtained: 0
-    }));
-
-    criteria = parsedCriteria.length > 0 ? parsedCriteria : parseProfessorText(text);
-    persistRubric();
-    renderCriteria();
-
-    const button = document.getElementById('parse-prof-btn');
-    button.textContent = 'Convertidos';
-    setTimeout(() => { button.textContent = 'Convertir en criterios'; }, 2000);
-  });
-
-  document.getElementById('reset-rubric-btn').addEventListener('click', () => {
+  document.getElementById('reset-rubric-btn')?.addEventListener('click', () => {
     if (!confirm('¿Vaciar la rúbrica actual?')) return;
+    destroyRubricaChart();
     criteria = [];
     persistRubric();
     renderCriteria();
   });
 
   renderCriteria();
+  onPlantillaChange();
 }

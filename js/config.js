@@ -221,27 +221,47 @@ const APA_REFERENCE_CHECKS = [
   { key: 'doiOrUrl', label: 'DOI o URL' }
 ];
 
-const RUBRIC_TEMPLATES_BASE = {
+const PLANTILLAS_RUBRICA = {
   ensayo: {
-    label: 'Ensayo argumentativo',
-    criteria: [
-      { name: 'Tesis clara y argumentable', max: 20 },
-      { name: 'Argumentos con evidencia', max: 30 },
-      { name: 'Contrarargumentos', max: 15 },
-      { name: 'Conclusión sólida', max: 20 },
-      { name: 'Formato APA y ortografía', max: 15 }
+    nombre: 'Ensayo académico',
+    criterios: [
+      { nombre: 'Coherencia argumentativa', peso: 25 },
+      { nombre: 'Uso de fuentes APA 7', peso: 25 },
+      { nombre: 'Redacción y ortografía', peso: 25 },
+      { nombre: 'Estructura y formato', peso: 25 }
     ]
   },
   informe: {
-    label: 'Informe de laboratorio',
-    criteria: [
-      { name: 'Objetivos claros', max: 15 },
-      { name: 'Metodología descrita', max: 25 },
-      { name: 'Resultados precisos', max: 30 },
-      { name: 'Discusión e interpretación', max: 20 },
-      { name: 'Conclusiones y referencias', max: 10 }
+    nombre: 'Informe técnico',
+    criterios: [
+      { nombre: 'Introducción y objetivos', peso: 20 },
+      { nombre: 'Desarrollo metodológico', peso: 30 },
+      { nombre: 'Resultados y análisis', peso: 30 },
+      { nombre: 'Conclusiones y referencias', peso: 20 }
     ]
   },
+  proyecto: {
+    nombre: 'Proyecto de investigación',
+    criterios: [
+      { nombre: 'Planteamiento del problema', peso: 20 },
+      { nombre: 'Marco teórico y citas APA', peso: 25 },
+      { nombre: 'Metodología', peso: 25 },
+      { nombre: 'Resultados y conclusiones', peso: 30 }
+    ]
+  }
+};
+
+const RUBRIC_TEMPLATES_BASE = {
+  ...Object.fromEntries(Object.entries(PLANTILLAS_RUBRICA).map(([key, template]) => [
+    key,
+    {
+      label: template.nombre,
+      criteria: template.criterios.map(criterion => ({
+        name: criterion.nombre,
+        max: criterion.peso
+      }))
+    }
+  ])),
   monografia: {
     label: 'Monografía',
     criteria: [
@@ -250,17 +270,6 @@ const RUBRIC_TEMPLATES_BASE = {
       { name: 'Referencias y citas', max: 15 },
       { name: 'Estructura y coherencia', max: 12 },
       { name: 'Conclusiones', max: 8 }
-    ]
-  },
-  investigacion: {
-    label: 'Trabajo de investigación',
-    criteria: [
-      { name: 'Planteamiento del problema', max: 15 },
-      { name: 'Objetivos e hipótesis', max: 15 },
-      { name: 'Marco teórico', max: 20 },
-      { name: 'Metodología', max: 20 },
-      { name: 'Resultados y discusión', max: 20 },
-      { name: 'Conclusiones y referencias', max: 10 }
     ]
   },
   anteproyecto: {

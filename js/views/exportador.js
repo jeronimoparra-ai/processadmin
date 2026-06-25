@@ -2,11 +2,101 @@
 // EXPORTADOR.JS - Exportación a Formato DOCX (APA 7)
 // ═══════════════════════════════════════════════════════════════════════
 
+function leerStorage(key) {
+  try {
+    const val = localStorage.getItem(key);
+    return val ? JSON.parse(val) : null;
+  } catch {
+    return localStorage.getItem(key) || null;
+  }
+}
+
+function stripInlineHtml(value) {
+  return String(value || '').replace(/<\/?em>/g, '').replace(/<[^>]+>/g, '').trim();
+}
+
+function flattenStoredText(value) {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) {
+    return value.map(flattenStoredText).filter(Boolean).join('\n\n');
+  }
+  if (typeof value === 'object') {
+    const preferredKeys = ['content', 'contenido', 'text', 'texto', 'body', 'secciones', 'sections', 'values', 'outline'];
+    const preferredText = preferredKeys
+      .filter(key => value[key] !== undefined)
+      .map(key => flattenStoredText(value[key]))
+      .filter(Boolean)
+      .join('\n\n');
+    if (preferredText) return preferredText;
+    return Object.values(value).map(flattenStoredText).filter(Boolean).join('\n\n');
+  }
+  return String(value);
+}
+
+function normalizeRedactorContent(value) {
+  return flattenStoredText(value).trim();
+}
+
+function normalizeStructureParts(value) {
+  const source = value && typeof value === 'object' && !Array.isArray(value) && Array.isArray(value.parts)
+    ? value.parts
+    : value;
+
+  if (!Array.isArray(source)) return [];
+
+  return source
+    .map((part, index) => {
+      if (typeof part === 'string') {
+        return { id: `structure-${index + 1}`, text: part.trim(), checked: false };
+      }
+      if (part && typeof part === 'object') {
+        return {
+          id: part.id || `structure-${index + 1}`,
+          text: String(part.text || part.label || part.nombre || part.title || '').trim(),
+          checked: !!part.checked
+        };
+      }
+      return null;
+    })
+    .filter(part => part && part.text);
+}
+
+function normalizeCitation(value) {
+  if (typeof value === 'string') return stripInlineHtml(value);
+  if (value && typeof value === 'object') {
+    return stripInlineHtml(value.formatted || value.texto || value.referencia || value.citation || value.text || value.value || '');
+  }
+  return '';
+}
+
+function getStoredStudentData() {
+  const studentData = leerStorage('export_student_data') || {};
+  return studentData && typeof studentData === 'object' && !Array.isArray(studentData) ? studentData : {};
+}
+
+function getStoredDocumentStructure(snapshot = {}) {
+  if (Array.isArray(snapshot.documentStructureParts)) return normalizeStructureParts(snapshot.documentStructureParts);
+
+  const storedParts = normalizeStructureParts(leerStorage('ws_document_structure_parts'));
+  if (storedParts.length > 0) return storedParts;
+
+  const exportFormatProfile = snapshot.exportFormatProfile ?? state.exportFormatProfile;
+  return Array.isArray(exportFormatProfile?.structureParts)
+    ? normalizeStructureParts(exportFormatProfile.structureParts)
+    : [];
+}
+
 function buildExportSnapshot() {
+  const redactorData = leerStorage('redactor_content');
+
   return {
-    redactorContent: safeStorageGet('redactor_content', ''),
+    studentData: getStoredStudentData(),
+    redactorContent: normalizeRedactorContent(redactorData ?? safeStorageGet('redactor_content', '')),
     organizerOutline: loadJSON('organizer_outline', {}),
     generatedCitations: getExportReferences(),
+    documentStructureParts: getStoredDocumentStructure(),
+    checklistDeadline: leerStorage('checklist_deadline') || getDeliveryDateValue(),
     exportFormatProfile: state.exportFormatProfile
   };
 }
@@ -102,29 +192,26 @@ function parseStoredReferences(rawValue) {
 
 function getExportReferences(snapshot = {}) {
   if (Array.isArray(snapshot.generatedCitations) && snapshot.generatedCitations.length > 0) {
-    return snapshot.generatedCitations.map(reference => String(reference || '').replace(/<\/?em>/g, '').trim()).filter(Boolean);
+    return snapshot.generatedCitations.map(normalizeCitation).filter(Boolean);
   }
 
   const fromState = Array.isArray(state.generatedCitations) ? state.generatedCitations : [];
   if (fromState.length > 0) {
-    return fromState.map(reference => String(reference || '').replace(/<\/?em>/g, '').trim()).filter(Boolean);
+    return fromState.map(normalizeCitation).filter(Boolean);
   }
 
-  let refsList = [];
-  try {
-    const raw = localStorage.getItem('apa_generated_citations');
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      refsList = Array.isArray(parsed)
-        ? parsed.map(c => c.formatted || c.texto || c.referencia || c.citation || String(c))
-        : [];
-    }
-  } catch(e) { console.warn('Error leyendo referencias:', e); }
-  return refsList;
+  const citations = leerStorage('apa_generated_citations') || [];
+  if (Array.isArray(citations)) {
+    return citations.map(normalizeCitation).filter(Boolean);
+  }
+
+  return parseStoredReferences(citations).map(normalizeCitation).filter(Boolean);
 }
 
 function formatApaDate(value) {
-  return new Date().toLocaleDateString('es-CO', {
+  const date = value ? new Date(value) : new Date();
+  const safeDate = Number.isNaN(date.getTime()) ? new Date() : date;
+  return safeDate.toLocaleDateString('es-CO', {
     year: 'numeric', month: 'long', day: 'numeric'
   });
 }
@@ -152,125 +239,133 @@ function buildSettingsXml() {
 </w:settings>`;
 }
 
-function buildGeneratedDocxPackage(data, snapshot = {}) {
+async function buildGeneratedDocxPackage(data, snapshot = {}) {
   const references = getExportReferences(snapshot);
   const outline = snapshot.organizerOutline || loadJSON('organizer_outline', {});
   const outlineValues = outline.values || outline;
-  const redactorContent = snapshot.redactorContent ?? safeStorageGet('redactor_content', '');
+  const redactorContent = normalizeRedactorContent(snapshot.redactorContent ?? leerStorage('redactor_content') ?? safeStorageGet('redactor_content', ''));
   const exportFormatProfile = snapshot.exportFormatProfile ?? state.exportFormatProfile;
-  const formatSections = Array.isArray(exportFormatProfile?.structureParts)
-    ? exportFormatProfile.structureParts.map(part => part.text).filter(Boolean)
-    : [];
+  const structureParts = getStoredDocumentStructure({ ...snapshot, exportFormatProfile });
+  const formatSections = structureParts.map(part => part.text).filter(Boolean);
   const title = data.titulo || data.curso || 'Trabajo académico';
-  const formattedDate = formatApaDate(data.fecha || getDeliveryDateValue() || new Date().toISOString());
+  const formattedDate = formatApaDate(data.fecha || snapshot.checklistDeadline || getDeliveryDateValue() || new Date().toISOString());
+  const outlineText = normalizeRedactorContent(Object.values(outlineValues).flat());
+  const bodyText = redactorContent || outlineText || 'Contenido pendiente.';
+  const {
+    AlignmentType,
+    Document,
+    HeadingLevel,
+    Packer,
+    PageBreak,
+    Paragraph,
+    TextRun
+  } = docx;
 
-  const paragraphs = [];
-  paragraphs.push(buildWordParagraph(data.institucion || 'Institución', { align: 'center', size: 24, double: false }));
-  paragraphs.push(buildWordParagraph(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
-  if (data.modalidad) paragraphs.push(buildWordParagraph(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
-  paragraphs.push(buildWordParagraph(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
-  paragraphs.push('<w:p><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:p>');
-  paragraphs.push(buildWordParagraph(title, { align: 'center', size: 24, bold: true }));
-  paragraphs.push('<w:p><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:p>');
-  paragraphs.push(buildWordParagraph(data.nombre || 'Nombre completo', { align: 'center', size: 24, bold: true }));
-  paragraphs.push(buildWordParagraph(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
-  paragraphs.push(buildWordParagraph(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
-  if (formattedDate) paragraphs.push(buildWordParagraph(formattedDate, { align: 'center', size: 24 }));
-  paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-  paragraphs.push(buildToCFieldParagraph());
-  paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-  paragraphs.push(buildWordParagraph(title, { align: 'center', bold: true, size: 24, double: true }));
-  const formatBody = formatSections.length > 0 ? formatSections.join('\n\n') : Object.values(outlineValues).flat().join('\n');
-  (redactorContent || formatBody || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
-    if (paragraph.trim()) paragraphs.push(buildWordParagraph(paragraph.trim(), { size: 24, double: true, firstLine: true }));
+  const paragraph = (text, options = {}) => new Paragraph({
+    heading: options.heading,
+    alignment: options.align === 'center'
+      ? AlignmentType.CENTER
+      : options.align === 'right'
+        ? AlignmentType.RIGHT
+        : AlignmentType.LEFT,
+    spacing: {
+      line: options.double === false ? 240 : 480,
+      before: options.before || 0,
+      after: options.after ?? 160
+    },
+    indent: options.hanging
+      ? { left: 720, hanging: 720 }
+      : options.firstLine
+        ? { firstLine: 720 }
+        : undefined,
+    children: [
+      new TextRun({
+        text: stripInlineHtml(text),
+        bold: !!options.bold,
+        italics: !!options.italic,
+        size: options.size || 24,
+        font: 'Times New Roman'
+      })
+    ]
   });
-  paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-  paragraphs.push(buildWordParagraph('Referencias', { style: 'Heading1', bold: true, size: 28, align: 'center' }));
+
+  const pageBreak = () => new Paragraph({ children: [new PageBreak()] });
+  const children = [
+    paragraph(data.institucion || 'Institución', { align: 'center', double: false }),
+    paragraph(data.curso || 'Nombre del curso', { align: 'center' }),
+    ...(data.modalidad ? [paragraph(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 })] : []),
+    paragraph(data.docente || 'Nombre del docente', { align: 'center' }),
+    paragraph(title, { align: 'center', bold: true, before: 720 }),
+    paragraph(data.nombre || 'Nombre completo', { align: 'center', bold: true, before: 720 }),
+    paragraph(data.codigo || 'Código estudiantil', { align: 'center' }),
+    paragraph(data.ciudad || 'Ciudad', { align: 'center' }),
+    paragraph(formattedDate, { align: 'center' }),
+    pageBreak(),
+    paragraph('Tabla de contenido', { heading: HeadingLevel.HEADING_1, bold: true, align: 'center', size: 28 }),
+    ...(formatSections.length > 0
+      ? formatSections.map((section, index) => paragraph(`${index + 1}. ${section}`, { double: false }))
+      : [paragraph('Actualice la tabla de contenido en Word.', { italic: true, double: false })]),
+    pageBreak(),
+    paragraph(title, { heading: HeadingLevel.HEADING_1, align: 'center', bold: true, size: 28 })
+  ];
+
+  bodyText.split(/\n\s*\n+/).forEach(textBlock => {
+    const cleanBlock = stripInlineHtml(textBlock);
+    if (cleanBlock) children.push(paragraph(cleanBlock, { firstLine: true }));
+  });
+
+  children.push(
+    pageBreak(),
+    paragraph('Referencias', { heading: HeadingLevel.HEADING_1, bold: true, size: 28, align: 'center' })
+  );
+
   if (references.length === 0) {
-    paragraphs.push(buildWordParagraph('No se han generado referencias aún.', { size: 24, italic: true }));
+    children.push(paragraph('No se han generado referencias aún.', { italic: true }));
   } else {
-    references.forEach(reference => paragraphs.push(buildWordParagraph(reference, { size: 24, hanging: true })));
+    references.forEach(reference => children.push(paragraph(reference, { hanging: true })));
   }
 
-  const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 wp14">
-  <w:body>
-    ${paragraphs.join('\n    ')}
-    <w:sectPr>
-      <w:pgSz w:w="12240" w:h="15840"/>
-      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
-      <w:cols w:space="708"/>
-      <w:titlePg/>
-      <w:headerReference w:type="default" r:id="rId1"/>
-    </w:sectPr>
-  </w:body>
-</w:document>`;
+  const doc = new Document({
+    creator: 'ProcessAdmin',
+    title,
+    description: 'Documento académico APA 7 generado localmente en ProcessAdmin',
+    styles: {
+      default: {
+        document: {
+          run: { font: 'Times New Roman', size: 24 },
+          paragraph: { spacing: { line: 480 } }
+        }
+      }
+    },
+    sections: [
+      {
+        properties: {
+          page: {
+            margin: {
+              top: 1440,
+              right: 1440,
+              bottom: 1440,
+              left: 1440
+            }
+          }
+        },
+        children
+      }
+    ]
+  });
 
-  const headerXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <w:p>
-    <w:pPr><w:jc w:val="right"/></w:pPr>
-    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r>
-    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>
-    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r>
-  </w:p>
-</w:hdr>`;
-
-  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-  <w:docDefaults>
-    <w:rPrDefault><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:rPrDefault>
-    <w:pPrDefault><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:pPrDefault>
-  </w:docDefaults>
-  <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr><w:rPr><w:b/><w:sz w:val="44"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/><w:outlineLvl w:val="0"/></w:pPr><w:rPr><w:b/><w:sz w:val="28"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:b/><w:sz w:val="26"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading3"><w:name w:val="heading 3"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:line="480" w:lineRule="auto"/><w:outlineLvl w:val="2"/></w:pPr><w:rPr><w:b/><w:sz w:val="24"/></w:rPr></w:style>
-</w:styles>`;
-
-  const settingsXml = buildSettingsXml();
-
-  const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
-</Types>`;
-
-  const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="R1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-</Relationships>`;
-
-  return createZipBlob([
-    { path: '[Content_Types].xml', content: contentTypesXml },
-    { path: '_rels/.rels', content: relsXml },
-    { path: 'word/_rels/document.xml.rels', content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>
-  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>
-</Relationships>` },
-    { path: 'word/document.xml', content: documentXml },
-    { path: 'word/header1.xml', content: headerXml },
-    { path: 'word/styles.xml', content: stylesXml },
-    { path: 'word/settings.xml', content: settingsXml }
-  ]);
+  return Packer.toBlob(doc);
 }
 
 async function buildTemplateDocxPackage(data, snapshot = {}) {
   const references = getExportReferences(snapshot);
   const outline = snapshot.organizerOutline || loadJSON('organizer_outline', {});
   const outlineValues = outline.values || outline;
-  const redactorContent = snapshot.redactorContent ?? safeStorageGet('redactor_content', '');
+  const redactorContent = normalizeRedactorContent(snapshot.redactorContent ?? leerStorage('redactor_content') ?? safeStorageGet('redactor_content', ''));
   const exportFormatProfile = snapshot.exportFormatProfile ?? state.exportFormatProfile;
-  const formatSections = Array.isArray(exportFormatProfile?.structureParts)
-    ? exportFormatProfile.structureParts.map(part => part.text).filter(Boolean)
-    : [];
+  const formatSections = getStoredDocumentStructure({ ...snapshot, exportFormatProfile }).map(part => part.text).filter(Boolean);
   const title = data.titulo || data.curso || exportFormatProfile?.title || 'Trabajo académico';
-  const tocItems = formatSections.length > 0 ? formatSections : ['Portada', 'Introducción', 'Desarrollo', 'Conclusiones', 'Referencias'];
-  const bodyText = redactorContent || formatSections.join('\n\n') || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.';
+  const bodyText = redactorContent || formatSections.join('\n\n') || normalizeRedactorContent(Object.values(outlineValues).flat()) || 'Contenido pendiente.';
   const dataUrl = getWordTemplateDataUrl(exportFormatProfile);
 
   if (!dataUrl || typeof JSZip === 'undefined') {
@@ -331,15 +426,27 @@ async function buildExportDocxPackage(data, snapshot = {}) {
 }
 
 async function downloadExportDocx(data, snapshot = {}, fileName = null) {
+  if (typeof docx === 'undefined' || !docx.Packer || typeof docx.Packer.toBlob !== 'function') {
+    alert('Error: la librería de exportación no está cargada. Verifica tu conexión a internet y recarga la página.');
+    return false;
+  }
+
   const blob = await buildExportDocxPackage(data, snapshot);
   const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = fileName || `${(data.nombre || 'documento').replace(/\s+/g, '_')}_APA7.docx`;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const a = document.createElement('a');
+  const nombreArchivo = (fileName || `${(data.nombre || 'documento').replace(/\s+/g, '_')}_APA7`).replace(/\.docx$/i, '');
+
+  a.href = url;
+  a.download = `${nombreArchivo}.docx`;
+  document.body.appendChild(a);
+  a.click();
+
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 100);
+
+  return true;
 }
 
 function buildExportador() {
@@ -545,11 +652,9 @@ function buildExportador() {
   function buildDocumentPreview(data) {
     const outline = loadJSON('organizer_outline', {});
     const outlineValues = outline.values || outline;
-    const redactorContent = safeStorageGet('redactor_content', '');
+    const redactorContent = normalizeRedactorContent(leerStorage('redactor_content') ?? safeStorageGet('redactor_content', ''));
     const references = getExportReferences();
-    const formatSections = Array.isArray(state.exportFormatProfile?.structureParts)
-      ? state.exportFormatProfile.structureParts.map(part => part.text).filter(Boolean)
-      : [];
+    const formatSections = getStoredDocumentStructure().map(part => part.text).filter(Boolean);
     const templateLoaded = state.exportFormatProfile?.kind === 'word-template';
     const previewDate = formatApaDate(data.fecha || getDeliveryDateValue() || new Date().toISOString());
 
@@ -579,7 +684,7 @@ function buildExportador() {
 
         <div class="mb-6">
           <h2 class="mb-3 text-lg font-bold">Cuerpo del documento</h2>
-          <p class="whitespace-pre-wrap text-sm">${escapeHtml(redactorContent || Object.values(outlineValues).flat().join('\n'))}</p>
+          <p class="whitespace-pre-wrap text-sm">${escapeHtml(redactorContent || normalizeRedactorContent(Object.values(outlineValues).flat()))}</p>
         </div>
 
         <div>
@@ -638,118 +743,12 @@ function buildExportador() {
     });
   }
 
-  function buildDocxPackage(data) {
-    const references = getExportReferences();
-    const outline = loadJSON('organizer_outline', {});
-    const outlineValues = outline.values || outline;
-    const title = data.titulo || data.curso || 'Trabajo académico';
-    const formattedDate = formatApaDate(data.fecha || getDeliveryDateValue() || new Date().toISOString());
-
-    const paragraphs = [];
-    const p = (text, options = {}) => {
-      const align = options.align || 'left';
-      const bold = options.bold ? '<w:b/>' : '';
-      const size = options.size || 24;
-      const style = options.style ? `<w:pStyle w:val="${options.style}"/>` : '';
-      const spacing = options.double ? '<w:spacing w:line="480" w:lineRule="auto"/>' : '';
-      const firstLine = options.firstLine ? '<w:ind w:firstLine="720"/>' : '';
-      const hanging = options.hanging ? '<w:ind w:left="720" w:hanging="720"/>' : '';
-      const italic = options.italic ? '<w:i/>' : '';
-      const indent = firstLine || hanging;
-      return `<w:p><w:pPr><w:jc w:val="${align}"/>${style}${spacing}${indent}</w:pPr><w:r><w:rPr>${bold}${italic}<w:sz w:val="${size}"/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t xml:space="preserve">${xmlEscape(text)}</w:t></w:r></w:p>`;
-    };
-
-    paragraphs.push(p(data.institucion || 'Institución', { align: 'center', size: 24, double: false }));
-    paragraphs.push(p(data.curso || 'Nombre del curso', { align: 'center', size: 24 }));
-    if (data.modalidad) paragraphs.push(p(`Modalidad: ${data.modalidad}`, { align: 'center', size: 20 }));
-    paragraphs.push(p(data.docente || 'Nombre del docente', { align: 'center', size: 24 }));
-    paragraphs.push('<w:p><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:p>');
-    paragraphs.push(p(title, { align: 'center', size: 24, bold: true }));
-    paragraphs.push('<w:p><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:p>');
-    paragraphs.push(p(data.nombre || 'Nombre completo', { align: 'center', size: 24, bold: true }));
-    paragraphs.push(p(data.codigo || 'Código estudiantil', { align: 'center', size: 24 }));
-    paragraphs.push(p(data.ciudad || 'Ciudad', { align: 'center', size: 24 }));
-    paragraphs.push(p(formattedDate || 'Fecha de entrega', { align: 'center', size: 24 }));
-    paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-    paragraphs.push(p('Tabla de contenido', { style: 'Heading1', bold: true, size: 28 }));
-    paragraphs.push(p('Actualice la tabla de contenido en Word.', { size: 22 }));
-    paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-    paragraphs.push(p(title, { align: 'center', bold: true, size: 24, double: true }));
-    (safeStorageGet('redactor_content', '') || Object.values(outlineValues).flat().join('\n') || 'Contenido pendiente.').split(/\n\s*\n+/).forEach(paragraph => {
-      if (paragraph.trim()) paragraphs.push(p(paragraph.trim(), { size: 24, double: true, firstLine: true }));
-    });
-    paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
-    paragraphs.push(p('Referencias', { style: 'Heading1', bold: true, size: 28, align: 'center' }));
-    if (references.length === 0) {
-      paragraphs.push(p('No se han generado referencias aún.', { size: 24, italic: true }));
-    } else {
-      references.forEach(reference => paragraphs.push(p(reference, { size: 24, hanging: true }))); 
+  async function exportarDocx(forceExport = false) {
+    if (typeof docx === 'undefined' || !docx.Packer || typeof docx.Packer.toBlob !== 'function') {
+      alert('Error: la librería de exportación no está cargada. Verifica tu conexión a internet y recarga la página.');
+      return;
     }
 
-    const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 wp14">
-  <w:body>
-    ${paragraphs.join('\n    ')}
-    <w:sectPr>
-      <w:pgSz w:w="12240" w:h="15840"/>
-      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/>
-      <w:cols w:space="708"/>
-      <w:titlePg/>
-      <w:headerReference w:type="default" r:id="rId1"/>
-    </w:sectPr>
-  </w:body>
-</w:document>`;
-
-    const headerXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <w:p>
-    <w:pPr><w:jc w:val="right"/></w:pPr>
-    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r>
-    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>
-    <w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r>
-  </w:p>
-</w:hdr>`;
-
-    const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-  <w:docDefaults>
-    <w:rPrDefault><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:rPrDefault>
-    <w:pPrDefault><w:pPr><w:spacing w:line="480" w:lineRule="auto"/></w:pPr></w:pPrDefault>
-  </w:docDefaults>
-  <w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style>
-  <w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="32"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="28"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="26"/></w:rPr></w:style>
-  <w:style w:type="paragraph" w:styleId="Heading3"><w:name w:val="heading 3"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:rPr><w:b/><w:sz w:val="24"/></w:rPr></w:style>
-</w:styles>`;
-
-    const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
-</Types>`;
-
-    const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="R1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-</Relationships>`;
-
-    return createZipBlob([
-      { path: '[Content_Types].xml', content: contentTypesXml },
-      { path: '_rels/.rels', content: relsXml },
-      { path: 'word/_rels/document.xml.rels', content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>
-</Relationships>` },
-      { path: 'word/document.xml', content: documentXml },
-      { path: 'word/header1.xml', content: headerXml },
-      { path: 'word/styles.xml', content: stylesXml }
-    ]);
-  }
-
-  async function exportarDocx(forceExport = false) {
     const data = fields.reduce((accumulator, field) => {
       accumulator[field] = document.getElementById(`export-${field}`).value.trim();
       return accumulator;
@@ -760,8 +759,10 @@ function buildExportador() {
       return;
     }
 
+    Object.assign(savedData, data);
+    savedData.titulo = savedData.titulo || data.curso || 'Trabajo académico';
     persistData();
-    const storedData = loadJSON('export_student_data', {});
+    const storedData = getStoredStudentData();
     const metrics = calculateQualityMetrics();
     const pendingItems = buildPendingItems(metrics);
     if (!forceExport && pendingItems.length > 0) {
@@ -770,8 +771,9 @@ function buildExportador() {
     }
 
     const snapshot = buildExportSnapshot();
+    const downloaded = await downloadExportDocx(storedData, snapshot);
+    if (!downloaded) return;
     addDocumentHistoryEntry(storedData, snapshot);
-    await downloadExportDocx(storedData, snapshot);
 
     const button = document.getElementById('generate-docx-btn');
     if (button) {

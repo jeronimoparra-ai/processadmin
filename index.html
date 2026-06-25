@@ -107,13 +107,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-
-  <!-- Open Graph / Redes sociales -->
-  <meta property="og:title" content="DocPro™ | Generador APA 7 Profesional">
-  <meta property="og:description" content="Diseña trabajos académicos de calidad con normas APA 7. Sin instalaciones, 100% en tu navegador.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://processadmin.vercel.app/">
-  <meta name="description" content="DocPro™ — Generador de documentos académicos APA 7 para estudiantes e investigadores. Redacción asistida, citas automáticas, rúbrica de evaluación y exportación. Sin servidores, 100% privado.">
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
 </head>
 <body class="page-root">
   <a class="skip-link" href="#app-main">Saltar al contenido principal</a>
@@ -233,7 +227,7 @@
           <!-- Estado de carga inicial — JS lo reemplaza al inicializar -->
           <div id="workspace-loader" class="flex flex-col items-center justify-center h-full min-h-96 gap-4 text-slate-400">
             <div class="text-5xl animate-pulse">📝</div>
-            <p class="text-lg font-medium">Cargando DocPro™...</p>
+            <p class="text-lg font-medium">Cargando ProcessAdmin...</p>
             <p class="text-sm text-slate-400">Si esta pantalla no desaparece, recarga la página (F5)</p>
           </div>
         </div>
@@ -269,7 +263,7 @@
         workspace.innerHTML = `
           <div class="flex flex-col items-center justify-center h-full min-h-96 gap-4 text-red-400 p-8">
             <div class="text-5xl">⚠️</div>
-            <p class="text-xl font-bold text-slate-700">Error al cargar DocPro™</p>
+            <p class="text-xl font-bold text-slate-700">Error al cargar ProcessAdmin</p>
             <p class="text-sm text-slate-500 text-center max-w-md">
               No se pudo inicializar la aplicación. 
               Verifica tu conexión a internet y recarga la página.
