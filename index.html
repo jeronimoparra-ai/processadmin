@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+  <link rel="icon" href="assets/icons/redactor.svg">
   <meta name="viewport"           content="width=device-width, initial-scale=1.0">
   <meta name="application-name"   content="ProcessAdmin">
   <meta name="author"             content="Andrés Jeronimo Parra">
@@ -226,7 +226,9 @@
         <div id="main-workspace" class="workspace">
           <!-- Estado de carga inicial — JS lo reemplaza al inicializar -->
           <div id="workspace-loader" class="flex flex-col items-center justify-center h-full min-h-96 gap-4 text-slate-400">
-            <div class="text-5xl animate-pulse">📝</div>
+            <div class="w-16 h-16 animate-pulse text-[var(--dp-primary)]">
+              <img src="assets/icons/redactor.svg" alt="Loading" class="w-full h-full">
+            </div>
             <p class="text-lg font-medium">Cargando ProcessAdmin...</p>
             <p class="text-sm text-slate-400">Si esta pantalla no desaparece, recarga la página (F5)</p>
           </div>
@@ -262,7 +264,9 @@
       if (workspace && workspace.querySelector('#workspace-loader')) {
         workspace.innerHTML = `
           <div class="flex flex-col items-center justify-center h-full min-h-96 gap-4 text-red-400 p-8">
-            <div class="text-5xl">⚠️</div>
+            <div class="w-16 h-16 text-red-500">
+              <img src="assets/icons/validation.svg" alt="Error" class="w-full h-full">
+            </div>
             <p class="text-xl font-bold text-slate-700">Error al cargar ProcessAdmin</p>
             <p class="text-sm text-slate-500 text-center max-w-md">
               No se pudo inicializar la aplicación. 
@@ -283,35 +287,35 @@
 
   <!-- Módulos JS con defer: se descargan en paralelo y ejecutan en orden tras parsear el HTML -->
   <!-- State and Config -->
-  <script src="js/config.js" defer></script>
-  <script src="js/state/store.js" defer></script>
-  <script src="js/state/persistence.js" defer></script>
+  <script src="src/config/index.js" defer></script>
+  <script src="src/state/store.js" defer></script>
+  <script src="src/state/persistence.js" defer></script>
 
   <!-- Utils -->
-  <script src="js/utils/helpers.js" defer></script>
-  <script src="js/utils/icons.js" defer></script>
+  <script src="src/utils/helpers.js" defer></script>
+  <script src="src/components/icons/icons.js" defer></script>
 
   <!-- Services -->
-  <script src="js/services/storage.js" defer></script>
-  <script src="js/services/apa.js" defer></script>
-  <script src="js/services/export.js" defer></script>
+  <script src="src/services/storage.js" defer></script>
+  <script src="src/services/apa.js" defer></script>
+  <script src="src/services/export.js" defer></script>
 
   <!-- Components -->
-  <script src="js/components/header.js" defer></script>
-  <script src="js/components/sidebar.js" defer></script>
-  <script src="js/components/uiComponents.js" defer></script>
+  <script src="src/components/layout/header.js" defer></script>
+  <script src="src/components/layout/sidebar.js" defer></script>
+  <script src="src/components/ui/uiComponents.js" defer></script>
 
-  <!-- Views -->
-  <script src="js/views/panel.js" defer></script>
-  <script src="js/views/redactor.js" defer></script>
-  <script src="js/views/apa.js" defer></script>
-  <script src="js/views/rubrica.js" defer></script>
-  <script src="js/views/checklist.js" defer></script>
-  <script src="js/views/organizador.js" defer></script>
-  <script src="js/views/historial.js" defer></script>
-  <script src="js/views/legal.js" defer></script>
-  <script src="js/views/acerca.js" defer></script>
-  <script src="js/views/exportador.js" defer></script>
-  <script src="js/app.js" defer></script>
+  <!-- Views (Features) -->
+  <script src="src/features/panel.js" defer></script>
+  <script src="src/features/redactor.js" defer></script>
+  <script src="src/features/apa.js" defer></script>
+  <script src="src/features/rubrica.js" defer></script>
+  <script src="src/features/checklist.js" defer></script>
+  <script src="src/features/organizador.js" defer></script>
+  <script src="src/features/historial.js" defer></script>
+  <script src="src/features/legal.js" defer></script>
+  <script src="src/features/acerca.js" defer></script>
+  <script src="src/features/exportador.js" defer></script>
+  <script src="src/app/main.js" defer></script>
 </body>
 </html>

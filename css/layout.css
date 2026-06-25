@@ -342,9 +342,17 @@
 }
 
 .workspace {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
   width: 100%;
+}
+
+@media (min-width: 1920px) {
+  .workspace { max-width: 1600px; }
+}
+
+@media (min-width: 2560px) {
+  .workspace { max-width: 1800px; }
 }
 
 .dashboard-shell {

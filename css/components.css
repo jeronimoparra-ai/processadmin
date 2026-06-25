@@ -26,8 +26,8 @@
 }
 .btn:hover, .btn-primary:hover, .dp-btn-primary:hover { 
   background: var(--dp-text-secondary); 
-  transform: translateY(-1px); 
-  box-shadow: var(--dp-shadow-sm); 
+  transform: translateY(-2px); 
+  box-shadow: var(--dp-shadow-md); 
 }
 .dp-btn-accent { 
   background: var(--dp-accent); 
@@ -46,6 +46,7 @@
   background: var(--dp-surface-2); 
   color: var(--dp-text-primary); 
   border-color: var(--dp-border-strong);
+  transform: translateY(-1px);
 }
 .dp-btn-sm { padding: 6px 12px; font-size: 13px; }
 .dp-btn-lg { padding: 12px 24px; font-size: 15px; }
@@ -53,16 +54,17 @@
 /* ── INPUTS & FORMS ── */
 .dp-input, .dp-textarea, .dp-select {
   width: 100%;
-  padding: 10px 14px;
+  padding: 12px 16px;
   background: var(--dp-surface);
   color: var(--dp-text-primary);
   border: 1px solid var(--dp-border);
-  border-radius: var(--dp-r-sm);
+  border-radius: var(--dp-r-md);
   font-family: var(--dp-font-sans);
   font-size: 14px;
   line-height: 1.5;
-  transition: all var(--dp-t-fast);
+  transition: all var(--dp-t-normal);
   outline: none;
+  box-shadow: var(--dp-shadow-xs);
 }
 .dp-input::placeholder, .dp-textarea::placeholder { color: var(--dp-text-muted); }
 .dp-input:focus, .dp-textarea:focus, .dp-select:focus {
@@ -71,21 +73,24 @@
 }
 .dp-textarea { min-height: 120px; resize: vertical; }
 .dp-textarea.dp-mono { font-family: var(--dp-font-mono); font-size: 13px; line-height: 1.6; }
-.dp-label { display: block; font-size: 13px; font-weight: 600; color: var(--dp-text-secondary); margin-bottom: 8px; }
-.dp-field { margin-bottom: 20px; }
+.dp-label { display: block; font-size: 13px; font-weight: 600; color: var(--dp-text-primary); margin-bottom: 8px; }
+.dp-field { margin-bottom: 24px; }
+.dp-input.has-error, .dp-textarea.has-error, .dp-select.has-error { border-color: var(--dp-danger); box-shadow: 0 0 0 3px var(--dp-danger-bg); }
+.dp-input.has-success, .dp-textarea.has-success, .dp-select.has-success { border-color: var(--dp-success); box-shadow: 0 0 0 3px var(--dp-success-bg); }
 
 /* ── CARDS ── */
 .dp-card {
   background: var(--dp-surface);
   border: 1px solid var(--dp-border);
-  border-radius: var(--dp-r-lg);
-  padding: 24px;
-  box-shadow: var(--dp-shadow-xs);
+  border-radius: var(--dp-r-xl);
+  padding: 32px;
+  box-shadow: var(--dp-shadow-sm);
   transition: all var(--dp-t-normal);
 }
 .dp-card:hover { 
-  box-shadow: var(--dp-shadow-md); 
-  border-color: var(--dp-border-strong);
+  box-shadow: var(--dp-shadow-lg); 
+  border-color: var(--dp-accent-border);
+  transform: translateY(-4px);
 }
 
 .dp-card-header {

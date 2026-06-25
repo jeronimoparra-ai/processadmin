@@ -3,51 +3,46 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── Color Palette ── */
-  --primary: #0f172a;
-  --secondary: #334155;
-  --accent: #2563eb;
-  --accent-strong: #1d4ed8;
-  --accent-soft: #eff6ff;
-  --success: #059669;
-  --warning: #d97706;
-  --danger: #dc2626;
-  --info: #475569;
-
-  /* ── Surfaces ── */
-  --background: #f8fafc;
-  --surface: #ffffff;
-  --surface-2: #f1f5f9;
-  --surface-3: #e2e8f0;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
-
-  /* ── Typography Colors ── */
-  --text-primary: #0f172a;
+  /* ── Color Palette (Phase 5) ── */
+  --background: #F8FAFC;
+  --surface: #FFFFFF;
+  --primary: #2563EB;
+  --secondary: #14B8A6;
+  --accent: #7C3AED;
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --text-primary: #0F172A;
   --text-secondary: #475569;
-  --text-muted: #64748b;
-  --text-inverse: #ffffff;
+  --border: #E2E8F0;
 
+  /* Additional Surface/Text steps for depth */
+  --surface-2: #F1F5F9;
+  --surface-3: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --text-muted: #64748B;
+  --text-inverse: #FFFFFF;
+  
   /* ── Sidebar ── */
-  --sidebar-bg: #0f172a;
-  --sidebar-text: #94a3b8;
+  --sidebar-bg: #0F172A;
+  --sidebar-text: #94A3B8;
   --sidebar-active: rgba(255, 255, 255, 0.08);
-  --sidebar-mark: #3b82f6;
-  --sidebar-width: 240px;
+  --sidebar-mark: var(--primary);
+  --sidebar-width: 260px;
 
-  /* ── Typography ── */
+  /* ── Typography (Phase 8) ── */
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-serif: 'Lora', Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Type Scale */
-  --text-xs: 11px;
-  --text-sm: 13px;
-  --text-base: 14px;
-  --text-lg: 16px;
-  --text-xl: 20px;
-  --text-2xl: 28px;
-  --text-3xl: 36px;
+  /* Fluid Type Scale */
+  --text-xs: clamp(0.6875rem, 0.65rem + 0.15vw, 0.75rem); /* 11px - 12px */
+  --text-sm: clamp(0.8125rem, 0.78rem + 0.18vw, 0.875rem); /* 13px - 14px */
+  --text-base: clamp(0.875rem, 0.84rem + 0.18vw, 1rem); /* 14px - 16px */
+  --text-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16px - 18px */
+  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem); /* 20px - 24px */
+  --text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 2rem); /* 24px - 32px */
+  --text-3xl: clamp(1.875rem, 1.6rem + 1.25vw, 2.5rem); /* 30px - 40px */
 
   /* ── Spacing ── */
   --space-1: 4px;
@@ -63,8 +58,8 @@
   --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
   --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.06), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
 
   /* ── Radius ── */
   --radius-xs: 4px;
@@ -97,28 +92,30 @@
   --dp-text-muted: var(--text-muted);
   --dp-text-inverse: var(--text-inverse);
 
+  --dp-primary: var(--primary);
   --dp-accent: var(--accent);
-  --dp-accent-dark: var(--accent-strong);
-  --dp-accent-light: var(--accent-soft);
-  --dp-accent-glow: rgba(37, 99, 235, 0.12);
-  --dp-accent-border: #bfdbfe;
+  --dp-accent-dark: #6D28D9;
+  --dp-accent-light: #EDE9FE;
+  --dp-accent-glow: rgba(124, 58, 237, 0.12);
+  --dp-accent-border: #C4B5FD;
+  
   --dp-teal: var(--secondary);
-  --dp-teal-dark: #1e293b;
-  --dp-teal-light: #f1f5f9;
-  --dp-teal-border: #cbd5e1;
+  --dp-teal-dark: #0F766E;
+  --dp-teal-light: #CCFBF1;
+  --dp-teal-border: #99F6E4;
 
   --dp-success: var(--success);
-  --dp-success-bg: #ecfdf5;
-  --dp-success-border: #a7f3d0;
+  --dp-success-bg: #DCFCE7;
+  --dp-success-border: #86EFAC;
   --dp-warning: var(--warning);
-  --dp-warning-bg: #fffbeb;
-  --dp-warning-border: #fde68a;
+  --dp-warning-bg: #FEF3C7;
+  --dp-warning-border: #FDE68A;
   --dp-danger: var(--danger);
-  --dp-danger-bg: #fef2f2;
-  --dp-danger-border: #fecaca;
-  --dp-info: var(--info);
-  --dp-info-bg: #f8fafc;
-  --dp-info-border: #e2e8f0;
+  --dp-danger-bg: #FEE2E2;
+  --dp-danger-border: #FECACA;
+  --dp-info: var(--primary);
+  --dp-info-bg: #DBEAFE;
+  --dp-info-border: #BFDBFE;
 
   --dp-font-sans: var(--font-sans);
   --dp-font-serif: var(--font-serif);
