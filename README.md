@@ -51,33 +51,14 @@ processadmin/
 │   └── utilities.css
 ├── js/
 │   ├── config.js
-│   ├── app.js
+├── src/
+│   ├── app/
 │   ├── components/
-│   │   ├── header.js
-│   │   ├── sidebar.js
-│   │   └── uiComponents.js
+│   ├── config/
+│   ├── features/
 │   ├── services/
-│   │   ├── apa.js
-│   │   ├── export.js
-│   │   └── storage.js
 │   ├── state/
-│   │   ├── persistence.js
-│   │   └── store.js
-│   ├── utils/
-│   │   ├── helpers.js
-│   │   └── icons.js
-│   └── views/
-│       ├── acerca.js
-│       ├── apa.js
-│       ├── checklist.js
-│       ├── exportador.js
-│       ├── historial.js
-│       ├── legal.js
-│       ├── organizador.js
-│       ├── panel.js
-│       ├── redactor.js
-│       └── rubrica.js
-├── assets/
+│   └── utils/
 │   ├── formato-ejemplo.json
 │   ├── word-template-ejemplo.docx
 │   └── icons/
@@ -91,7 +72,7 @@ Dependencias CDN:
 
 | Librería | Propósito | Versión |
 |---|---|---|
-| Tailwind CSS | Estilos utilitarios | CDN |
+| CSS modular | Estilos utilitarios | Local |
 | Chart.js | Gráfico de rúbrica | CDN |
 | docx.js | Exportación Word real | 8.5.0 |
 | Plus Jakarta Sans | Tipografía sans | Google Fonts |

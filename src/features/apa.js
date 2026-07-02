@@ -44,7 +44,7 @@ function buildApaEnhanced() {
 
         <div class="space-y-6">
           <div class="dp-card p-6 sticky top-6">
-            <h3 class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span></h3>
+            <h3 id="apa-references-heading" class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span></h3>
             <div id="apa-referencias" class="mb-4 max-h-64 space-y-2 overflow-y-auto text-xs"></div>
             <div class="space-y-2">
               <button id="sort-refs-btn" class="dp-btn dp-btn-ghost w-full">Ordenar referencias A-Z</button>
@@ -221,7 +221,10 @@ function buildApaEnhanced() {
 
   function renderReferences() {
     const list = document.getElementById('apa-referencias');
-    document.querySelector('h3.font-bold.text-slate-900.mb-4.flex.items-center.gap-2').innerHTML = `${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span>`;
+    const heading = document.getElementById('apa-references-heading');
+    if (heading) {
+      heading.innerHTML = `${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span>`;
+    }
 
     if (state.generatedCitations.length === 0) {
       list.innerHTML = '<p class="text-gray-500 italic">Sin referencias aún</p>';

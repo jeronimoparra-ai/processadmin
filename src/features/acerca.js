@@ -66,11 +66,10 @@ function buildAcercaView() {
         </div>
 
         <p style="font-size:14px; color:var(--dp-text-secondary); line-height:1.7; margin:0 0 16px;">
-          ProcessAdmin es una aplicación web académica construida completamente en HTML5,
-          CSS3 y JavaScript vanilla. No utiliza frameworks, no requiere instalación y
-          funciona directamente desde el navegador. Todo el contenido se guarda en el
-          dispositivo del usuario mediante <code style="font-family:var(--dp-font-mono); font-size:12px; background:var(--dp-surface-2); padding:1px 5px; border-radius:3px;">localStorage</code>
-          — ningún dato sale del navegador.
+              ProcessAdmin es una aplicación web académica construida completamente en HTML5,
+              CSS3 y JavaScript vanilla. No utiliza frameworks, no requiere instalación y
+              funciona directamente desde el navegador. Todo el contenido se guarda en el
+              dispositivo del usuario mediante <code style="font-family:var(--dp-font-mono); font-size:12px; background:var(--dp-surface-2); padding:1px 5px; border-radius:3px;">localStorage</code>.
         </p>
 
         <div class="dp-grid-2">
@@ -79,7 +78,7 @@ function buildAcercaView() {
             <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px;">
               ${[
       ['HTML5 + CSS3 + JS Vanilla', 'Sin frameworks'],
-      ['Tailwind CSS', 'Via CDN'],
+      ['CSS modular', 'Tokens y utilidades propias'],
       ['Chart.js', 'Gráficos de rúbrica'],
       ['docx.js v8.5.0', 'Exportación Word real'],
       ['Google Fonts', 'Lora + Plus Jakarta Sans'],

@@ -10,17 +10,37 @@ function resetWorkspaceAnimation() {
   workspace.classList.add('dp-view', 'dp-stagger');
 }
 
+let exportModalLastFocus = null;
+
+function focusExportModal() {
+  const exportModal = document.getElementById('exportModal');
+  if (!exportModal) return;
+
+  const focusable = exportModal.querySelector('#closeExportModal, #copyMarkdownBtn, [href], button, [tabindex]:not([tabindex="-1"])');
+  (focusable || exportModal).focus?.();
+}
+
+function handleExportModalKeydown(event) {
+  if (event.key === 'Escape') {
+    closeExportModal();
+  }
+}
+
 function openExportModal() {
   const exportModal = document.getElementById('exportModal');
   if (!exportModal) return;
+  exportModalLastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   exportModal.style.display = 'flex';
   exportModal.setAttribute('aria-hidden', 'false');
+  exportModal.setAttribute('aria-modal', 'true');
   const modal = exportModal.querySelector('.modal-panel');
   if (modal) {
     modal.classList.remove('dp-modal-anim');
     void modal.offsetWidth;
     modal.classList.add('dp-modal-anim');
   }
+  document.addEventListener('keydown', handleExportModalKeydown);
+  focusExportModal();
 }
 
 function closeExportModal() {
@@ -28,11 +48,16 @@ function closeExportModal() {
   if (!exportModal) return;
   exportModal.style.display = 'none';
   exportModal.setAttribute('aria-hidden', 'true');
+  exportModal.removeAttribute('aria-modal');
   const modal = exportModal.querySelector('.modal-panel');
   if (modal) {
     modal.classList.remove('dp-modal-anim');
     void modal.offsetWidth;
     modal.classList.add('dp-modal-anim');
+  }
+  document.removeEventListener('keydown', handleExportModalKeydown);
+  if (exportModalLastFocus && typeof exportModalLastFocus.focus === 'function') {
+    exportModalLastFocus.focus();
   }
 }
 

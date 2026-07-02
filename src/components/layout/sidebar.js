@@ -12,10 +12,13 @@ function updateActiveNavigation(viewId) {
 }
 
 function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
+  const sidebar = document.getElementById('side-panel') || document.getElementById('sidebar');
   const overlay = document.getElementById('sidebar-overlay');
+  const isOpen = sidebar ? !sidebar.classList.contains('is-open') : false;
+
   if (sidebar) sidebar.classList.toggle('is-open');
   if (overlay) overlay.classList.toggle('is-visible');
+  document.body.classList.toggle('sidebar-open', isOpen);
 }
 
 function initSidebarControls() {

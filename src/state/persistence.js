@@ -2,46 +2,30 @@
 // PERSISTENCE.JS - Wrappers for localStorage and save operations
 // ═══════════════════════════════════════════════════════════════════════
 
-function safeStorageGet(key, fallback) {
-  try {
-    const value = localStorage.getItem(key);
-    return value !== null ? value : fallback;
-  } catch (e) {
-    return fallback;
-  }
-}
-
-function safeStorageSet(key, value) {
-  try {
-    localStorage.setItem(key, value);
-  } catch (e) {
-    console.error('Error saving to localStorage', e);
-  }
-}
-
-function safeStorageSetJSON(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (e) {
-    console.error('Error saving JSON to localStorage', e);
-  }
-}
-
-function validateStoredValue(value, fallback) {
-  return value !== undefined && value !== null ? value : fallback;
-}
-
 function loadJSON(key, fallback) {
   try {
-    const value = safeStorageGet(key, null);
-    return value ? validateStoredValue(JSON.parse(value), fallback) : fallback;
+    const value = typeof safeStorageGet === 'function'
+      ? safeStorageGet(key, null)
+      : localStorage.getItem(key);
+    if (!value) return fallback;
+    const parsed = JSON.parse(value);
+    return parsed !== undefined && parsed !== null ? parsed : fallback;
   } catch (error) {
     return fallback;
   }
 }
 
 function saveJSON(key, value) {
-  safeStorageSetJSON(key, value);
+  if (typeof safeStorageSetJSON === 'function') {
+    safeStorageSetJSON(key, value);
+    return;
+  }
+
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error('Error saving JSON to localStorage', error);
+  }
 }
 
 function saveField(key, value) {
@@ -49,7 +33,15 @@ function saveField(key, value) {
 
   clearTimeout(window.state.saveTimer);
   window.state.saveTimer = setTimeout(() => {
-    safeStorageSet(key, value);
+    if (typeof safeStorageSet === 'function') {
+      safeStorageSet(key, value);
+    } else {
+      try {
+        localStorage.setItem(key, value);
+      } catch (error) {
+        console.error('Error saving to localStorage', error);
+      }
+    }
     if (typeof updateWriterProgress === 'function') updateWriterProgress();
     if (typeof updateSectionCompleteness === 'function') updateSectionCompleteness();
   }, 800);
