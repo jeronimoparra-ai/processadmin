@@ -183,10 +183,17 @@ function buildHistorial() {
         }
 
         if (action === 'delete') {
-          const confirmed = confirm(`¿Eliminar "${entry.title || 'este documento'}" del historial?`);
-          if (!confirmed) return;
-          removeDocumentHistoryEntry(entryId);
-          renderHistory();
+          showConfirm({
+            title: 'Eliminar documento',
+            message: `¿Eliminar "${entry.title || 'este documento'}" del historial?`,
+            confirmText: 'Eliminar'
+          }).then((confirmed) => {
+            if (!confirmed) return;
+            removeDocumentHistoryEntry(entryId);
+            renderHistory();
+            showToast('Documento eliminado del historial.', 'success');
+          });
+          return;
         }
       });
     });

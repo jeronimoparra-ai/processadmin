@@ -6,6 +6,13 @@ function buildRubricaRebuilt() {
   const baseTemplates = RUBRIC_TEMPLATES_BASE;
   const savedTemplates = state.rubricTemplates || {};
   let criteria = Array.isArray(state.currentRubric) ? state.currentRubric : [];
+  // If no rubric is loaded, suggest a template based on the unified work type selection
+  if ((!criteria || criteria.length === 0) && typeof safeStorageGet === 'function') {
+    const preferredType = safeStorageGet('ws_document_type', null);
+    if (preferredType && PLANTILLAS_RUBRICA[preferredType]) {
+      criteria = (PLANTILLAS_RUBRICA[preferredType].criterios || []).map(item => ({ name: item.nombre || item.name, max: item.peso || item.max, obtained: 0 }));
+    }
+  }
 
   function buildTemplateOptions() {
     const builtinOptions = Object.entries(baseTemplates)
@@ -319,7 +326,7 @@ function buildRubricaRebuilt() {
   function convertirCriterios() {
     const text = document.getElementById('textarea-criterios-profesor')?.value.trim();
     if (!text) {
-      alert('Pega los criterios del profesor');
+      showToast('Pega los criterios del profesor.', 'error');
       return;
     }
 
@@ -350,7 +357,7 @@ function buildRubricaRebuilt() {
   document.getElementById('save-template-btn')?.addEventListener('click', () => {
     const name = document.getElementById('template-name').value.trim();
     if (!name) {
-      alert('Ingresa nombre para la plantilla');
+      showToast('Ingresa nombre para la plantilla.', 'error');
       return;
     }
 
@@ -374,12 +381,18 @@ function buildRubricaRebuilt() {
 
   document.getElementById('btn-convertir-criterios')?.addEventListener('click', convertirCriterios);
 
-  document.getElementById('reset-rubric-btn')?.addEventListener('click', () => {
-    if (!confirm('¿Vaciar la rúbrica actual?')) return;
+  document.getElementById('reset-rubric-btn')?.addEventListener('click', async () => {
+    const confirmed = await showConfirm({
+      title: 'Vaciar rúbrica',
+      message: '¿Vaciar la rúbrica actual?',
+      confirmText: 'Vaciar'
+    });
+    if (!confirmed) return;
     destroyRubricaChart();
     criteria = [];
     persistRubric();
     renderCriteria();
+    showToast('Rúbrica vaciada.', 'success');
   });
 
   renderCriteria();

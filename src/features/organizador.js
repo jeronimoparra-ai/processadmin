@@ -51,15 +51,8 @@ function buildOrganizador() {
     ]
   };
 
-  const workTypeLabels = {
-    ensayo: 'Ensayo argumentativo',
-    monografia: 'Monografía',
-    informe: 'Informe de laboratorio',
-    investigacion: 'Trabajo de investigación',
-    anteproyecto: 'Anteproyecto'
-  };
-
-  const savedType = loadStoredString('organizer_work_type', 'investigacion');
+  // Reuse WORK_TYPES from config; keep a descriptive label if needed
+  const savedType = loadStoredString('ws_document_type', 'investigacion');
 
   const html = `
     <div class="dp-stagger" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
@@ -72,7 +65,7 @@ function buildOrganizador() {
             <div>
               <label class="dp-label mb-3 block">Selecciona tipo de trabajo:</label>
               <select id="work-type" aria-label="Tipo de trabajo del organizador" class="dp-select">
-                ${Object.entries(workTypeLabels).map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
+                ${Object.entries(WORK_TYPES).map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
               </select>
             </div>
 
@@ -252,7 +245,7 @@ function buildOrganizador() {
             <div>v${index + 1}</div>
             <div class="text-[var(--dp-accent-dark)] text-xs">${escapeHtml(version.date)}</div>
           </div>
-          <span class="text-[10px] uppercase tracking-wide text-[var(--dp-accent-dark)]">${escapeHtml(workTypeLabels[version.type] || version.type)}</span>
+            <span class="text-[10px] uppercase tracking-wide text-[var(--dp-accent-dark)]">${escapeHtml(WORK_TYPES[version.type] || version.type)}</span>
         </div>
         <div class="flex gap-2">
           <button class="dp-btn dp-btn-ghost flex-1 preview-version" data-idx="${index}">Vista previa</button>
@@ -283,7 +276,7 @@ function buildOrganizador() {
   }
 
   document.getElementById('work-type').addEventListener('change', () => {
-    safeStorageSet('organizer_work_type', workTypeSelect.value);
+    safeStorageSet('ws_document_type', workTypeSelect.value);
     renderForm();
   });
 
@@ -311,7 +304,8 @@ function buildOrganizador() {
 
   renderForm();
   renderVersions();
-  safeStorageSet('organizer_work_type', workTypeSelect.value);
+  // Persist unified work type selection
+  safeStorageSet('ws_document_type', workTypeSelect.value);
 
   if (state.organizerSnapshotInterval) clearInterval(state.organizerSnapshotInterval);
   state.organizerSnapshotInterval = setInterval(() => {

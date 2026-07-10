@@ -45,15 +45,9 @@ function buildRedactorEnhanced() {
     ]
   };
 
-  const workTypeOptions = [
-    ['ensayo', 'Ensayo'],
-    ['monografia', 'Monografía'],
-    ['informe', 'Informe de laboratorio'],
-    ['investigacion', 'Trabajo de investigación'],
-    ['anteproyecto', 'Anteproyecto']
-  ];
-
-  const savedType = loadStoredString('redactor_work_type', 'ensayo');
+  // Use central WORK_TYPES from config and a single storage key
+  const workTypeOptions = Object.entries(WORK_TYPES);
+  const savedType = loadStoredString('ws_document_type', 'ensayo');
 
   const html = `
     <div class="dp-stagger dp-view" style="display:flex;flex-direction:column;gap:20px;max-width:1000px">
@@ -61,9 +55,9 @@ function buildRedactorEnhanced() {
         <div id="redactor-side-panels" class="lg:col-span-4 space-y-4">
           <div class="dp-card p-4">
             <label class="dp-label mb-2 block">Tipo de trabajo</label>
-            <select id="work-type-select" aria-label="Tipo de trabajo" class="dp-select">
-              ${workTypeOptions.map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
-            </select>
+                            <select id="work-type-select" aria-label="Tipo de trabajo" class="dp-select">
+                              ${workTypeOptions.map(([value, label]) => `<option value="${value}" ${value === savedType ? 'selected' : ''}>${label}</option>`).join('')}
+                            </select>
           </div>
 
           <div class="dp-accordion">
@@ -249,7 +243,7 @@ function buildRedactorEnhanced() {
 
   textarea.addEventListener('input', updateCounters);
   workTypeSelect.addEventListener('change', () => {
-    safeStorageSet('redactor_work_type', workTypeSelect.value);
+    safeStorageSet('ws_document_type', workTypeSelect.value);
     renderGuide();
     renderWarnings();
   });

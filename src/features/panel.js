@@ -30,6 +30,8 @@ function buildPanel() {
     ? paperBody.split(/\n\s*\n+/).map(paragraph => paragraph.trim()).filter(Boolean).slice(0, 2)
     : [];
   const savedDocumentCount = history.length;
+  const hasRealContent = redactorWords > 0 || (organizerText && organizerText.trim().length > 0);
+  const isNewUser = savedDocumentCount === 0 && !hasRealContent;
   const savedDocsLabel = `${savedDocumentCount} ${savedDocumentCount === 1 ? 'documento' : 'documentos'}`;
   const latestHistory = history[0] || null;
   const lastEditLabel = latestHistory?.savedAt
@@ -239,6 +241,31 @@ function buildPanel() {
 
       <section class="dashboard-main-grid">
         <div class="dashboard-panel">
+          ${isNewUser ? `
+            <div class="dp-card mb-6 p-5">
+              <p class="dashboard-kicker dashboard-kicker--light">Primeros pasos</p>
+              <h3 class="panel-section-title">Bienvenido a ProcessAdmin</h3>
+              <p class="panel-section-copy">Sigue este flujo sugerido para completar tu primer documento.</p>
+              <div class="action-grid mt-4">
+                <button type="button" class="action-card quick-start-card" data-view="organizador">
+                  <span>${docproIconHtml('ideas', 'Organiza tus ideas')}</span>
+                  <strong>1. Organiza tus ideas</strong>
+                  <small>Define tema, problema y objetivos.</small>
+                </button>
+                <button type="button" class="action-card quick-start-card" data-view="redactor">
+                  <span>${docproIconHtml('redactor', 'Redacta tu documento')}</span>
+                  <strong>2. Redacta tu documento</strong>
+                  <small>Empieza con el borrador principal.</small>
+                </button>
+                <button type="button" class="action-card quick-start-card" data-view="exportar">
+                  <span>${docproIconHtml('exportWord', 'Exporta a Word')}</span>
+                  <strong>3. Exporta a Word</strong>
+                  <small>Genera el archivo final en formato APA 7.</small>
+                </button>
+              </div>
+            </div>
+          ` : ''}
+
           <div class="panel-section-header">
             <div>
               <p class="dashboard-kicker dashboard-kicker--light">Acciones principales</p>
@@ -291,21 +318,25 @@ function buildPanel() {
                 <div class="quality-item">
                   <span>Estructura</span>
                   <strong>${metrics.structure}%</strong>
+                  <small class="text-xs text-[var(--dp-text-muted)]">Partes del documento completadas</small>
                   <div class="dp-progress"><div class="dp-progress-fill" style="width: ${metrics.structure}%"></div></div>
                 </div>
                 <div class="quality-item">
                   <span>APA 7</span>
                   <strong>${metrics.apa}%</strong>
+                  <small class="text-xs text-[var(--dp-text-muted)]">Citas, referencias y fuentes registradas</small>
                   <div class="dp-progress"><div class="dp-progress-fill" style="width: ${metrics.apa}%"></div></div>
                 </div>
                 <div class="quality-item">
                   <span>Rúbrica</span>
                   <strong>${metrics.criteria}%</strong>
+                  <small class="text-xs text-[var(--dp-text-muted)]">Cumplimiento de criterios evaluados</small>
                   <div class="dp-progress"><div class="dp-progress-fill" style="width: ${metrics.criteria}%"></div></div>
                 </div>
                 <div class="quality-item">
                   <span>Word</span>
                   <strong>${metrics.wordFormat}%</strong>
+                  <small class="text-xs text-[var(--dp-text-muted)]">Formato APA y datos de exportación</small>
                   <div class="dp-progress"><div class="dp-progress-fill" style="width: ${metrics.wordFormat}%"></div></div>
                 </div>
               </div>
@@ -539,7 +570,7 @@ function buildPanel() {
 
         if (normalized) navigate('exportar');
       } catch (err) {
-        alert('No se pudo cargar el formato. Verifica que sea una plantilla Word .docx válida o un JSON compatible.');
+        showToast('No se pudo cargar el formato. Verifica que sea una plantilla Word .docx válida o un JSON compatible.', 'error');
       } finally {
         panelLoadFormatInput.value = '';
       }

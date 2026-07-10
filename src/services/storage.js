@@ -54,18 +54,8 @@ function updateSavedDocumentCounter() {
   }
 }
 
-function updateSidebarDocCount() {
-  const countEl = document.getElementById('sidebar-doc-count') || document.getElementById('saved-document-count');
-  if (!countEl) return;
-  const docKeys = Object.keys(localStorage).filter(key =>
-    key.startsWith('docpro_') && !key.includes('_config') && !key.includes('_ui')
-  );
-  if (docKeys.length > 0) {
-    countEl.textContent = docKeys.length;
-  }
-}
-
-document.addEventListener('DOMContentLoaded', updateSidebarDocCount);
+// updateSidebarDocCount was removed because it searched for non-existent 'docpro_' keys
+// and produced confusing behavior. The correct counter is updated via updateSavedDocumentCounter().
 
 // Dashboard logic
 function updateCountdown() {
@@ -156,7 +146,7 @@ function updateWriterProgress() {
 }
 
 function calculateQualityMetrics() {
-  const structureChecklist = loadJSON('checklist_estructura', []);
+  const structureChecklist = loadJSON('ws_document_structure_parts', []);
   const formatChecklist = loadJSON('checklist_formato', []);
   const rubric = loadJSON('rubrica_current', []);
   const exportData = loadJSON('export_student_data', {});

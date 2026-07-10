@@ -10,6 +10,88 @@ function resetWorkspaceAnimation() {
   workspace.classList.add('dp-view', 'dp-stagger');
 }
 
+// ======= Toasts and Confirmation Modal (non-blocking) =======
+function _ensureToastContainer() {
+  let container = document.getElementById('dp-toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'dp-toast-container';
+    container.style.position = 'fixed';
+    container.style.right = '1rem';
+    container.style.bottom = '1rem';
+    container.style.zIndex = '9999';
+    document.body.appendChild(container);
+  }
+  return container;
+}
+
+function showToast(message, type = 'info', timeout = 3000) {
+  const container = _ensureToastContainer();
+  const toast = document.createElement('div');
+  toast.className = `dp-toast dp-toast-${type}`;
+  toast.style.marginTop = '8px';
+  toast.style.minWidth = '220px';
+  toast.style.padding = '10px 14px';
+  toast.style.borderRadius = '8px';
+  toast.style.background = type === 'error' ? 'rgba(220,38,38,0.95)' : type === 'success' ? 'rgba(16,185,129,0.95)' : 'rgba(17,24,39,0.95)';
+  toast.style.color = 'white';
+  toast.style.boxShadow = '0 8px 20px rgba(2,6,23,0.4)';
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => { toast.remove(); }, 400);
+  }, timeout);
+  return toast;
+}
+
+function _buildConfirmModal() {
+  let modal = document.getElementById('dp-confirm-modal');
+  if (modal) return modal;
+  modal = document.createElement('div');
+  modal.id = 'dp-confirm-modal';
+  modal.className = 'modal-backdrop';
+  modal.style.display = 'none';
+  modal.innerHTML = `
+    <div class="modal-panel" role="dialog" aria-modal="true">
+      <div class="modal-header"><h2 id="dp-confirm-title" class="font-bold"></h2></div>
+      <div class="modal-body"><p id="dp-confirm-message"></p></div>
+      <div class="modal-footer" style="display:flex;gap:8px;justify-content:flex-end;">
+        <button id="dp-confirm-cancel" class="dp-btn dp-btn-ghost">Cancelar</button>
+        <button id="dp-confirm-ok" class="dp-btn dp-btn-accent">Aceptar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function showConfirm(options) {
+  const modal = _buildConfirmModal();
+  const titleEl = modal.querySelector('#dp-confirm-title');
+  const messageEl = modal.querySelector('#dp-confirm-message');
+  const okBtn = modal.querySelector('#dp-confirm-ok');
+  const cancelBtn = modal.querySelector('#dp-confirm-cancel');
+
+  titleEl.textContent = options.title || 'Confirmar';
+  messageEl.textContent = options.message || '';
+  okBtn.textContent = options.confirmText || 'Aceptar';
+  cancelBtn.textContent = options.cancelText || 'Cancelar';
+
+  return new Promise(resolve => {
+    modal.style.display = 'flex';
+    function cleanup() {
+      modal.style.display = 'none';
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+    }
+    function onOk() { cleanup(); resolve(true); }
+    function onCancel() { cleanup(); resolve(false); }
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+  });
+}
+
 let exportModalLastFocus = null;
 
 function focusExportModal() {
@@ -83,7 +165,7 @@ function bindExportModalControls() {
           copyBtn.textContent = originalText;
         }, 1500);
       } catch (error) {
-        alert('No se pudo copiar automáticamente.');
+        showToast('No se pudo copiar automáticamente.', 'error');
       }
     });
   }

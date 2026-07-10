@@ -130,11 +130,18 @@
       </div>
 
       <nav class="nav-list" aria-label="Navegación principal">
-        <div class="nav-section">Herramientas</div>
         <button class="nav-btn active" data-view="panel">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
           <span class="hidden md:inline">Panel de Control</span>
         </button>
+
+        <div class="nav-section">Planear</div>
+        <button class="nav-btn" data-view="organizador">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M8 6v12"></path></svg>
+          <span class="hidden md:inline">Organizador de Ideas</span>
+        </button>
+
+        <div class="nav-section">Redactar</div>
         <button class="nav-btn" data-view="redactor">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5z"></path></svg>
           <span class="hidden md:inline">Redactor</span>
@@ -143,27 +150,25 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 5.5h16"></path><path d="M7 5.5v13"></path><path d="M17 5.5v13"></path><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
           <span class="hidden md:inline">Gestor APA 7</span>
         </button>
+
+        <div class="nav-section">Revisar</div>
         <button class="nav-btn" data-view="simulador">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 19h16"></path><path d="M6 15h3V7H6z"></path><path d="M11 15h3V4h-3z"></path><path d="M16 15h3v-6h-3z"></path></svg>
           <span class="hidden md:inline">Rúbrica</span>
         </button>
-        <button class="nav-btn" data-view="organizador">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M8 6v12"></path></svg>
-          <span class="hidden md:inline">Organizador</span>
-        </button>
-
-        <div class="nav-section">Utilidades</div>
         <button class="nav-btn" data-view="checklist">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M7 12l3 3 7-7"></path></svg>
           <span class="hidden md:inline">Checklist</span>
         </button>
-        <button class="nav-btn" data-view="historial">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path><path d="M18 17v-6"></path><path d="M15 14l3 3 3-3"></path></svg>
-          <span class="hidden md:inline">Historial</span>
-        </button>
+
+        <div class="nav-section">Entregar</div>
         <button class="nav-btn" data-view="exportar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 3v10"></path><path d="M8 9l4 4 4-4"></path><path d="M5 21h14"></path></svg>
           <span class="hidden md:inline">Exportar Word</span>
+        </button>
+        <button class="nav-btn" data-view="historial">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path><path d="M18 17v-6"></path><path d="M15 14l3 3 3-3"></path></svg>
+          <span class="hidden md:inline">Historial</span>
         </button>
       </nav>
 
@@ -277,10 +282,10 @@
   </script>
 
   <!-- Módulos JS con defer: se descargan en paralelo y ejecutan en orden tras parsear el HTML -->
-  <!-- State and Config -->
-  <script src="src/config/index.js" defer></script>
-  <script src="src/state/store.js" defer></script>
+  <!-- State and Config (persistence must load before config) -->
   <script src="src/state/persistence.js" defer></script>
+  <script src="src/state/store.js" defer></script>
+  <script src="src/config/index.js" defer></script>
 
   <!-- Utils -->
   <script src="src/utils/helpers.js" defer></script>
@@ -289,7 +294,6 @@
   <!-- Services -->
   <script src="src/services/storage.js" defer></script>
   <script src="src/services/apa.js" defer></script>
-  <script src="src/services/export.js" defer></script>
 
   <!-- Components -->
   <script src="src/components/layout/header.js" defer></script>

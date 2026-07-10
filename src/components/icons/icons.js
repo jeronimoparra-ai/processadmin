@@ -15,7 +15,6 @@ const DOCPRO_ICON_PATHS = Object.freeze({
   panel: 'assets/icons/panel.svg',
   redactor: 'assets/icons/redactor.svg',
   apa: 'assets/icons/apa.svg',
-  rubric: 'assets/icons/rubric.svg',
   ideas: 'assets/icons/ideas.svg',
   exportWord: 'assets/icons/export-word.svg',
   review: 'assets/icons/review.svg',

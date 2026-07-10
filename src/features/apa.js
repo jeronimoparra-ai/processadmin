@@ -44,7 +44,7 @@ function buildApaEnhanced() {
 
         <div class="space-y-6">
           <div class="dp-card p-6 sticky top-6">
-            <h3 id="apa-references-heading" class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span></h3>
+            <h3 id="apa-referencias-title" class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span></h3>
             <div id="apa-referencias" class="mb-4 max-h-64 space-y-2 overflow-y-auto text-xs"></div>
             <div class="space-y-2">
               <button id="sort-refs-btn" class="dp-btn dp-btn-ghost w-full">Ordenar referencias A-Z</button>
@@ -81,20 +81,50 @@ function buildApaEnhanced() {
   }
 
   function renderReferenceChecklist(reference) {
-    const normalized = String(reference || '').replace(/<[^>]+>/g, '');
-    const checks = {
-      author: /^[^(]+\(\d{4}\)/.test(normalized),
-      year: /\(\d{4}\)/.test(normalized),
-      title: /<em>.+<\/em>|\.[^\.]{3,}/.test(reference),
-      source: /\)\.\s*.+/.test(normalized),
-      doiOrUrl: /doi|https?:\/\//i.test(normalized)
+    // Reuse domain validation from services/apa.js when available
+    const parsedReference = {
+      author: getReferenceAuthor(reference),
+      year: (String(reference || '').match(/\((\d{4})\)/) || [])[1] || '',
+      title: (String(reference || '').match(/<em>(.*?)<\/em>/) || [])[1] || '',
+      source: String(reference || '').replace(/<[^>]+>/g, '').split(').')[1]?.trim() || '',
+      url: (String(reference || '').match(/https?:\/\/\S+/i) || [])[0] || '',
+      doi: (String(reference || '').match(/doi\S*/i) || [])[0] || ''
     };
 
+    const validationResult = typeof validateReference === 'function'
+      ? (function mapValidation() {
+          const result = validateReference(parsedReference);
+          return {
+            isValid: result.isValid,
+            validation: {
+              author: result.validation.author,
+              year: result.validation.year,
+              title: result.validation.title,
+              source: result.validation.source,
+              doiOrUrl: result.validation.urlOrDoi
+            }
+          };
+        })()
+      : typeof validateReferenceString === 'function'
+      ? validateReferenceString(reference)
+      : (function fallback() {
+          const normalized = String(reference || '').replace(/<[^>]+>/g, '');
+          const checks = {
+            author: /^[^(]+\(\d{4}\)/.test(normalized),
+            year: /\(\d{4}\)/.test(normalized),
+            title: /<em>.+<\/em>|\.[^\.]{3,}/.test(reference),
+            source: /\)\.\s*.+/.test(normalized),
+            doiOrUrl: /doi|https?:\/\//i.test(normalized)
+          };
+          return { isValid: Object.values(checks).every(Boolean), validation: checks };
+        })();
+
+    const checks = validationResult.validation || {};
     const result = document.getElementById('validator-resultado');
     result.innerHTML = APA_REFERENCE_CHECKS.map(item => {
       const ok = checks[item.key];
       return `<div class="flex items-center gap-2 ${ok ? 'text-green-700' : 'text-red-700'}"><span>${ok ? '●' : '●'}</span><span>${item.label}: ${ok ? 'Presente' : 'Falta'}</span></div>`;
-    }).join('') + `<div class="pt-2 border-t border-orange-200 text-slate-600">${Object.values(checks).every(Boolean) ? 'Referencia con estructura básica correcta.' : 'Revisa los campos faltantes antes de usarla.'}</div>`;
+    }).join('') + `<div class="pt-2 border-t border-orange-200 text-slate-600">${validationResult.isValid ? 'Referencia con estructura básica correcta.' : 'Revisa los campos faltantes antes de usarla.'}</div>`;
     result.classList.remove('hidden');
   }
 
@@ -105,7 +135,7 @@ function buildApaEnhanced() {
     const pagina = document.getElementById('cita-pagina').value.trim();
 
     if (!autor || !anio) {
-      alert('Ingresa autor y año para continuar.');
+      showToast('Ingresa autor y año para continuar.', 'error');
       return;
     }
 
@@ -130,7 +160,7 @@ function buildApaEnhanced() {
   document.getElementById('validate-ref-btn').addEventListener('click', () => {
     const ref = document.getElementById('ref-validator').value.trim();
     if (!ref) {
-      alert('Pega una referencia para revisarla.');
+      showToast('Pega una referencia para revisarla.', 'error');
       return;
     }
     renderReferenceChecklist(ref);
@@ -149,7 +179,10 @@ function buildApaEnhanced() {
       <div class="dp-ref-item">
         <div class="font-bold text-[var(--dp-text-primary)]">${escapeHtml(source.titulo)}</div>
         <div class="text-xs text-[var(--dp-text-secondary)]">${escapeHtml(source.autor)}</div>
-        <button class="delete-source mt-2 text-xs font-bold text-red-600 hover:text-red-700" data-idx="${index}">Eliminar</button>
+        <div class="mt-2 flex gap-2">
+          <button class="convert-source dp-btn dp-btn-ghost dp-btn-sm" data-idx="${index}">Convertir en referencia APA</button>
+          <button class="delete-source text-xs font-bold text-red-600 hover:text-red-700" data-idx="${index}">Eliminar</button>
+        </div>
       </div>
     `).join('');
 
@@ -160,12 +193,35 @@ function buildApaEnhanced() {
         renderSources();
       });
     });
+
+    list.querySelectorAll('.convert-source').forEach(button => {
+      button.addEventListener('click', () => {
+        const idx = parseInt(button.dataset.idx, 10);
+        const src = sources[idx];
+        if (!src) return;
+        const autor = src.autor || 'Autor desconocido';
+        const year = src.fecha ? (String(src.fecha).slice(0,4)) : '';
+        const titulo = src.titulo || '';
+        const fuente = src.url || '';
+
+        let reference = `${escapeHtml(autor)}${year ? ` (${escapeHtml(year)})` : ''}. <em>${escapeHtml(titulo)}</em>`;
+        if (fuente) reference += `. Recuperado de ${escapeHtml(fuente)}`;
+
+        state.generatedCitations.push(reference);
+        saveCitations();
+        renderReferences();
+
+        // Provide quick feedback
+        button.textContent = 'Convertida';
+        setTimeout(() => { button.textContent = 'Convertir en referencia APA'; }, 1800);
+      });
+    });
   }
 
   document.getElementById('add-source-btn').addEventListener('click', () => {
     const titulo = document.getElementById('source-titulo').value.trim();
     if (!titulo) {
-      alert('Ingresa el título de la fuente.');
+      showToast('Ingresa el título de la fuente.', 'error');
       return;
     }
 
@@ -196,7 +252,7 @@ function buildApaEnhanced() {
     const url = document.getElementById('apa-url-full').value.trim();
 
     if (!autor || !anio || !titulo) {
-      alert('Ingresa autor, año y título para generar la referencia.');
+      showToast('Ingresa autor, año y título para generar la referencia.', 'error');
       return;
     }
 
@@ -221,7 +277,7 @@ function buildApaEnhanced() {
 
   function renderReferences() {
     const list = document.getElementById('apa-referencias');
-    const heading = document.getElementById('apa-references-heading');
+    const heading = document.getElementById('apa-referencias-title');
     if (heading) {
       heading.innerHTML = `${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span>`;
     }
@@ -249,7 +305,15 @@ function buildApaEnhanced() {
   }
 
   document.getElementById('sort-refs-btn').addEventListener('click', () => {
-    state.generatedCitations.sort((a, b) => getReferenceAuthor(a).localeCompare(getReferenceAuthor(b), 'es'));
+    if (typeof sortReferencesByAuthor === 'function') {
+      const referencesWithAuthor = state.generatedCitations.map(ref => ({ raw: ref, author: getReferenceAuthor(ref) }));
+      sortReferencesByAuthor(referencesWithAuthor);
+      state.generatedCitations = referencesWithAuthor.map(item => item.raw);
+    } else if (typeof sortReferenceStringsByAuthor === 'function') {
+      sortReferenceStringsByAuthor(state.generatedCitations);
+    } else {
+      state.generatedCitations.sort((a, b) => getReferenceAuthor(a).localeCompare(getReferenceAuthor(b), 'es'));
+    }
     saveCitations();
     renderReferences();
 
@@ -267,21 +331,24 @@ function buildApaEnhanced() {
     const citationsWithoutReference = citedAuthors.filter(author => !referenceAuthors.some(referenceAuthor => normalizeSpanishText(referenceAuthor) === normalizeSpanishText(author)));
     const referencesWithoutCitation = referenceAuthors.filter(referenceAuthor => !citedAuthors.some(author => normalizeSpanishText(author) === normalizeSpanishText(referenceAuthor)));
 
-    alert(
-      `Verificación de consistencia:\n\n` +
-      `Citas en texto detectadas: ${citedAuthors.length}\n` +
-      `Referencias registradas: ${referenceAuthors.length}\n` +
-      `Citas sin referencia: ${citationsWithoutReference.length}\n` +
-      `Referencias sin cita: ${referencesWithoutCitation.length}`
+    showToast(
+      `Consistencia: citas ${citedAuthors.length}, referencias ${referenceAuthors.length}, sin referencia ${citationsWithoutReference.length}, sin cita ${referencesWithoutCitation.length}`,
+      (citationsWithoutReference.length + referencesWithoutCitation.length) === 0 ? 'success' : 'info',
+      5000
     );
   });
 
-  document.getElementById('clear-refs-btn').addEventListener('click', () => {
-    if (confirm('¿Estás seguro? Se eliminarán todas las referencias.')) {
-      state.generatedCitations = [];
-      saveCitations();
-      renderReferences();
-    }
+  document.getElementById('clear-refs-btn').addEventListener('click', async () => {
+    const confirmed = await showConfirm({
+      title: 'Eliminar referencias',
+      message: '¿Estás seguro? Se eliminarán todas las referencias.',
+      confirmText: 'Eliminar'
+    });
+    if (!confirmed) return;
+    state.generatedCitations = [];
+    saveCitations();
+    renderReferences();
+    showToast('Referencias eliminadas.', 'success');
   });
 
   renderReferences();

@@ -49,21 +49,37 @@ processadmin/
 │   ├── layout.css
 │   ├── components.css
 │   └── utilities.css
-├── js/
-│   ├── config.js
 ├── src/
 │   ├── app/
+│   │   └── main.js
 │   ├── components/
+│   │   ├── icons/
+│   │   ├── layout/
+│   │   └── ui/
 │   ├── config/
+│   │   └── index.js
 │   ├── features/
+│   │   ├── panel.js
+│   │   ├── organizador.js
+│   │   ├── redactor.js
+│   │   ├── apa.js
+│   │   ├── rubrica.js
+│   │   ├── checklist.js
+│   │   ├── exportador.js
+│   │   └── historial.js
 │   ├── services/
+│   │   ├── storage.js
+│   │   └── apa.js
 │   ├── state/
+│   │   ├── store.js
+│   │   └── persistence.js
 │   └── utils/
+│       └── helpers.js
+├── assets/
 │   ├── formato-ejemplo.json
 │   ├── word-template-ejemplo.docx
 │   └── icons/
 ├── og-image.html
-├── .gitignore
 ├── LICENSE
 └── README.md
 ```
@@ -83,11 +99,17 @@ Dependencias CDN:
 
 | Rol | Color | HEX |
 |---|---|---|
-| Fondo | Beige cálido | `#faf9f6` |
-| Sidebar | Negro editorial | `#1c1b18` |
-| Acento | Oro académico | `#c9a96e` |
-| Texto principal | Casi negro | `#1c1b18` |
-| Texto secundario | Gris cálido | `#5c5650` |
+| Fondo | Slate claro | `#F8FAFC` |
+| Superficie | Blanco | `#FFFFFF` |
+| Primario | Azul | `#2563EB` |
+| Secundario | Teal | `#14B8A6` |
+| Acento | Púrpura | `#7C3AED` |
+| Éxito | Verde | `#22C55E` |
+| Advertencia | Ámbar | `#F59E0B` |
+| Error | Rojo | `#EF4444` |
+| Texto principal | Slate oscuro | `#0F172A` |
+| Texto secundario | Slate medio | `#475569` |
+| Borde | Slate suave | `#E2E8F0` |
 
 ## Hoja de Ruta
 

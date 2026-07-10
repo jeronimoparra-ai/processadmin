@@ -358,6 +358,7 @@ async function buildGeneratedDocxPackage(data, snapshot = {}) {
 }
 
 async function buildTemplateDocxPackage(data, snapshot = {}) {
+  state.lastTemplateFallback = false;
   const references = getExportReferences(snapshot);
   const outline = snapshot.organizerOutline || loadJSON('organizer_outline', {});
   const outlineValues = outline.values || outline;
@@ -369,6 +370,7 @@ async function buildTemplateDocxPackage(data, snapshot = {}) {
   const dataUrl = getWordTemplateDataUrl(exportFormatProfile);
 
   if (!dataUrl || typeof JSZip === 'undefined') {
+    state.lastTemplateFallback = true;
     return buildGeneratedDocxPackage(data, snapshot);
   }
 
@@ -408,6 +410,7 @@ async function buildTemplateDocxPackage(data, snapshot = {}) {
   }));
 
   if (!replacedAnyToken) {
+    state.lastTemplateFallback = true;
     return buildGeneratedDocxPackage(data, snapshot);
   }
 
@@ -427,11 +430,15 @@ async function buildExportDocxPackage(data, snapshot = {}) {
 
 async function downloadExportDocx(data, snapshot = {}, fileName = null) {
   if (typeof docx === 'undefined' || !docx.Packer || typeof docx.Packer.toBlob !== 'function') {
-    alert('Error: la librería de exportación no está cargada. Verifica tu conexión a internet y recarga la página.');
+    showToast('La librería de exportación no está cargada. Verifica tu conexión y recarga la página.', 'error');
     return false;
   }
 
   const blob = await buildExportDocxPackage(data, snapshot);
+  if (state.lastTemplateFallback) {
+    showToast('No se encontraron marcadores en tu plantilla; se generó el documento con el formato estándar.', 'info', 5500);
+    state.lastTemplateFallback = false;
+  }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   const nombreArchivo = (fileName || `${(data.nombre || 'documento').replace(/\s+/g, '_')}_APA7`).replace(/\.docx$/i, '');
@@ -458,15 +465,18 @@ function buildExportador() {
       <h2 class="mb-2 flex items-center gap-3 text-3xl font-bold">${docproIconHtml('exportWord', 'Exportación a Word', 'docpro-icon docpro-icon--lg')}<span>Exportación a Word (Formato APA 7)</span></h2>
       <p class="mb-8 text-[var(--dp-text-secondary)]">Completa tus datos, revisa la validación y genera tu archivo local sin perder el formato.</p>
 
-      <div class="dp-card mb-8 flex flex-col gap-4 border-dashed lg:flex-row lg:items-center lg:justify-between">
+      <div class="dp-card mb-8 flex flex-col gap-4 border-dashed">
         <div>
           <p class="text-sm font-bold text-[var(--dp-text-primary)]">Formato de trabajo</p>
           <p class="text-sm text-[var(--dp-text-secondary)]">${escapeHtml(formatLabel)} · ${escapeHtml(formatDetail)}</p>
         </div>
-        <div class="flex flex-wrap gap-3">
-          <button id="load-format-btn" class="dp-btn dp-btn-primary text-sm">Cargar plantilla Word</button>
-          <button id="clear-format-btn" class="dp-btn dp-btn-ghost text-sm">Eliminar formato cargado</button>
-        </div>
+        <details>
+          <summary class="dp-btn dp-btn-ghost text-sm" style="display:inline-flex;cursor:pointer;">Avanzado: plantilla personalizada</summary>
+          <div class="mt-3 flex flex-wrap gap-3">
+            <button id="load-format-btn" class="dp-btn dp-btn-primary text-sm">Cargar plantilla Word</button>
+            <button id="clear-format-btn" class="dp-btn dp-btn-ghost text-sm">Eliminar formato cargado</button>
+          </div>
+        </details>
       </div>
 
       <input id="load-format-input" type="file" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document,.docx,application/json,.json" class="hidden">
@@ -635,7 +645,7 @@ function buildExportador() {
           updateValidation();
         }
       } catch (err) {
-        alert('No se pudo cargar el formato. Verifica que sea un archivo Word .docx válido o un JSON compatible.');
+        showToast('No se pudo cargar el formato. Verifica que sea un archivo Word .docx válido o un JSON compatible.', 'error');
       } finally {
         loadFormatInput.value = '';
       }
@@ -745,7 +755,7 @@ function buildExportador() {
 
   async function exportarDocx(forceExport = false) {
     if (typeof docx === 'undefined' || !docx.Packer || typeof docx.Packer.toBlob !== 'function') {
-      alert('Error: la librería de exportación no está cargada. Verifica tu conexión a internet y recarga la página.');
+      showToast('La librería de exportación no está cargada. Verifica tu conexión y recarga la página.', 'error');
       return;
     }
 
@@ -755,7 +765,7 @@ function buildExportador() {
     }, {});
 
     if (!data.nombre) {
-      alert('Por favor completa al menos tu nombre');
+      showToast('Por favor completa al menos tu nombre.', 'error');
       return;
     }
 
@@ -766,7 +776,11 @@ function buildExportador() {
     const metrics = calculateQualityMetrics();
     const pendingItems = buildPendingItems(metrics);
     if (!forceExport && pendingItems.length > 0) {
-      const shouldContinue = confirm('Hay pendientes por revisar. ¿Quieres exportar igualmente?');
+      const shouldContinue = await showConfirm({
+        title: 'Exportar con pendientes',
+        message: 'Hay pendientes por revisar. ¿Quieres exportar igualmente?',
+        confirmText: 'Exportar igual'
+      });
       if (!shouldContinue) return;
     }
 
@@ -782,12 +796,7 @@ function buildExportador() {
     }
   }
 
-  async function exportWordFile(forceExport = false) {
-    return exportarDocx(forceExport);
-  }
-
   window.exportarDocx = exportarDocx;
-  window.exportWordFile = exportWordFile;
 
   updateValidation();
 

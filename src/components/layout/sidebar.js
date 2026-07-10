@@ -12,7 +12,7 @@ function updateActiveNavigation(viewId) {
 }
 
 function toggleSidebar() {
-  const sidebar = document.getElementById('side-panel') || document.getElementById('sidebar');
+  const sidebar = document.getElementById('side-panel');
   const overlay = document.getElementById('sidebar-overlay');
   const isOpen = sidebar ? !sidebar.classList.contains('is-open') : false;
 

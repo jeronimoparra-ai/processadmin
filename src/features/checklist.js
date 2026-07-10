@@ -100,7 +100,8 @@ function buildChecklist() {
     formato: ['Márgenes 2.54 cm', 'Fuente Times New Roman 12pt', 'Interlineado doble (2.0)', 'Sangría francesa en referencias', 'Numeración de páginas', 'Portada sin número', 'Títulos con jerarquía APA', 'Tabla de contenido actualizada']
   };
 
-  const storedStructure = loadJSON('checklist_estructura', defaultItems.estructura.map(text => ({ id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, text, checked: false })));
+  // Use panel's structure as the single source of truth
+  const storedStructure = loadJSON('ws_document_structure_parts', defaultItems.estructura.map(text => ({ id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, text, checked: false })));
   const storedFormato = loadJSON('checklist_formato', defaultItems.formato.map(text => ({ id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, text, checked: false })));
   const rubricCriteria = loadJSON('rubrica_current', []);
   const storedCriteria = loadJSON('checklist_criterios', []);
@@ -121,7 +122,12 @@ function buildChecklist() {
   };
 
   function persistChecklist(tab) {
-    saveJSON(`checklist_${tab}`, checklists[tab]);
+    if (tab === 'estructura') {
+      // Persist into the panel's canonical key so both views stay in sync
+      saveJSON('ws_document_structure_parts', checklists[tab]);
+    } else {
+      saveJSON(`checklist_${tab}`, checklists[tab]);
+    }
   }
 
   function moveItem(tab, index, direction) {

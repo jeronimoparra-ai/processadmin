@@ -2,78 +2,9 @@
 // CONFIG.JS - Estado global y constantes de configuración
 // ═══════════════════════════════════════════════════════════════════════
 
-function validateStoredValue(value, fallback) {
-  if (Array.isArray(fallback)) {
-    return Array.isArray(value) ? value : fallback;
-  }
-
-  if (fallback && typeof fallback === 'object') {
-    return value && typeof value === 'object' && !Array.isArray(value) ? value : fallback;
-  }
-
-  if (typeof fallback === 'string') {
-    return typeof value === 'string' ? value : fallback;
-  }
-
-  if (typeof fallback === 'number') {
-    const numberValue = Number(value);
-    return Number.isFinite(numberValue) ? numberValue : fallback;
-  }
-
-  if (typeof fallback === 'boolean') {
-    return typeof value === 'boolean' ? value : fallback;
-  }
-
-  return value ?? fallback;
-}
-
-function safeStorageGet(key, fallback = null) {
-  try {
-    const value = localStorage.getItem(key);
-    return value === null ? fallback : value;
-  } catch (err) {
-    return fallback;
-  }
-}
-
-function safeStorageSet(key, value) {
-  try {
-    localStorage.setItem(key, String(value));
-    return true;
-  } catch (err) {
-    return false;
-  }
-}
-
-function safeStorageSetJSON(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch (err) {
-    return false;
-  }
-}
-
-function loadStoredString(key, fallback = '') {
-  const value = safeStorageGet(key, null);
-  if (value === null) return fallback;
-
-  try {
-    const parsed = JSON.parse(value);
-    return typeof parsed === 'string' ? parsed : value;
-  } catch (err) {
-    return value;
-  }
-}
-
-function safeParse(key, fallback) {
-  try {
-    const v = safeStorageGet(key, null);
-    return v ? validateStoredValue(JSON.parse(v), fallback) : fallback;
-  } catch (err) {
-    return fallback;
-  }
-}
+// NOTE: Storage helper functions (validateStoredValue, safeStorageGet/Set, safeStorageSetJSON,
+// loadStoredString, safeParse) were moved to src/state/persistence.js to avoid duplicate
+// definitions and ensure a single robust implementation is used across the app.
 
 const DELIVERY_DATE_STORAGE_KEY = 'checklist_deadline';
 const EXPORT_FORMAT_PROFILE_KEY = 'export_format_profile';
@@ -221,6 +152,15 @@ const APA_REFERENCE_CHECKS = [
   { key: 'doiOrUrl', label: 'DOI o URL' }
 ];
 
+// Unica fuente de verdad para tipos de trabajo usados en la app
+const WORK_TYPES = Object.freeze({
+  ensayo: 'Ensayo',
+  monografia: 'Monografía',
+  informe: 'Informe',
+  investigacion: 'Trabajo de investigación',
+  anteproyecto: 'Anteproyecto'
+});
+
 const PLANTILLAS_RUBRICA = {
   ensayo: {
     nombre: 'Ensayo académico',
@@ -240,8 +180,8 @@ const PLANTILLAS_RUBRICA = {
       { nombre: 'Conclusiones y referencias', peso: 20 }
     ]
   },
-  proyecto: {
-    nombre: 'Proyecto de investigación',
+  investigacion: {
+    nombre: 'Trabajo de investigación',
     criterios: [
       { nombre: 'Planteamiento del problema', peso: 20 },
       { nombre: 'Marco teórico y citas APA', peso: 25 },
