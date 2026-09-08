@@ -3,34 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="assets/icons/redactor.svg">
-  <meta name="viewport"           content="width=device-width, initial-scale=1.0">
-  <meta name="application-name"   content="ProcessAdmin">
-  <meta name="author"             content="Andrés Jeronimo Parra">
-  <meta name="theme-color"        content="#0f172a">
-  <meta name="robots"             content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="application-name" content="ProcessAdmin">
+  <meta name="author" content="Andrés Jeronimo Parra">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 
   <!-- SEO -->
-  <meta name="description"
-        content="ProcessAdmin: redacta, organiza y exporta trabajos académicos con normas APA 7 completas. Guardado local en el navegador, sin servidor, sin cuenta, 100% privado.">
-  <meta name="keywords"
-        content="APA 7, trabajos académicos, redacción académica, referencias bibliográficas, exportar Word, normas APA, Colombia">
+  <meta name="description" content="ProcessAdmin: redacta, organiza y exporta trabajos académicos con normas APA 7 completas. Guardado local en el navegador, sin servidor, sin cuenta, 100% privado.">
+  <meta name="keywords" content="APA 7, trabajos académicos, redacción académica, referencias bibliográficas, exportar Word, normas APA, Colombia">
 
   <!-- Open Graph -->
-  <meta property="og:type"        content="website">
-  <meta property="og:url"         content="https://processadmin.vercel.app">
-  <meta property="og:title"       content="ProcessAdmin | Redacción académica y APA 7">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://processadmin.vercel.app">
+  <meta property="og:title" content="ProcessAdmin | Redacción académica y APA 7">
   <meta property="og:description" content="Redacta, organiza y exporta trabajos académicos con normas APA 7. Sin servidor, sin cuenta, 100% privado.">
-  <meta property="og:image"       content="https://processadmin.vercel.app/og-image.png">
+  <meta property="og:image" content="https://processadmin.vercel.app/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale"      content="es_CO">
-  <meta property="og:site_name"   content="ProcessAdmin">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:site_name" content="ProcessAdmin">
 
   <!-- Twitter Card -->
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:title"       content="ProcessAdmin | Redacción académica y APA 7">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ProcessAdmin | Redacción académica y APA 7">
   <meta name="twitter:description" content="Herramienta académica para redactar y exportar trabajos en APA 7 desde el navegador.">
-  <meta name="twitter:image"       content="https://processadmin.vercel.app/og-image.png">
+  <meta name="twitter:image" content="https://processadmin.vercel.app/og-image.png">
 
   <!-- Canonical -->
   <link rel="canonical" href="https://processadmin.vercel.app">
@@ -44,11 +42,11 @@
     "@type": "SoftwareApplication",
     "name": "ProcessAdmin",
     "url": "https://processadmin.vercel.app",
-    "description": "Plataforma académica para redactar, organizar y exportar trabajos con normas APA 7. Guardado local en el navegador sin servidor ni telemetría.",
+    "description": "Plataforma académica para redactar, planificar, revisar y exportar trabajos con normas APA 7. Guardado local en el navegador sin servidor ni telemetría.",
     "applicationCategory": "EducationalApplication",
     "operatingSystem": "Web Browser",
     "browserRequirements": "Requires JavaScript. Requires localStorage.",
-    "softwareVersion": "1.0.0",
+    "softwareVersion": "2.0.0",
     "inLanguage": "es-CO",
     "isAccessibleForFree": true,
     "offers": {
@@ -57,13 +55,14 @@
       "priceCurrency": "COP"
     },
     "featureList": [
-      "Redactor académico con guardado automático",
-      "Gestor de referencias APA 7",
-      "Exportación a Word (.docx) con formato APA completo",
-      "Evaluador de rúbrica con simulación de calificación",
-      "Organizador de ideas y estructura del documento",
-      "Checklist inteligente de requisitos APA 7",
-      "100% local — sin servidor ni cuenta de usuario"
+      "Centro de trabajo y avance real",
+      "Planificador de estructura y objetivos",
+      "Redactor académico estructurado con guardado automático",
+      "Gestor de citas y referencias APA 7.ª edición",
+      "Revisión objetiva y checklist pre-entrega",
+      "Exportación nativa a Word (.docx) con formato APA 7 completo",
+      "Mis trabajos: gestor local de documentos",
+      "100% privado y local sin servidor ni cuenta de usuario"
     ],
     "author": {
       "@type": "Person",
@@ -73,15 +72,6 @@
         "@type": "EducationalOrganization",
         "name": "Institución Universitaria Digital de Antioquia"
       }
-    },
-    "maintainer": {
-      "@type": "Person",
-      "name": "Andrés Jeronimo Parra"
-    },
-    "sourceOrganization": {
-      "@type": "EducationalOrganization",
-      "name": "Institución Universitaria Digital de Antioquia",
-      "url": "https://www.iudigital.edu.co"
     }
   }
   </script>
@@ -90,14 +80,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/utilities.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <!-- docx.js nativo para exportación oficial a Word -->
   <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
 </head>
 <body class="page-root">
@@ -129,66 +117,62 @@
         </button>
       </div>
 
+      <!-- Menú principal definitivo (7 áreas esenciales) -->
       <nav class="nav-list" aria-label="Navegación principal">
         <button class="nav-btn active" data-view="panel">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
-          <span class="hidden md:inline">Panel de Control</span>
+          <span>Inicio</span>
         </button>
 
-        <div class="nav-section">Planear</div>
-        <button class="nav-btn" data-view="organizador">
+        <button class="nav-btn" data-view="planificar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M8 6v12"></path></svg>
-          <span class="hidden md:inline">Organizador de Ideas</span>
+          <span>Planificar</span>
         </button>
 
-        <div class="nav-section">Redactar</div>
         <button class="nav-btn" data-view="redactor">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5z"></path></svg>
-          <span class="hidden md:inline">Redactor</span>
+          <span>Redactar</span>
         </button>
+
         <button class="nav-btn" data-view="apa">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 5.5h16"></path><path d="M7 5.5v13"></path><path d="M17 5.5v13"></path><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
-          <span class="hidden md:inline">Gestor APA 7</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+          <span>APA 7</span>
         </button>
 
-        <div class="nav-section">Revisar</div>
-        <button class="nav-btn" data-view="simulador">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 19h16"></path><path d="M6 15h3V7H6z"></path><path d="M11 15h3V4h-3z"></path><path d="M16 15h3v-6h-3z"></path></svg>
-          <span class="hidden md:inline">Rúbrica</span>
-        </button>
-        <button class="nav-btn" data-view="checklist">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M7 12l3 3 7-7"></path></svg>
-          <span class="hidden md:inline">Checklist</span>
+        <button class="nav-btn" data-view="revisar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+          <span>Revisar</span>
         </button>
 
-        <div class="nav-section">Entregar</div>
         <button class="nav-btn" data-view="exportar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 3v10"></path><path d="M8 9l4 4 4-4"></path><path d="M5 21h14"></path></svg>
-          <span class="hidden md:inline">Exportar Word</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="12" y2="12"></line><line x1="15" y1="15" x2="12" y2="12"></line></svg>
+          <span>Exportar</span>
         </button>
-        <button class="nav-btn" data-view="historial">
+
+        <button class="nav-btn" data-view="trabajos">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path><path d="M18 17v-6"></path><path d="M15 14l3 3 3-3"></path></svg>
-          <span class="hidden md:inline">Historial</span>
+          <span>Mis trabajos</span>
         </button>
       </nav>
 
+      <!-- Pie de página del sidebar: acceso secundario a Legal, Acerca y contador -->
       <div class="side-footer">
         <div class="side-footer-row">
           <button class="nav-btn nav-btn--subtle" data-view="legal">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span class="hidden md:inline">Legal</span>
+            <span>Legal</span>
           </button>
           <button class="nav-btn nav-btn--subtle" data-view="acerca">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            <span class="hidden md:inline">Acerca</span>
+            <span>Acerca</span>
           </button>
         </div>
         <div class="side-meta">
           <span id="saved-document-count" class="side-meta-count">0</span>
-          <span class="side-meta-label">docs guardados</span>
+          <span class="side-meta-label">trabajos guardados</span>
         </div>
       </div>
     </aside>
@@ -201,12 +185,12 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
             <div>
-              <h2 id="header-title" class="header-title">Panel de Control</h2>
-              <p id="header-subtitle" class="header-subtitle">Resumen del progreso de tu documento</p>
+              <h2 id="header-title" class="header-title">Inicio</h2>
+              <p id="header-subtitle" class="header-subtitle">Centro de trabajo y avance real del documento</p>
             </div>
           </div>
           <div class="header-pills">
-            <div class="header-pill header-pill--success" title="El documento está guardado en localStorage">
+            <div class="header-pill header-pill--success" title="Los cambios se guardan localmente en tu navegador">
               <svg id="save-indicator" class="header-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                 <path d="M7 3v6h10"></path>
@@ -219,98 +203,18 @@
       </header>
 
       <section class="content-area">
-        <div id="main-workspace" class="workspace">
-          <!-- Estado de carga inicial — JS lo reemplaza al inicializar -->
-          <div id="workspace-loader" class="flex flex-col items-center justify-center h-full min-h-96 gap-4 text-slate-400">
-            <div class="w-16 h-16 animate-pulse text-[var(--dp-primary)]">
-              <img src="assets/icons/redactor.svg" alt="Loading" class="w-full h-full">
-            </div>
-            <p class="text-lg font-medium">Cargando ProcessAdmin...</p>
-            <p class="text-sm text-slate-400">Si esta pantalla no desaparece, recarga la página (F5)</p>
+        <div id="main-workspace" class="workspace p-4 md:p-8">
+          <!-- El enrutador JS renderiza la vista activa aquí -->
+          <div id="workspace-loader" class="flex flex-col items-center justify-center min-h-[400px] gap-4 text-slate-400">
+            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-base font-medium text-slate-700">Cargando ProcessAdmin...</p>
           </div>
         </div>
       </section>
     </main>
   </div>
 
-  <div id="exportModal" class="modal-backdrop" style="display:none" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle" aria-describedby="markdownOutput" tabindex="-1">
-    <div class="modal-panel" tabindex="-1">
-      <div class="modal-header">
-        <h2 id="exportModalTitle" class="font-bold flex items-center gap-2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-blue-600"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-          Vista previa del contenido
-        </h2>
-        <button id="closeExportModal" class="modal-close" aria-label="Cerrar vista previa">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      </div>
-      <div class="modal-body bg-slate-50">
-        <pre id="markdownOutput" class="markdown-output" aria-live="polite"></pre>
-      </div>
-      <div class="modal-footer">
-        <button id="copyMarkdownBtn" class="dp-btn dp-btn-primary">Copiar al portapapeles</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Manejo global de errores JS -->
-  <script>
-    window.addEventListener('error', function(e) {
-      const workspace = document.getElementById('main-workspace');
-      if (workspace && workspace.querySelector('#workspace-loader')) {
-        workspace.innerHTML = `
-          <div class="flex flex-col items-center justify-center h-full min-h-96 gap-4 text-red-400 p-8">
-            <div class="w-16 h-16 text-red-500">
-              <img src="assets/icons/validation.svg" alt="Error" class="w-full h-full">
-            </div>
-            <p class="text-xl font-bold text-slate-700">Error al cargar ProcessAdmin</p>
-            <p class="text-sm text-slate-500 text-center max-w-md">
-              No se pudo inicializar la aplicación. 
-              Verifica tu conexión a internet y recarga la página.
-            </p>
-            <p class="text-xs text-slate-400 font-mono bg-slate-100 p-3 rounded-lg max-w-lg break-all">
-              ${e.filename ? e.filename.split('/').pop() : 'script'}: ${e.message}
-            </p>
-            <button onclick="location.reload()" 
-              class="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
-              Recargar página
-            </button>
-          </div>
-        `;
-      }
-    });
-  </script>
-
-  <!-- Módulos JS con defer: se descargan en paralelo y ejecutan en orden tras parsear el HTML -->
-  <!-- State and Config (persistence must load before config) -->
-  <script src="src/state/persistence.js" defer></script>
-  <script src="src/state/store.js" defer></script>
-  <script src="src/config/index.js" defer></script>
-
-  <!-- Utils -->
-  <script src="src/utils/helpers.js" defer></script>
-  <script src="src/components/icons/icons.js" defer></script>
-
-  <!-- Services -->
-  <script src="src/services/storage.js" defer></script>
-  <script src="src/services/apa.js" defer></script>
-
-  <!-- Components -->
-  <script src="src/components/layout/header.js" defer></script>
-  <script src="src/components/layout/sidebar.js" defer></script>
-  <script src="src/components/ui/uiComponents.js" defer></script>
-
-  <!-- Views (Features) -->
-  <script src="src/features/panel.js" defer></script>
-  <script src="src/features/redactor.js" defer></script>
-  <script src="src/features/apa.js" defer></script>
-  <script src="src/features/rubrica.js" defer></script>
-  <script src="src/features/checklist.js" defer></script>
-  <script src="src/features/organizador.js" defer></script>
-  <script src="src/features/historial.js" defer></script>
-  <script src="src/features/legal.js" defer></script>
-  <script src="src/features/acerca.js" defer></script>
-  <script src="src/features/exportador.js" defer></script>
-  <script src="src/app/main.js" defer></script>
+  <!-- Script principal modular de la aplicación -->
+  <script type="module" src="src/app/main.js"></script>
 </body>
 </html>
