@@ -18,7 +18,7 @@ function cleanupView() {
 
 function navigate(viewId) {
   cleanupView();
-  state.activeView = viewId;
+  window.state.activeView = viewId;
 
   updateHeaderForView(viewId);
   updateActiveNavigation(viewId);
@@ -57,6 +57,7 @@ function initApp() {
 
   updateSavedDocumentCounter();
   bindExportModalControls();
+  initSidebarControls();
 
   document.querySelectorAll('.nav-btn, .nav-item').forEach(button => {
     if (button.dataset.bound === 'true') return;
@@ -66,15 +67,7 @@ function initApp() {
     });
   });
 
-  document.querySelectorAll('.header-quick').forEach(button => {
-    if (button.dataset.bound === 'true') return;
-    button.dataset.bound = 'true';
-    button.addEventListener('click', () => {
-      navigate(button.dataset.view);
-    });
-  });
-
-  navigate(state.activeView || 'panel');
+  navigate(window.state.activeView || 'panel');
 }
 
 if (document.readyState === 'loading') {

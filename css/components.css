@@ -184,7 +184,7 @@
   padding: 20px;
 }
 .modal-backdrop[aria-hidden='true'] { pointer-events: none; }
-.modal-backdrop[aria-hidden='false'] { pointer-events: auto; }
+.modal-backdrop[aria-hidden='false'] { pointer-events: auto; display: flex; }
 
 .modal-panel {
   background: var(--dp-surface);
@@ -281,19 +281,29 @@
   border-radius: 2px;
   background: #ffffff;
   color: #111827;
-  padding: 80px;
+  padding: 40px;
   box-shadow: var(--dp-shadow-lg);
   font-family: "Times New Roman", Times, serif;
   font-size: 16px;
   line-height: 2;
 }
 
-.paper-page-number {
-  position: absolute;
-  top: 40px;
-  right: 80px;
-  font-size: 14px;
-}
+.paper-preview--compact .paper-cover {
+    padding: 32px 40px;
+  }
+
+  .paper-preview--compact .paper-page-number {
+    top: 24px;
+    right: 40px;
+    font-size: 12px;
+  }
+
+  .paper-page-number {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    font-size: 14px;
+  }
 
 .paper-cover {
   min-height: 400px;
@@ -304,17 +314,17 @@
 }
 
 .paper-cover h1 {
-  margin: 60px 0 30px;
-  color: #111827;
-  font-family: "Times New Roman", Times, serif;
-  font-size: 24px;
-  line-height: 1.4;
-  font-weight: 700;
-}
+    margin: 30px 0 20px;
+    color: #111827;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 700;
+  }
 
 .paper-meta, .paper-cover p { margin: 0; font-size: 16px; }
 
-.paper-section { margin-top: 40px; }
+.paper-section { margin-top: 24px; }
 .paper-section h2 {
   margin: 0 0 16px;
   color: #111827;
@@ -355,6 +365,25 @@
 .dp-empty-icon { width: 64px; height: 64px; background: var(--dp-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--dp-text-muted); box-shadow: var(--dp-shadow-sm); }
 .dp-empty-title { font-family: var(--dp-font-sans); font-size: 18px; font-weight: 700; color: var(--dp-text-primary); margin: 0 0 8px; }
 .dp-empty-text { font-size: 14px; color: var(--dp-text-secondary); margin: 0; line-height: 1.5; }
+
+/* ── REFERENCE ITEM ── */
+.dp-ref-item {
+  padding: 8px 12px;
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-r-sm);
+  background: var(--dp-surface);
+  color: var(--dp-text-primary);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+/* ── SLIDER ── */
+.dp-slider {
+  width: 100%;
+  accent-color: var(--dp-accent);
+  cursor: pointer;
+}
 
 /* ── CHECKLIST & ACCORDION ── */
 .dp-check-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--dp-border); }

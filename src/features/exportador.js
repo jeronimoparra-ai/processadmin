@@ -718,7 +718,7 @@ function buildExportador() {
     const validations = [
       { name: 'Nombre del estudiante', ok: !!document.getElementById('export-nombre').value },
       { name: 'Datos básicos del curso', ok: !!document.getElementById('export-curso').value },
-      { name: 'Fecha de entrega', ok: true },
+      { name: 'Fecha de entrega', ok: !!document.getElementById('export-fecha').value },
       { name: 'Estructura completada', ok: metrics.structure >= 80 },
       { name: 'Normas APA 7', ok: metrics.apa >= 70 },
       { name: 'Rúbrica activa', ok: metrics.criteria > 0 }

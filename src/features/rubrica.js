@@ -157,7 +157,8 @@ function buildRubricaRebuilt() {
   }
 
   function destroyRubricaChart() {
-    if (typeof Chart !== 'undefined' && window.rubricaChart instanceof Chart) {
+    if (typeof Chart === 'undefined') return;
+    if (window.rubricaChart instanceof Chart) {
       window.rubricaChart.destroy();
       window.rubricaChart = null;
     }
@@ -170,7 +171,8 @@ function buildRubricaRebuilt() {
     destroyRubricaChart();
     if (criteria.length === 0) return;
 
-    window.rubricaChart = new Chart(canvas, {
+    const ctx = canvas.getContext('2d');
+    window.rubricaChart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: criteria.map(item => item.name),

@@ -291,6 +291,6 @@ function buildChecklist() {
   });
 
   updateDeadlineCountdown();
-  if (state.checklistDeadlineInterval) clearInterval(state.checklistDeadlineInterval);
-  state.checklistDeadlineInterval = setInterval(updateDeadlineCountdown, 60000);
+  if (window.state.checklistDeadlineInterval) clearInterval(window.state.checklistDeadlineInterval);
+  window.state.checklistDeadlineInterval = setInterval(updateDeadlineCountdown, 60000);
 }

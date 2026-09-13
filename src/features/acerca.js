@@ -2,6 +2,8 @@ function buildAcercaView() {
   const workspace = document.getElementById('main-workspace');
   if (!workspace) return;
 
+  stopCountdown();
+
   workspace.innerHTML = `
     <div class="dp-stagger" style="display:flex; flex-direction:column; gap:20px; max-width:760px;">
 

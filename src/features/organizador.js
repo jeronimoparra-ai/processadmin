@@ -307,8 +307,8 @@ function buildOrganizador() {
   // Persist unified work type selection
   safeStorageSet('ws_document_type', workTypeSelect.value);
 
-  if (state.organizerSnapshotInterval) clearInterval(state.organizerSnapshotInterval);
-  state.organizerSnapshotInterval = setInterval(() => {
+  if (window.state.organizerSnapshotInterval) clearInterval(window.state.organizerSnapshotInterval);
+  window.state.organizerSnapshotInterval = setInterval(() => {
     saveCurrentOutline(true, 'auto');
   }, 600000);
 }

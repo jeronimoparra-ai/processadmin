@@ -104,8 +104,6 @@ function saveJSON(key, value) {
 }
 
 function saveField(key, value) {
-  if (typeof flashSaveIndicator === 'function') flashSaveIndicator();
-
   clearTimeout(window.state.saveTimer);
   window.state.saveTimer = setTimeout(() => {
     if (typeof safeStorageSet === 'function') {

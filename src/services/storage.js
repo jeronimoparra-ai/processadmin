@@ -151,7 +151,7 @@ function calculateQualityMetrics() {
   const rubric = loadJSON('rubrica_current', []);
   const exportData = loadJSON('export_student_data', {});
   const apaSources = loadJSON('apa_sources', []);
-  const citations = loadJSON('apa_generated_citations', window.state.generatedCitations ? Array.from(window.state.generatedCitations) : []);
+  const citations = loadJSON('apa_generated_citations', (typeof state !== 'undefined' && state.generatedCitations) || []);
   const redactorText = safeStorageGet('redactor_content', '');
   const inTextCitations = [...redactorText.matchAll(/\(([^)]+)\)/g)].length;
 

@@ -14,10 +14,9 @@ function updateActiveNavigation(viewId) {
 function toggleSidebar() {
   const sidebar = document.getElementById('side-panel');
   const overlay = document.getElementById('sidebar-overlay');
-  const isOpen = sidebar ? !sidebar.classList.contains('is-open') : false;
-
   if (sidebar) sidebar.classList.toggle('is-open');
   if (overlay) overlay.classList.toggle('is-visible');
+  const isOpen = sidebar ? sidebar.classList.contains('is-open') : false;
   document.body.classList.toggle('sidebar-open', isOpen);
 }
 
@@ -29,15 +28,4 @@ function initSidebarControls() {
   if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
   if (closeBtn) closeBtn.addEventListener('click', toggleSidebar);
   if (overlay) overlay.addEventListener('click', toggleSidebar);
-
-  // Close sidebar on mobile when navigating
-  document.querySelectorAll('.nav-btn, .nav-item').forEach(button => {
-    button.addEventListener('click', () => {
-      if (window.innerWidth <= 900) {
-        toggleSidebar();
-      }
-    });
-  });
 }
-
-document.addEventListener('DOMContentLoaded', initSidebarControls);

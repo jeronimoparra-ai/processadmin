@@ -107,7 +107,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #475569;
-  padding: 16px 12px 6px;
+  padding: 8px 12px 4px;
   margin: 0;
 }
 
@@ -216,20 +216,22 @@
 
 /* ── SIDEBAR OVERLAY (mobile) ── */
 .sidebar-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(2px);
-  z-index: 45;
-  opacity: 0;
-  transition: opacity var(--t-normal);
-}
+    visibility: hidden;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 45;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--t-normal);
+  }
 
-.sidebar-overlay.is-visible {
-  display: block;
-  opacity: 1;
-}
+  .sidebar-overlay.is-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
 
 /* ── MAIN AREA ── */
 .main-area {
