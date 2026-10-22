@@ -2,14 +2,14 @@
   <defs>
     <linearGradient id="sheet" x1="0" x2="1" y1="0" y2="1">
       <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#FAF9F6"/>
     </linearGradient>
   </defs>
-  <rect x="14" y="12" width="52" height="68" rx="7" fill="url(#sheet)" stroke="#cbd5e1" stroke-width="2.5"/>
-  <path d="M24 28h30M24 38h28M24 48h20" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
-  <path d="M24 60h6l3 4 7-10" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M24 71h6l3 4 7-10" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="70" cy="58" r="18" fill="#dbeafe" stroke="#1e3a8a" stroke-width="4"/>
-  <circle cx="70" cy="58" r="10" fill="none" stroke="#1e3a8a" stroke-width="4"/>
-  <line x1="80" y1="68" x2="88" y2="76" stroke="#1e3a8a" stroke-width="5" stroke-linecap="round"/>
+  <rect x="14" y="12" width="52" height="68" rx="7" fill="url(#sheet)" stroke="#D8CFC0" stroke-width="2.5"/>
+  <path d="M24 28h30M24 38h28M24 48h20" stroke="#A79C8A" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 60h6l3 4 7-10" fill="none" stroke="#4F7A45" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M24 71h6l3 4 7-10" fill="none" stroke="#4F7A45" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="70" cy="58" r="18" fill="#F0E4CF" stroke="#5C4218" stroke-width="4"/>
+  <circle cx="70" cy="58" r="10" fill="none" stroke="#5C4218" stroke-width="4"/>
+  <line x1="80" y1="68" x2="88" y2="76" stroke="#5C4218" stroke-width="5" stroke-linecap="round"/>
 </svg>

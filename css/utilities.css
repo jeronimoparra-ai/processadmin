@@ -171,30 +171,30 @@
 .list-inside { list-style-position: inside; }
 
 /* ── COLORS & BACKGROUNDS ── */
-.bg-slate-50 { background-color: #f8fafc; }
-.bg-slate-100 { background-color: #f1f5f9; }
+.bg-slate-50 { background-color: #FAF9F6; }
+.bg-slate-100 { background-color: #F4F0E8; }
 .bg-white { background-color: #ffffff; }
-.bg-blue-50 { background-color: #eff6ff; }
-.bg-yellow-50 { background-color: #fefce8; }
-.bg-purple-50 { background-color: #faf5ff; }
-.bg-indigo-500 { background-color: #6366f1; }
-.bg-emerald-500 { background-color: #10b981; }
-.bg-blue-600 { background-color: #2563eb; }
+.bg-blue-50 { background-color: #F6EFE3; }
+.bg-yellow-50 { background-color: #FBF3E2; }
+.bg-purple-50 { background-color: #F7EDE7; }
+.bg-indigo-500 { background-color: #B08A55; }
+.bg-emerald-500 { background-color: #466E3D; }
+.bg-blue-600 { background-color: #8C6430; }
 .text-white { color: #ffffff; }
-.text-slate-400 { color: #94a3b8; }
-.text-slate-500 { color: #64748b; }
-.text-slate-700 { color: #334155; }
-.text-blue-700 { color: #1d4ed8; }
-.text-blue-900 { color: #1e3a8a; }
-.text-yellow-700 { color: #a16207; }
-.text-yellow-900 { color: #713f12; }
-.text-purple-900 { color: #581c87; }
-.text-blue-600 { color: #2563eb; }
-.text-red-400 { color: #f87171; }
-.text-red-500 { color: #ef4444; }
-.text-red-600 { color: #dc2626; }
-.hover\:bg-blue-700:hover { background-color: #1d4ed8; }
-.hover\:bg-indigo-700:hover { background-color: #4338ca; }
+.text-slate-400 { color: #A79C8A; }
+.text-slate-500 { color: #8A8175; }
+.text-slate-700 { color: #3F3B35; }
+.text-blue-700 { color: #74501F; }
+.text-blue-900 { color: #4A3418; }
+.text-yellow-700 { color: #8A5A12; }
+.text-yellow-900 { color: #4F3208; }
+.text-purple-900 { color: #6E3320; }
+.text-blue-600 { color: #8C6430; }
+.text-red-400 { color: #C97A6E; }
+.text-red-500 { color: #B34A3F; }
+.text-red-600 { color: #A33A32; }
+.hover\:bg-blue-700:hover { background-color: #74501F; }
+.hover\:bg-indigo-700:hover { background-color: #8A6A3E; }
 
 .bg-\[var\(--dp-surface-2\)\] { background-color: var(--dp-surface-2); }
 .text-\[var\(--dp-text-primary\)\] { color: var(--dp-text-primary); }
@@ -210,8 +210,8 @@
 .border { border-width: 1px; }
 .border-b { border-bottom-width: 1px; }
 .border-dashed { border-style: dashed; }
-.border-blue-100 { border-color: #dbeafe; }
-.border-blue-300 { border-color: #93c5fd; }
+.border-blue-100 { border-color: #E8DAC1; }
+.border-blue-300 { border-color: #D9C3A0; }
 .border-\[var\(--dp-border\)\] { border-color: var(--dp-border); }
 
 /* ── MISC & RESPONSIVE ── */

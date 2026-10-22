@@ -33,9 +33,9 @@ function showToast(message, type = 'info', timeout = 3000) {
   toast.style.minWidth = '220px';
   toast.style.padding = '10px 14px';
   toast.style.borderRadius = '8px';
-  toast.style.background = type === 'error' ? 'rgba(220,38,38,0.95)' : type === 'success' ? 'rgba(16,185,129,0.95)' : 'rgba(17,24,39,0.95)';
+  toast.style.background = type === 'error' ? 'rgba(163,58,50,0.96)' : type === 'success' ? 'rgba(79,122,69,0.96)' : 'rgba(28,27,24,0.96)';
   toast.style.color = 'white';
-  toast.style.boxShadow = '0 8px 20px rgba(2,6,23,0.4)';
+  toast.style.boxShadow = '0 8px 20px rgba(28,27,24,0.35)';
   toast.textContent = message;
   container.appendChild(toast);
   setTimeout(() => {

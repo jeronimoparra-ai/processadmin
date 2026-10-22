@@ -25,7 +25,7 @@
   box-shadow: var(--dp-shadow-xs);
 }
 .btn:hover, .btn-primary:hover, .dp-btn-primary:hover { 
-  background: #1D4ED8; 
+  background: #74501F; 
   transform: translateY(-2px); 
   box-shadow: var(--dp-shadow-md); 
 }
@@ -69,7 +69,7 @@
 .dp-input::placeholder, .dp-textarea::placeholder { color: var(--dp-text-muted); }
 .dp-input:focus, .dp-textarea:focus, .dp-select:focus {
   border-color: var(--dp-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px rgba(140, 100, 48, 0.22);
 }
 .dp-textarea { min-height: 120px; resize: vertical; }
 .dp-textarea.dp-mono { font-family: var(--dp-font-mono); font-size: 13px; line-height: 1.6; }
@@ -176,7 +176,7 @@
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(28, 27, 24, 0.55);
   backdrop-filter: blur(4px);
   align-items: center;
   justify-content: center;
@@ -268,7 +268,7 @@
   overflow: auto;
   border: 1px solid var(--dp-border);
   border-radius: var(--dp-r-md);
-  background: #f1f5f9;
+  background: #F4F0E8;
   padding: 32px;
 }
 
@@ -280,7 +280,7 @@
   border: 1px solid var(--dp-border-strong);
   border-radius: 2px;
   background: #ffffff;
-  color: #111827;
+  color: #3F3B35;
   padding: 40px;
   box-shadow: var(--dp-shadow-lg);
   font-family: "Times New Roman", Times, serif;
@@ -315,7 +315,7 @@
 
 .paper-cover h1 {
     margin: 30px 0 20px;
-    color: #111827;
+    color: #3F3B35;
     font-family: "Times New Roman", Times, serif;
     font-size: 24px;
     line-height: 1.4;
@@ -327,7 +327,7 @@
 .paper-section { margin-top: 24px; }
 .paper-section h2 {
   margin: 0 0 16px;
-  color: #111827;
+  color: #3F3B35;
   font-family: "Times New Roman", Times, serif;
   font-size: 18px;
   line-height: 1.4;

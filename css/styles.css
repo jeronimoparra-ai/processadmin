@@ -4,30 +4,30 @@
 
 :root {
   /* ── Color Palette (Phase 5) ── */
-  --background: #F8FAFC;
-  --surface: #FFFFFF;
-  --primary: #2563EB;
-  --secondary: #14B8A6;
-  --accent: #7C3AED;
-  --success: #22C55E;
-  --warning: #F59E0B;
-  --danger: #EF4444;
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --border: #E2E8F0;
+  --background: #FAF9F6;
+  --surface: #FFFDF9;
+  --primary: #8C6430;
+  --secondary: #6E7F5C;
+  --accent: #A65B3A;
+  --success: #466E3D;
+  --warning: #946017;
+  --danger: #A33A32;
+  --text-primary: #1C1B18;
+  --text-secondary: #5C5650;
+  --border: #E5DED1;
 
   /* Additional Surface/Text steps for depth */
-  --surface-2: #F1F5F9;
-  --surface-3: #E2E8F0;
-  --border-strong: #CBD5E1;
-  --text-muted: #64748B;
-  --text-inverse: #FFFFFF;
+  --surface-2: #F4F0E8;
+  --surface-3: #EAE4D8;
+  --border-strong: #D2C7B4;
+  --text-muted: #8A8175;
+  --text-inverse: #FFFDF9;
   
   /* ── Sidebar ── */
-  --sidebar-bg: #0F172A;
-  --sidebar-text: #94A3B8;
-  --sidebar-active: rgba(255, 255, 255, 0.08);
-  --sidebar-mark: var(--primary);
+  --sidebar-bg: #1C1B18;
+  --sidebar-text: #B7AE9F;
+  --sidebar-active: rgba(201, 169, 110, 0.14);
+  --sidebar-mark: #C9A96E;
   --sidebar-width: 260px;
 
   /* ── Typography (Phase 9) ── */

@@ -99,7 +99,7 @@ Dependencias CDN:
 
 | Rol | Color | HEX |
 |---|---|---|
-| Fondo | Slate claro | `#F8FAFC` |
+| Fondo | Hueso | `#FAF9F6` |
 | Superficie | Blanco | `#FFFFFF` |
 | Primario | Azul | `#2563EB` |
 | Secundario | Teal | `#14B8A6` |

@@ -247,10 +247,10 @@ function updateScoreVisuals(score) {
   }
   card.className = 'dp-card dp-stat p-10 text-center';
   card.style.background = bgClass === 'from-green-50 to-green-100'
-    ? 'linear-gradient(180deg, #f0faf4 0%, #e7f7ee 100%)'
+    ? 'linear-gradient(180deg, #F1F5EA 0%, #E4EDDA 100%)'
     : bgClass === 'from-amber-50 to-amber-100'
-      ? 'linear-gradient(180deg, #fdf6eb 0%, #fbefcf 100%)'
-      : 'linear-gradient(180deg, #fdf0ef 0%, #f9e4e1 100%)';
+      ? 'linear-gradient(180deg, #FBF2E1 0%, #F4E3C4 100%)'
+      : 'linear-gradient(180deg, #FAE9E5 0%, #F3D6D0 100%)';
   card.style.borderColor = borderClass.includes('border-green-500')
     ? 'var(--dp-success-border)'
     : borderClass.includes('border-amber-600')
