@@ -9,31 +9,62 @@ function loadDocumentHistory() {
 }
 
 function saveDocumentHistory(history) {
-  saveJSON(DOCUMENT_HISTORY_KEY, history);
+  if (!saveJSON(DOCUMENT_HISTORY_KEY, history)) {
+    showToast('No se pudo guardar el historial en este navegador.', 'error');
+    return false;
+  }
   updateSavedDocumentCounter();
+  return true;
 }
 
-function createDocumentHistorySnapshot(data, snapshot = {}) {
+function createDocumentHistorySnapshot(data, snapshot = buildExportSnapshot()) {
   return {
     id: crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
     title: data.titulo || data.curso || data.nombre || 'Documento sin título',
     savedAt: new Date().toISOString(),
     data: { ...data },
-    snapshot: {
-      redactorContent: snapshot.redactorContent ?? safeStorageGet('redactor_content', ''),
-      organizerOutline: snapshot.organizerOutline ?? loadJSON('organizer_outline', {}),
-      generatedCitations: snapshot.generatedCitations ?? [...window.state.generatedCitations].map(ref => ref.replace(/<\/?em>/g, '')),
-      exportFormatProfile: snapshot.exportFormatProfile ?? window.state.exportFormatProfile ?? null
-    }
+    snapshot: { ...snapshot }
   };
 }
 
-function addDocumentHistoryEntry(data, snapshot = {}) {
+function addDocumentHistoryEntry(data, snapshot = buildExportSnapshot()) {
   const history = loadDocumentHistory();
   const entry = createDocumentHistorySnapshot(data, snapshot);
   history.unshift(entry);
   saveDocumentHistory(history.slice(0, 12));
   return entry;
+}
+
+function readHistorySnapshot(entry) {
+  const snapshot = entry.snapshot || {};
+  return {
+    redactorContent: snapshot.redactorContent ?? '',
+    organizerOutline: snapshot.organizerOutline || {},
+    generatedCitations: snapshot.generatedCitations || [],
+    documentStructureParts: snapshot.documentStructureParts ?? snapshot.exportFormatProfile?.structureParts ?? [],
+    exportFormatProfile: snapshot.exportFormatProfile || null,
+    checklistDeadline: snapshot.checklistDeadline || '',
+    exportDate: snapshot.exportDate || entry.savedAt
+  };
+}
+
+function openHistoryDocument(entry) {
+  if (!guardPendingFields()) return;
+  const snapshot = readHistorySnapshot(entry);
+  const fields = {
+    export_student_data: JSON.stringify(entry.data || {}),
+    redactor_content: snapshot.redactorContent,
+    organizer_outline: JSON.stringify(snapshot.organizerOutline),
+    ws_document_type: snapshot.organizerOutline.type || 'investigacion',
+    apa_generated_citations: JSON.stringify(snapshot.generatedCitations),
+    ws_document_structure_parts: JSON.stringify(snapshot.documentStructureParts),
+    export_format_profile: JSON.stringify(snapshot.exportFormatProfile),
+    checklist_deadline: snapshot.checklistDeadline,
+    history_export_date: snapshot.exportDate || ''
+  };
+  const id = createProject(`${entry.title || 'Documento'} (copia)`, fields);
+  if (id) openProject(id, 'exportar');
+  else showToast('No se pudo guardar la copia en este navegador.', 'error');
 }
 
 function removeDocumentHistoryEntry(entryId) {
@@ -151,7 +182,7 @@ function calculateQualityMetrics() {
   const rubric = loadJSON('rubrica_current', []);
   const exportData = loadJSON('export_student_data', {});
   const apaSources = loadJSON('apa_sources', []);
-  const citations = loadJSON('apa_generated_citations', (typeof state !== 'undefined' && state.generatedCitations) || []);
+  const citations = window.state.generatedCitations;
   const redactorText = safeStorageGet('redactor_content', '');
   const inTextCitations = [...redactorText.matchAll(/\(([^)]+)\)/g)].length;
 

@@ -3,9 +3,10 @@
 // ═══════════════════════════════════════════════════════════════════════
 
 function debounce(fn, delay) {
+  let timer;
   return function(...args) {
-    clearTimeout(window.state.saveTimer);
-    window.state.saveTimer = setTimeout(() => fn(...args), delay);
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
   };
 }
 

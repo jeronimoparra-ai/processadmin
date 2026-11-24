@@ -1,0 +1,325 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * Antigravity / PRISM — Academic Suite Styles (APMS V2)
+ * Features: Planner, Library, Studio, Review, Publishing
+ * Dirección Artística: Editorial académico contemporáneo, cálido,
+ *                      profesional, minimalista. WCAG 2.2 AA.
+ * ═══════════════════════════════════════════════════════════════════
+ */
+
+/* ── Contenedor Principal del Espacio Académico ── */
+.academic {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 24px);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-2, 8px) var(--space-4, 16px) var(--space-12, 48px);
+  color: var(--color-ink, #1C1B18);
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+}
+
+/* ── Barra de Flujo y Rutas Académicas (Breadcrumb / Stepper) ── */
+.academic > nav.academic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  padding: var(--space-2, 8px) var(--space-3, 12px);
+  background: var(--color-surface, #FFFDF9);
+  border: 1px solid var(--color-border, #E5DED1);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-xs);
+}
+
+.academic > nav.academic-actions .dp-btn {
+  font-size: var(--font-size-sm, 13.5px);
+  font-weight: 500;
+  color: var(--color-ink-secondary, #524C44);
+  background: transparent;
+  border: 1px solid transparent;
+  padding: var(--space-2, 8px) var(--space-4, 16px);
+  border-radius: var(--radius-md, 8px);
+  transition: all var(--t-fast);
+}
+
+.academic > nav.academic-actions .dp-btn:hover {
+  background: var(--color-surface-subtle, #F5F1E9);
+  color: var(--color-ink, #1C1B18);
+  border-color: var(--color-border, #E5DED1);
+}
+
+.academic > nav.academic-actions .dp-btn[aria-current="page"],
+.academic [aria-current="page"] {
+  background: var(--color-bronze-light, #F7F1E8) !important;
+  color: var(--color-bronze-dark, #704E24) !important;
+  font-weight: 700 !important;
+  border-color: var(--color-bronze-border, #DFCBB4) !important;
+  box-shadow: 0 1px 2px rgba(140, 100, 48, 0.08);
+  outline: none;
+}
+
+/* ── Controles de Contexto (Proyecto, Curso, Documento, Sección) ── */
+.academic > div.academic-actions:not(nav) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4, 16px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  background: var(--color-surface-subtle, #F5F1E9);
+  border: 1px solid var(--color-border, #E5DED1);
+  border-radius: var(--radius-md, 8px);
+}
+
+.academic label, .academic-dialog label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1-5, 6px);
+  font-size: var(--font-size-xs, 12px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-muted, #7E766B);
+}
+
+.academic-actions select,
+.academic-actions input,
+.academic-actions .dp-select,
+.academic-actions .dp-input {
+  min-width: 180px;
+  max-width: 100%;
+}
+
+/* ── Tarjetas y Paneles Académicos ── */
+.academic-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+  background: var(--color-surface, #FFFDF9);
+  border: 1px solid var(--color-border, #E5DED1);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--space-6, 24px);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+
+.academic-card:hover {
+  border-color: var(--color-border-strong, #CEBEA8);
+}
+
+.academic-card .dp-card-title,
+.academic h2 {
+  font-family: var(--font-serif, 'Lora', serif);
+  font-size: var(--font-size-xl, 24px);
+  font-weight: 700;
+  color: var(--color-ink, #1C1B18);
+  letter-spacing: -0.015em;
+  margin: 0;
+  padding-bottom: var(--space-2, 8px);
+  border-bottom: 1px solid var(--color-border-subtle, #EFEAE0);
+}
+
+.academic h3 {
+  font-family: var(--font-serif, 'Lora', serif);
+  font-size: var(--font-size-lg, 20px);
+  font-weight: 600;
+  color: var(--color-ink, #1C1B18);
+  margin-top: var(--space-4, 16px);
+  margin-bottom: var(--space-2, 8px);
+}
+
+.academic h4 {
+  font-size: var(--font-size-md, 17px);
+  font-weight: 600;
+  color: var(--color-ink-secondary, #524C44);
+  margin-top: var(--space-3, 12px);
+}
+
+.academic p {
+  color: var(--color-ink-secondary, #524C44);
+  font-size: var(--font-size-base, 15px);
+  line-height: var(--line-height-normal, 1.55);
+  margin: 0;
+}
+
+/* ── Botones y Acciones ── */
+.academic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3, 12px);
+}
+
+.academic-actions > .dp-btn {
+  box-shadow: var(--shadow-xs);
+}
+
+/* ── Estudio de Escritura (Writing Studio) ── */
+.academic-card textarea.dp-textarea {
+  min-height: 380px;
+  background: var(--color-surface, #FFFDF9);
+  color: var(--color-ink, #1C1B18);
+  font-family: var(--font-serif, 'Lora', Georgia, serif);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  padding: var(--space-6, 24px);
+  border: 1px solid var(--color-border, #E5DED1);
+  border-radius: var(--radius-md, 8px);
+  resize: vertical;
+  box-shadow: inset 0 1px 3px rgba(28, 27, 24, 0.03);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+
+.academic-card textarea.dp-textarea:focus {
+  outline: none;
+  border-color: var(--color-bronze, #8C6430);
+  box-shadow: var(--focus-ring);
+}
+
+.academic-card output {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+  font-size: var(--font-size-xs, 12px);
+  font-family: var(--font-mono, monospace);
+  color: var(--color-ink-muted, #7E766B);
+  background: var(--color-surface-subtle, #F5F1E9);
+  padding: var(--space-1, 4px) var(--space-3, 12px);
+  border-radius: var(--radius-pill, 9999px);
+  border: 1px solid var(--color-border, #E5DED1);
+  width: fit-content;
+}
+
+.academic [role="status"] {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-size-xs, 12px);
+  font-weight: 600;
+  padding: var(--space-1, 4px) var(--space-3, 12px);
+  border-radius: var(--radius-pill, 9999px);
+  background: var(--color-bronze-light, #F7F1E8);
+  color: var(--color-bronze-dark, #704E24);
+  border: 1px solid var(--color-bronze-border, #DFCBB4);
+}
+
+/* Modo concentración */
+.academic-focus > :not(.academic-card),
+.academic-focus > .academic-card:last-child {
+  display: none !important;
+}
+
+.academic-focus textarea {
+  min-height: 68vh !important;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+/* ── Biblioteca de Investigación (Library) ── */
+.academic blockquote {
+  position: relative;
+  margin: var(--space-2, 8px) 0;
+  padding: var(--space-3, 12px) var(--space-5, 20px);
+  background: var(--color-surface-subtle, #F5F1E9);
+  border-left: 3px solid var(--color-bronze, #8C6430);
+  border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+  font-family: var(--font-serif, 'Lora', Georgia, serif);
+  font-style: italic;
+  font-size: var(--font-size-base, 15px);
+  color: var(--color-ink, #1C1B18);
+  line-height: var(--line-height-normal, 1.55);
+}
+
+.academic a {
+  color: var(--color-bronze-dark, #704E24);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+}
+
+.academic a:hover {
+  color: var(--color-bronze, #8C6430);
+}
+
+/* ── Centro de Revisión (Review Center) ── */
+.academic-finding-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4, 16px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  background: var(--color-surface, #FFFDF9);
+  border: 1px solid var(--color-border, #E5DED1);
+  border-left: 4px solid var(--color-terracotta, #A65B3A);
+  border-radius: var(--radius-md, 8px);
+}
+
+/* ── Estudio de Publicación (Publishing & Preview) ── */
+.academic table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: var(--space-4, 16px) 0;
+  font-size: var(--font-size-sm, 13.5px);
+  border: 1px solid var(--color-border, #E5DED1);
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+}
+
+.academic th, .academic td {
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  border-bottom: 1px solid var(--color-border-subtle, #EFEAE0);
+  text-align: left;
+}
+
+.academic tr:last-child td {
+  border-bottom: none;
+}
+
+.academic th {
+  background: var(--color-surface-subtle, #F5F1E9);
+  font-weight: 600;
+  color: var(--color-ink, #1C1B18);
+}
+
+.academic code {
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-xs, 12px);
+  background: var(--color-surface-subtle, #F5F1E9);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs, 4px);
+  border: 1px solid var(--color-border, #E5DED1);
+  color: var(--color-ink-secondary, #524C44);
+}
+
+/* ── Diálogos y Modales Accesibles ── */
+.academic-dialog {
+  margin: auto;
+  width: min(34rem, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--color-surface, #FFFDF9);
+  border: 1px solid var(--color-border-strong, #CEBEA8);
+  border-radius: var(--radius-xl, 16px);
+  padding: var(--space-6, 24px);
+  box-shadow: var(--shadow-xl);
+}
+
+.academic-dialog::backdrop {
+  background: rgba(28, 27, 24, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.academic-dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
+}
+
+.academic-dialog form .dp-card-title {
+  font-family: var(--font-serif, 'Lora', serif);
+  font-size: var(--font-size-xl, 24px);
+  font-weight: 700;
+  margin-bottom: var(--space-2, 8px);
+  padding-bottom: var(--space-2, 8px);
+  border-bottom: 1px solid var(--color-border-subtle, #EFEAE0);
+}

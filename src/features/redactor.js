@@ -221,12 +221,11 @@ function buildRedactorEnhanced() {
     document.getElementById('char-count').textContent = chars;
     document.getElementById('para-count').textContent = paras;
 
-    saveField('redactor_content', text);
     renderWarnings();
   }
 
   function syncFocusMode(enable) {
-    state.focusMode = enable;
+    window.state.focusMode = enable;
     sidePanels.classList.toggle('hidden', enable);
     editorPanel.classList.toggle('lg:col-span-8', !enable);
     editorPanel.classList.toggle('lg:col-span-12', enable);
@@ -241,7 +240,10 @@ function buildRedactorEnhanced() {
   updateCounters();
   syncFocusMode(false);
 
-  textarea.addEventListener('input', updateCounters);
+  textarea.addEventListener('input', () => {
+    saveField('redactor_content', textarea.value);
+    updateCounters();
+  });
   workTypeSelect.addEventListener('change', () => {
     safeStorageSet('ws_document_type', workTypeSelect.value);
     renderGuide();
@@ -250,6 +252,7 @@ function buildRedactorEnhanced() {
 
   document.getElementById('save-redactor-btn').addEventListener('click', () => {
     saveField('redactor_content', textarea.value);
+    if (!guardPendingFields()) return;
     const btn = document.getElementById('save-redactor-btn');
     btn.textContent = 'Guardado';
     setTimeout(() => {
@@ -258,7 +261,7 @@ function buildRedactorEnhanced() {
   });
 
   document.getElementById('focus-mode-btn').addEventListener('click', () => {
-    syncFocusMode(!state.focusMode);
+    syncFocusMode(!window.state.focusMode);
   });
 
   document.querySelectorAll('.copy-connector').forEach(btn => {

@@ -1,236 +1,774 @@
-/* ═══════════════════════════════════════════════════════════════════
-   STYLES.CSS — ProcessAdmin Design System Foundation (Base & Variables)
-   ═══════════════════════════════════════════════════════════════════ */
+/* =============================================================================
+   STYLES.CSS — ProcessAdmin Design System Foundation
+   Rediseño UI/UX Integral - Antigravity/PRISM
+   =============================================================================
+   
+   Sistema visual editorial académico contemporáneo, cálido, profesional, minimalista.
+   Paleta: Papel #FAF9F6, Superficie #FFFDF9, Bronce #8C6430, Oliva #6E7F5C, 
+   Terracota #A65B3A, Tinta #1C1B18
+   
+   ============================================================================= */
+
+/* =============================================================================
+   IMPORT TOKENS
+   ============================================================================= */
+
+/* Los tokens se importan desde assets/tokens.css */
+
+/* =============================================================================
+   ROOT VARIABLES - Legacy Support & Aliases
+   ============================================================================= */
 
 :root {
-  /* ── Color Palette (Phase 5) ── */
-  --background: #FAF9F6;
-  --surface: #FFFDF9;
-  --primary: #8C6430;
-  --secondary: #6E7F5C;
-  --accent: #A65B3A;
-  --success: #466E3D;
-  --warning: #946017;
-  --danger: #A33A32;
-  --text-primary: #1C1B18;
-  --text-secondary: #5C5650;
-  --border: #E5DED1;
-
-  /* Additional Surface/Text steps for depth */
-  --surface-2: #F4F0E8;
-  --surface-3: #EAE4D8;
-  --border-strong: #D2C7B4;
-  --text-muted: #8A8175;
-  --text-inverse: #FFFDF9;
+  /* Legacy color aliases for backward compatibility */
+  --dp-bg: var(--color-bg-primary);
+  --dp-surface: var(--color-bg-secondary);
+  --dp-surface-2: var(--color-bg-tertiary);
+  --dp-surface-3: var(--color-superficie-3);
   
-  /* ── Sidebar ── */
-  --sidebar-bg: #1C1B18;
-  --sidebar-text: #B7AE9F;
-  --sidebar-active: rgba(201, 169, 110, 0.14);
-  --sidebar-mark: #C9A96E;
-  --sidebar-width: 260px;
-
-  /* ── Typography (Phase 9) ── */
-  --font-sans: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Lora', Georgia, serif;
-  --font-mono: 'JetBrains Mono', monospace;
-
-  /* Fluid Type Scale (clamp) */
-  --text-xs: clamp(0.70rem, 0.68rem + 0.10vw, 0.75rem); /* 11px - 12px */
-  --text-sm: clamp(0.80rem, 0.76rem + 0.20vw, 0.875rem); /* 13px - 14px */
-  --text-base: clamp(0.90rem, 0.85rem + 0.25vw, 1rem); /* 14px - 16px */
-  --text-lg: clamp(1.05rem, 0.98rem + 0.35vw, 1.125rem); /* 16px - 18px */
-  --text-xl: clamp(1.20rem, 1.10rem + 0.5vw, 1.5rem); /* 20px - 24px */
-  --text-2xl: clamp(1.40rem, 1.25rem + 0.75vw, 2rem); /* 24px - 32px */
-  --text-3xl: clamp(1.75rem, 1.50rem + 1.25vw, 2.5rem); /* 28px - 40px */
-  --text-4xl: clamp(2.25rem, 2.00rem + 1.5vw, 3rem); /* 36px - 48px */
-
-  /* ── Spacing ── */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-7: 32px;
-  --space-8: 40px;
-  --space-12: 60px;
-  --space-16: 80px;
-
-  /* ── Shadows ── */
-  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-  --shadow-sm: 0 2px 4px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 6px 12px -2px rgba(15, 23, 42, 0.06), 0 3px 6px -3px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 6px 12px -6px rgba(15, 23, 42, 0.04);
-  --shadow-xl: 0 24px 48px -6px rgba(15, 23, 42, 0.1), 0 12px 24px -8px rgba(15, 23, 42, 0.04);
-
-  /* ── Radius ── */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 24px;
-  --radius-full: 9999px;
-
-  /* ── Transitions ── */
-  --t-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --t-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  --t-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
-  --t-bounce: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  /* ── DP Compat Aliases ── */
-  --dp-bg: var(--background);
-  --dp-surface: var(--surface);
-  --dp-surface-2: var(--surface-2);
-  --dp-surface-3: var(--surface-3);
-  --dp-border: var(--border);
-  --dp-border-strong: var(--border-strong);
-
   --dp-sidebar-bg: var(--sidebar-bg);
   --dp-sidebar-text: var(--sidebar-text);
-  --dp-sidebar-active: var(--sidebar-active);
-  --dp-sidebar-mark: var(--sidebar-mark);
-
-  --dp-text-primary: var(--text-primary);
-  --dp-text-secondary: var(--text-secondary);
-  --dp-text-muted: var(--text-muted);
-  --dp-text-inverse: var(--text-inverse);
-
-  --dp-primary: var(--primary);
-  --dp-accent: var(--accent);
-  --dp-accent-dark: #6D28D9;
-  --dp-accent-light: #EDE9FE;
-  --dp-accent-glow: rgba(124, 58, 237, 0.12);
-  --dp-accent-border: #C4B5FD;
+  --dp-sidebar-active: var(--sidebar-active-bg);
+  --dp-sidebar-mark: var(--color-bronce-light);
   
-  --dp-teal: var(--secondary);
-  --dp-teal-dark: #0F766E;
-  --dp-teal-light: #CCFBF1;
-  --dp-teal-border: #99F6E4;
-
-  --dp-success: var(--success);
-  --dp-success-bg: #DCFCE7;
-  --dp-success-border: #86EFAC;
-  --dp-warning: var(--warning);
-  --dp-warning-bg: #FEF3C7;
-  --dp-warning-border: #FDE68A;
-  --dp-danger: var(--danger);
-  --dp-danger-bg: #FEE2E2;
-  --dp-danger-border: #FECACA;
-  --dp-info: var(--primary);
-  --dp-info-bg: #DBEAFE;
-  --dp-info-border: #BFDBFE;
-
-  --dp-font-sans: var(--font-sans);
-  --dp-font-serif: var(--font-serif);
-  --dp-font-mono: var(--font-mono);
-
-  --dp-shadow-xs: var(--shadow-xs);
-  --dp-shadow-sm: var(--shadow-sm);
-  --dp-shadow-md: var(--shadow-md);
-  --dp-shadow-lg: var(--shadow-lg);
-  --dp-shadow-xl: var(--shadow-xl);
-
+  --dp-text-primary: var(--color-text-primary);
+  --dp-text-secondary: var(--color-text-secondary);
+  --dp-text-muted: var(--color-text-muted);
+  --dp-text-inverse: var(--color-text-inverse);
+  
+  /* Primary accent colors */
+  --dp-primary: var(--color-bronce);
+  --dp-accent: var(--color-terracota);
+  --dp-accent-dark: var(--color-terracota-dark);
+  --dp-accent-light: var(--color-terracota-light);
+  --dp-accent-glow: var(--color-terracota-subtle);
+  --dp-accent-border: var(--color-terracota-light);
+  
+  /* Secondary colors */
+  --dp-teal: var(--color-oliva);
+  --dp-teal-dark: var(--color-oliva-dark);
+  --dp-teal-light: var(--color-oliva-light);
+  --dp-teal-border: var(--color-oliva-light);
+  
+  /* Semantic colors */
+  --dp-success: var(--color-success);
+  --dp-success-bg: var(--color-success-light);
+  --dp-success-border: var(--color-success-border);
+  --dp-warning: var(--color-warning);
+  --dp-warning-bg: var(--color-warning-light);
+  --dp-warning-border: var(--color-warning-border);
+  --dp-danger: var(--color-danger);
+  --dp-danger-bg: var(--color-danger-light);
+  --dp-danger-border: var(--color-danger-border);
+  --dp-info: var(--color-info);
+  --dp-info-bg: var(--color-info-light);
+  --dp-info-border: var(--color-info-border);
+  
+  /* Border colors */
+  --dp-border: var(--color-border);
+  --dp-border-strong: var(--color-border-strong);
+  
+  /* Typography */
+  --dp-font-sans: var(--font-family-sans);
+  --dp-font-serif: var(--font-family-serif);
+  --dp-font-mono: var(--font-family-mono);
+  
+  /* Text sizes (fluid scale) */
+  --text-xs: var(--font-size-xs);
+  --text-sm: var(--font-size-sm);
+  --text-base: var(--font-size-base);
+  --text-lg: var(--font-size-lg);
+  --text-xl: var(--font-size-xl);
+  --text-2xl: var(--font-size-2xl);
+  --text-3xl: var(--font-size-3xl);
+  --text-4xl: var(--font-size-4xl);
+  
+  /* Spacing */
+  --sp-1: var(--spacing-1);
+  --sp-2: var(--spacing-2);
+  --sp-3: var(--spacing-3);
+  --sp-4: var(--spacing-4);
+  --sp-5: var(--spacing-5);
+  --sp-6: var(--spacing-6);
+  --sp-8: var(--spacing-8);
+  --sp-12: var(--spacing-12);
+  --sp-16: var(--spacing-16);
+  
+  /* Radius */
   --dp-r-xs: var(--radius-xs);
   --dp-r-sm: var(--radius-sm);
   --dp-r-md: var(--radius-md);
   --dp-r-lg: var(--radius-lg);
   --dp-r-xl: var(--radius-xl);
+  --dp-r-2xl: var(--radius-2xl);
   --dp-r-full: var(--radius-full);
-
-  --dp-t-fast: var(--t-fast);
-  --dp-t-normal: var(--t-normal);
-  --dp-t-slow: var(--t-slow);
+  
+  /* Shadows */
+  --dp-shadow-xs: var(--shadow-xs);
+  --dp-shadow-sm: var(--shadow-sm);
+  --dp-shadow-md: var(--shadow-md);
+  --dp-shadow-lg: var(--shadow-lg);
+  --dp-shadow-xl: var(--shadow-xl);
+  
+  /* Transitions */
+  --dp-t-fast: var(--transition-fast);
+  --dp-t-normal: var(--transition-normal);
+  --dp-t-slow: var(--transition-slow);
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   RESET & BASE
-   ═══════════════════════════════════════════════════════════════════ */
+/* =============================================================================
+   CSS CUSTOM PROPERTIES FOR DYNAMIC THEMING
+   ============================================================================= */
 
-*, *::before, *::after { box-sizing: border-box; }
+/* Define CSS custom properties that can be used in JavaScript */
+:root {
+  --prism-color-papel: var(--color-papel);
+  --prism-color-superficie: var(--color-superficie);
+  --prism-color-bronce: var(--color-bronce);
+  --prism-color-oliva: var(--color-oliva);
+  --prism-color-terracota: var(--color-terracota);
+  --prism-color-tinta: var(--color-tinta);
+}
+
+/* =============================================================================
+   RESET & BASE STYLES
+   ============================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 html {
   scrollbar-width: thin;
-  scrollbar-color: var(--dp-border-strong) transparent;
+  scrollbar-color: var(--color-border-strong) transparent;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 body {
   margin: 0;
-  font-family: var(--dp-font-sans);
-  font-size: var(--text-base);
-  background: var(--dp-bg);
-  color: var(--dp-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  line-height: 1.5;
+  line-height: var(--line-height-normal);
 }
 
+/* Skip link for accessibility */
 .skip-link {
   position: absolute;
-  left: 16px;
-  top: 10px;
+  left: var(--spacing-4);
+  top: var(--spacing-2);
   z-index: 100;
-  padding: 10px 14px;
-  border-radius: var(--dp-r-sm);
-  background: var(--dp-text-primary);
-  color: var(--dp-text-inverse);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
   transform: translateY(-180%);
-  transition: transform var(--dp-t-fast);
+  transition: transform var(--transition-fast);
   text-decoration: none;
-  font-size: var(--text-sm);
-  font-weight: 600;
-}
-.skip-link:focus { transform: translateY(0); }
-
-h1, h2, h3, h4 {
-  font-family: var(--dp-font-sans);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--dp-text-primary);
-  line-height: 1.25;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
 }
 
-img, svg, video, canvas { max-width: 100%; height: auto; }
+.skip-link:focus {
+  transform: translateY(0);
+}
 
+/* Typography hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+  margin: 0 0 var(--spacing-4);
+}
+
+h2 {
+  font-size: var(--font-size-3xl);
+  margin: 0 0 var(--spacing-4);
+}
+
+h3 {
+  font-size: var(--font-size-2xl);
+  margin: 0 0 var(--spacing-3);
+}
+
+h4 {
+  font-size: var(--font-size-xl);
+  margin: 0 0 var(--spacing-2);
+}
+
+h5 {
+  font-size: var(--font-size-lg);
+  margin: 0 0 var(--spacing-2);
+}
+
+h6 {
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--spacing-2);
+}
+
+p {
+  margin: 0 0 var(--paragraph-spacing);
+  color: var(--color-text-secondary);
+}
+
+a {
+  color: var(--color-text-link);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-text-link-hover);
+  text-decoration: underline;
+}
+
+/* Code blocks */
+code, pre {
+  font-family: var(--font-family-mono);
+}
+
+code {
+  background: var(--color-superficie-2);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-xs);
+  font-size: 0.85em;
+  color: var(--color-terracota);
+}
+
+pre {
+  background: var(--color-superficie-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+  overflow-x: auto;
+  margin: var(--spacing-4) 0;
+}
+
+/* Images and media */
+img, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Form elements reset */
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Remove default focus outline (we'll add custom one) */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+/* Custom focus styles */
+:where(button, [role="button"], input, textarea, select, a, [tabindex]):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 4px var(--focus-ring-color);
+  opacity: var(--opacity-100);
+}
+
+/* Selection */
 ::selection {
-  background: var(--dp-accent-light);
-  color: var(--dp-accent-dark);
+  background: var(--color-bronce-subtle);
+  color: var(--color-text-primary);
 }
 
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-moz-selection {
+  background: var(--color-bronce-subtle);
+  color: var(--color-text-primary);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 ::-webkit-scrollbar-thumb {
-  background: var(--dp-border-strong);
-  border-radius: var(--dp-r-full);
+  background: var(--color-border-strong);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
 }
 
-:where(button, [role='button'], input, textarea, select, a, [tabindex]):focus-visible {
-  outline: 2px solid var(--dp-accent);
-  outline-offset: 2px;
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-tinta-muted);
 }
 
+/* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  
+  /* Replace scrollbar animations */
+  html {
+    scroll-behavior: auto;
+  }
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-    ANIMATIONS
-    ═══════════════════════════════════════════════════════════════════ */
-
-@keyframes dpFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: var(--color-text-primary);
+  }
+  
+  button,
+  input,
+  textarea,
+  select {
+    border-width: 2px;
+  }
 }
 
-.dp-view { animation: dpFadeIn var(--dp-t-normal) both; }
-.dp-stagger > * { animation: dpFadeIn var(--dp-t-normal) both; }
+/* =============================================================================
+   ANIMATIONS & KEYFRAMES
+   ============================================================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--spacing-1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(var(--spacing-4));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--spacing-4)));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(var(--spacing-8));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--spacing-8)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Animation utilities */
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--transition-normal) ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--transition-normal) ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--transition-normal) ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Staggered animations */
+.dp-stagger > * {
+  opacity: 0;
+  animation: fadeInUp var(--transition-normal) ease-out forwards;
+}
+
 .dp-stagger > *:nth-child(1) { animation-delay: 0ms; }
 .dp-stagger > *:nth-child(2) { animation-delay: 50ms; }
 .dp-stagger > *:nth-child(3) { animation-delay: 100ms; }
 .dp-stagger > *:nth-child(4) { animation-delay: 150ms; }
 .dp-stagger > *:nth-child(5) { animation-delay: 200ms; }
+.dp-stagger > *:nth-child(6) { animation-delay: 250ms; }
+.dp-stagger > *:nth-child(7) { animation-delay: 300ms; }
+.dp-stagger > *:nth-child(8) { animation-delay: 350ms; }
+
+/* =============================================================================
+   PRINT STYLES
+   ============================================================================= */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .side-panel,
+  .workspace-header,
+  .modal-backdrop,
+  .sidebar-toggle-btn,
+  .nav-btn {
+    display: none !important;
+  }
+  
+  .main-area {
+    padding: 0;
+  }
+  
+  .content-area {
+    padding: 0;
+  }
+  
+  /* Force text to be black for printing */
+  * {
+    color: #000000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+  
+  pre {
+    background: #f5f5f5 !important;
+    border: 1px solid #ddd !important;
+    page-break-inside: avoid;
+  }
+  
+  table {
+    page-break-inside: auto;
+  }
+  
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+}
+
+/* =============================================================================
+   PWA/OFFLINE INDICATOR STYLES
+   ============================================================================= */
+
+.offline-indicator {
+  position: fixed;
+  bottom: var(--spacing-4);
+  right: var(--spacing-4);
+  z-index: var(--z-toast);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--offline-indicator-bg);
+  border: 1px solid var(--offline-indicator-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--offline-indicator-text);
+  animation: slideInRight var(--transition-normal);
+}
+
+.offline-indicator.hidden {
+  display: none;
+}
+
+.offline-indicator-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.install-prompt {
+  position: fixed;
+  bottom: var(--spacing-4);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  padding: var(--spacing-4) var(--spacing-6);
+  background: var(--install-prompt-bg);
+  border: 1px solid var(--install-prompt-border);
+  border-radius: var(--install-prompt-radius);
+  box-shadow: var(--install-prompt-shadow);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  animation: slideInRight var(--transition-normal);
+}
+
+.install-prompt.hidden {
+  display: none;
+}
+
+.install-prompt-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.install-prompt button {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* =============================================================================
+   LOADING STATES
+   ============================================================================= */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-superficie-3) 25%,
+    var(--color-superficie-2) 50%,
+    var(--color-superficie-3) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: var(--spacing-2);
+}
+
+.skeleton-title {
+  height: 1.5em;
+  width: 60%;
+  margin-bottom: var(--spacing-3);
+}
+
+.skeleton-paragraph {
+  height: 1em;
+  margin-bottom: var(--spacing-2);
+}
+
+.skeleton-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+}
+
+.skeleton-rectangle {
+  width: 100%;
+  height: 120px;
+  border-radius: var(--radius-md);
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 27, 24, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-max);
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--color-border);
+  border-top-color: var(--color-bronce);
+  border-radius: var(--radius-full);
+  animation: spin 0.8s linear infinite;
+}
+
+/* =============================================================================
+   TOOLTIP STYLES
+   ============================================================================= */
+
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-var(--spacing-2));
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--tooltip-bg);
+  color: var(--tooltip-text);
+  border-radius: var(--tooltip-radius);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  box-shadow: var(--tooltip-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast),
+    transform var(--transition-fast);
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-var(--spacing-1));
+}
+
+[data-tooltip-top]::after {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-var(--spacing-2));
+}
+
+[data-tooltip-bottom]::after {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--spacing-2));
+}
+
+[data-tooltip-left]::after {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-var(--spacing-2));
+}
+
+[data-tooltip-right]::after {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) translateX(var(--spacing-2));
+}
+
+/* =============================================================================
+   SAFE AREA INSET FOR MOBILE
+   ============================================================================= */
+
+@supports (padding: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}

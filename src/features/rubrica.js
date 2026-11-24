@@ -4,8 +4,8 @@
 
 function buildRubricaRebuilt() {
   const baseTemplates = RUBRIC_TEMPLATES_BASE;
-  const savedTemplates = state.rubricTemplates || {};
-  let criteria = Array.isArray(state.currentRubric) ? state.currentRubric : [];
+  const savedTemplates = window.state.rubricTemplates || {};
+  let criteria = Array.isArray(window.state.currentRubric) ? window.state.currentRubric : [];
   // If no rubric is loaded, suggest a template based on the unified work type selection
   if ((!criteria || criteria.length === 0) && typeof safeStorageGet === 'function') {
     const preferredType = safeStorageGet('ws_document_type', null);
@@ -109,7 +109,7 @@ function buildRubricaRebuilt() {
   stopCountdown();
 
   function persistRubric() {
-    state.currentRubric = criteria;
+    window.state.currentRubric = criteria;
     saveJSON('rubrica_current', criteria);
   }
 
@@ -154,6 +154,13 @@ function buildRubricaRebuilt() {
     const max = Math.max(parseInt(criterion.max, 10) || 0, 1);
     const obtained = Math.min(Math.max(parseInt(criterion.obtained, 10) || 0, 0), max);
     return { ...criterion, id, name, max, obtained };
+  }
+
+  if (typeof Chart === 'undefined') {
+    const canvas = document.getElementById('rubrica-chart');
+    document.getElementById('local-chart')?.addEventListener('load', () => {
+      if (canvas?.isConnected) renderRubricaChart();
+    }, { once: true });
   }
 
   function destroyRubricaChart() {
@@ -363,8 +370,8 @@ function buildRubricaRebuilt() {
       return;
     }
 
-    state.rubricTemplates[name] = criteria.map(item => ({ name: item.name, max: item.max }));
-    saveJSON('rubrica_templates', state.rubricTemplates);
+    window.state.rubricTemplates[name] = criteria.map(item => ({ name: item.name, max: item.max }));
+    saveJSON('rubrica_templates', window.state.rubricTemplates);
     document.getElementById('template-name').value = '';
 
     const select = document.getElementById('select-plantilla');

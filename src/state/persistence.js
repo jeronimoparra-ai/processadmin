@@ -29,9 +29,52 @@ function validateStoredValue(value, fallback) {
   return value ?? fallback;
 }
 
+const projectNamePrefix = 'processadmin:project-name:';
+const defaultProjectId = 'principal';
+const requestedProjectId = new URLSearchParams(location.search).get('project');
+const activeProjectId = requestedProjectId && listProjects().some(project => project.id === requestedProjectId)
+  ? requestedProjectId
+  : defaultProjectId;
+
+function listProjects() {
+  const projects = [{ id: defaultProjectId, name: 'Proyecto principal' }];
+  try {
+    for (let index = 0; index < localStorage.length; index++) {
+      const key = localStorage.key(index);
+      if (key?.startsWith(projectNamePrefix)) {
+        projects.push({ id: key.slice(projectNamePrefix.length), name: localStorage.getItem(key) });
+      }
+    }
+  } catch {}
+  return projects;
+}
+
+function projectKey(key, projectId = activeProjectId) {
+  return `processadmin:project:${projectId}:${key}`;
+}
+
+function createProject(name, fields = {}) {
+  const id = crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const written = [];
+  try {
+    for (const [key, value] of Object.entries(fields)) {
+      const scopedKey = projectKey(key, id);
+      localStorage.setItem(scopedKey, value);
+      written.push(scopedKey);
+    }
+    localStorage.setItem(projectNamePrefix + id, name);
+    return id;
+  } catch {
+    for (const key of written) localStorage.removeItem(key);
+    return null;
+  }
+}
+
 function safeStorageGet(key, fallback = null) {
   try {
-    const value = localStorage.getItem(key);
+    const value = localStorage.getItem(projectKey(key));
+    // Pre-project installations belong exclusively to the principal project.
+    if (value === null && activeProjectId === defaultProjectId) return localStorage.getItem(key) ?? fallback;
     return value === null ? fallback : value;
   } catch (err) {
     return fallback;
@@ -40,7 +83,7 @@ function safeStorageGet(key, fallback = null) {
 
 function safeStorageSet(key, value) {
   try {
-    localStorage.setItem(key, String(value));
+    localStorage.setItem(projectKey(key), String(value));
     return true;
   } catch (err) {
     return false;
@@ -49,7 +92,7 @@ function safeStorageSet(key, value) {
 
 function safeStorageSetJSON(key, value) {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(projectKey(key), JSON.stringify(value));
     return true;
   } catch (err) {
     return false;
@@ -77,45 +120,39 @@ function safeParse(key, fallback) {
   }
 }
 
-function loadJSON(key, fallback) {
+function safeStorageRemove(key) {
   try {
-    const value = typeof safeStorageGet === 'function'
-      ? safeStorageGet(key, null)
-      : localStorage.getItem(key);
-    if (!value) return fallback;
-    const parsed = JSON.parse(value);
-    return parsed !== undefined && parsed !== null ? parsed : fallback;
-  } catch (error) {
-    return fallback;
+    if (activeProjectId === defaultProjectId) localStorage.removeItem(key);
+    localStorage.removeItem(projectKey(key));
+    return true;
+  } catch {
+    return false;
   }
+}
+
+function loadJSON(key, fallback) {
+  return safeParse(key, fallback);
 }
 
 function saveJSON(key, value) {
-  if (typeof safeStorageSetJSON === 'function') {
-    safeStorageSetJSON(key, value);
-    return;
-  }
+  return safeStorageSetJSON(key, value);
+}
 
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    console.error('Error saving JSON to localStorage', error);
+function flushPendingFields() {
+  clearTimeout(window.state.saveTimer);
+  window.state.saveTimer = null;
+  for (const [key, value] of window.state.pendingFields) {
+    if (safeStorageSet(key, value)) window.state.pendingFields.delete(key);
   }
+  return window.state.pendingFields.size === 0;
 }
 
 function saveField(key, value) {
+  window.state.pendingFields.set(key, value);
   clearTimeout(window.state.saveTimer);
   window.state.saveTimer = setTimeout(() => {
-    if (typeof safeStorageSet === 'function') {
-      safeStorageSet(key, value);
-    } else {
-      try {
-        localStorage.setItem(key, value);
-      } catch (error) {
-        console.error('Error saving to localStorage', error);
-      }
-    }
-    if (typeof updateWriterProgress === 'function') updateWriterProgress();
+    if (!flushPendingFields()) showToast('No se pudieron guardar los cambios en este navegador.', 'error');
+    updateWriterProgress();
     if (typeof updateSectionCompleteness === 'function') updateSectionCompleteness();
   }, 800);
 }

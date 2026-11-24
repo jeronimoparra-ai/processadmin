@@ -9,34 +9,6 @@
 const DELIVERY_DATE_STORAGE_KEY = 'checklist_deadline';
 const EXPORT_FORMAT_PROFILE_KEY = 'export_format_profile';
 
-const workStartRaw = safeStorageGet('ws_work_start', '');
-const parsedWorkStart = parseInt(workStartRaw, 10);
-
-const state = {
-  activeView: 'panel',
-  chartInstance: null,
-  animationId: null,
-  currentScore: 71,
-  saveTimer: null,
-  generatedCitations: safeParse('apa_generated_citations', []),
-  countdownInterval: null,
-  simulationHistory: [],
-  workStartTime: Number.isFinite(parsedWorkStart) ? parsedWorkStart : Date.now(),
-  lastSaveTime: null,
-  focusMode: false,
-  rubricTemplates: safeParse('rubrica_templates', {}),
-  currentRubric: safeParse('rubrica_current', []),
-  organizerVersions: safeParse('organizer_versions', []),
-  organizerNotes: safeParse('organizer_notes', {}),
-  organizerSnapshots: safeParse('organizer_snapshots', []),
-  exportFormatProfile: loadExportFormatProfile(),
-  organizerSnapshotInterval: null,
-  checklistDeadlineInterval: null,
-  exportValidationTimer: null,
-  saveIndicatorTimer: null,
-  lastTemplateFallback: false
-};
-
 function normalizeExportFormatProfile(profile) {
   if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return null;
 
@@ -89,27 +61,41 @@ function loadExportFormatProfile() {
   return normalizeExportFormatProfile(safeParse(EXPORT_FORMAT_PROFILE_KEY, null));
 }
 
+async function importExportFormatProfile(file) {
+  if (/\.docx$/i.test(file.name) || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    return saveExportFormatProfile({
+      name: file.name.replace(/\.docx$/i, ''),
+      description: 'Plantilla Word cargada desde un documento DOCX',
+      fileName: file.name,
+      templateDataUrl: await readFileAsDataUrl(file)
+    });
+  }
+  const parsed = JSON.parse(await file.text());
+  const candidate = parsed.profile || parsed.formato || parsed;
+  return saveExportFormatProfile({
+    ...candidate,
+    name: candidate.name || file.name.replace(/\.json$/i, ''),
+    description: candidate.description || 'Formato personalizado cargado desde archivo'
+  });
+}
+
 function saveExportFormatProfile(profile) {
   const normalized = normalizeExportFormatProfile(profile);
   if (!normalized) {
-    try {
-      localStorage.removeItem(EXPORT_FORMAT_PROFILE_KEY);
-    } catch (err) {}
-    state.exportFormatProfile = null;
+    safeStorageRemove(EXPORT_FORMAT_PROFILE_KEY);
+    window.state.exportFormatProfile = null;
     return null;
   }
 
   normalized.updatedAt = new Date().toISOString();
-  safeStorageSetJSON(EXPORT_FORMAT_PROFILE_KEY, normalized);
-  state.exportFormatProfile = normalized;
+  if (!safeStorageSetJSON(EXPORT_FORMAT_PROFILE_KEY, normalized)) throw new Error('No se pudo guardar la plantilla');
+  window.state.exportFormatProfile = normalized;
   return normalized;
 }
 
 function clearExportFormatProfile() {
-  try {
-    localStorage.removeItem(EXPORT_FORMAT_PROFILE_KEY);
-  } catch (err) {}
-  state.exportFormatProfile = null;
+  safeStorageRemove(EXPORT_FORMAT_PROFILE_KEY);
+  window.state.exportFormatProfile = null;
 }
 
 function getDeliveryDateValue() {

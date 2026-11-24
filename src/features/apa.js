@@ -44,7 +44,7 @@ function buildApaEnhanced() {
 
         <div class="space-y-6">
           <div class="dp-card p-6 sticky top-6">
-            <h3 id="apa-referencias-title" class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span></h3>
+            <h3 id="apa-referencias-title" class="dp-card-title mb-4 flex items-center gap-2">${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${window.state.generatedCitations.length})</span></h3>
             <div id="apa-referencias" class="mb-4 max-h-64 space-y-2 overflow-y-auto text-xs"></div>
             <div class="space-y-2">
               <button id="sort-refs-btn" class="dp-btn dp-btn-ghost w-full">Ordenar referencias A-Z</button>
@@ -77,7 +77,7 @@ function buildApaEnhanced() {
   const copyCitationBtn = document.getElementById('copy-cita-btn');
 
   function saveCitations() {
-    saveJSON('apa_generated_citations', state.generatedCitations);
+    saveJSON('apa_generated_citations', window.state.generatedCitations);
   }
 
   function renderReferenceChecklist(reference) {
@@ -207,7 +207,7 @@ function buildApaEnhanced() {
         let reference = `${escapeHtml(autor)}${year ? ` (${escapeHtml(year)})` : ''}. <em>${escapeHtml(titulo)}</em>`;
         if (fuente) reference += `. Recuperado de ${escapeHtml(fuente)}`;
 
-        state.generatedCitations.push(reference);
+        window.state.generatedCitations.push(reference);
         saveCitations();
         renderReferences();
 
@@ -260,7 +260,7 @@ function buildApaEnhanced() {
     if (fuente) reference += `. ${escapeHtml(fuente)}`;
     if (url) reference += `. Recuperado de ${escapeHtml(url)}`;
 
-    state.generatedCitations.push(reference);
+    window.state.generatedCitations.push(reference);
     saveCitations();
     document.getElementById('ref-resultado').innerHTML = reference;
     document.getElementById('ref-resultado').classList.remove('hidden');
@@ -279,16 +279,16 @@ function buildApaEnhanced() {
     const list = document.getElementById('apa-referencias');
     const heading = document.getElementById('apa-referencias-title');
     if (heading) {
-      heading.innerHTML = `${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${state.generatedCitations.length})</span>`;
+      heading.innerHTML = `${docproIconHtml('apa', 'Referencias APA 7 generadas', 'docpro-icon docpro-icon--sm')}<span>Referencias APA 7 generadas (${window.state.generatedCitations.length})</span>`;
     }
 
-    if (state.generatedCitations.length === 0) {
+    if (window.state.generatedCitations.length === 0) {
       list.innerHTML = '<p class="text-gray-500 italic">Sin referencias aún</p>';
       saveCitations();
       return;
     }
 
-    list.innerHTML = state.generatedCitations.map((reference, index) => `
+    list.innerHTML = window.state.generatedCitations.map((reference, index) => `
       <div class="dp-ref-item text-xs">
         <div>${escapeHtml(reference.replace(/<\/?em>/g, ''))}</div>
         <button class="delete-ref mt-1 text-xs font-bold text-red-600 hover:text-red-700" data-idx="${index}">Eliminar</button>
@@ -297,7 +297,7 @@ function buildApaEnhanced() {
 
     list.querySelectorAll('.delete-ref').forEach(button => {
       button.addEventListener('click', () => {
-        state.generatedCitations.splice(parseInt(button.dataset.idx, 10), 1);
+        window.state.generatedCitations.splice(parseInt(button.dataset.idx, 10), 1);
         saveCitations();
         renderReferences();
       });
@@ -306,13 +306,13 @@ function buildApaEnhanced() {
 
   document.getElementById('sort-refs-btn').addEventListener('click', () => {
     if (typeof sortReferencesByAuthor === 'function') {
-      const referencesWithAuthor = state.generatedCitations.map(ref => ({ raw: ref, author: getReferenceAuthor(ref) }));
+      const referencesWithAuthor = window.state.generatedCitations.map(ref => ({ raw: ref, author: getReferenceAuthor(ref) }));
       sortReferencesByAuthor(referencesWithAuthor);
-      state.generatedCitations = referencesWithAuthor.map(item => item.raw);
+      window.state.generatedCitations = referencesWithAuthor.map(item => item.raw);
     } else if (typeof sortReferenceStringsByAuthor === 'function') {
-      sortReferenceStringsByAuthor(state.generatedCitations);
+      sortReferenceStringsByAuthor(window.state.generatedCitations);
     } else {
-      state.generatedCitations.sort((a, b) => getReferenceAuthor(a).localeCompare(getReferenceAuthor(b), 'es'));
+      window.state.generatedCitations.sort((a, b) => getReferenceAuthor(a).localeCompare(getReferenceAuthor(b), 'es'));
     }
     saveCitations();
     renderReferences();
@@ -326,7 +326,7 @@ function buildApaEnhanced() {
     const content = safeStorageGet('redactor_content', '');
     const inTextMatches = [...content.matchAll(/\(([^)]+)\)/g)].map(match => match[1]);
     const citedAuthors = inTextMatches.map(text => text.split(',')[0].trim()).filter(Boolean);
-    const referenceAuthors = state.generatedCitations.map(getReferenceAuthor).filter(Boolean);
+    const referenceAuthors = window.state.generatedCitations.map(getReferenceAuthor).filter(Boolean);
 
     const citationsWithoutReference = citedAuthors.filter(author => !referenceAuthors.some(referenceAuthor => normalizeSpanishText(referenceAuthor) === normalizeSpanishText(author)));
     const referencesWithoutCitation = referenceAuthors.filter(referenceAuthor => !citedAuthors.some(author => normalizeSpanishText(author) === normalizeSpanishText(referenceAuthor)));
@@ -345,7 +345,7 @@ function buildApaEnhanced() {
       confirmText: 'Eliminar'
     });
     if (!confirmed) return;
-    state.generatedCitations = [];
+    window.state.generatedCitations = [];
     saveCitations();
     renderReferences();
     showToast('Referencias eliminadas.', 'success');

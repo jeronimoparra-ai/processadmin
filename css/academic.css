@@ -1,0 +1,95 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * Antigravity / PRISM — Academic Suite (css/academic.css)
+ * ═══════════════════════════════════════════════════════════════════
+ */
+
+@import "../src/features/academico/academico.css";
+
+/* Fallback direct rules in case @import is isolated */
+.academic {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6, 24px);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-2, 8px) var(--space-4, 16px) var(--space-12, 48px);
+}
+
+.academic-card, .academic-dialog {
+  background: var(--color-surface, #FFFDF9);
+  border: 1px solid var(--color-border, #E5DED1);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--space-6, 24px);
+  box-shadow: var(--shadow-sm);
+}
+
+.academic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3, 12px);
+}
+
+.academic-actions > .dp-input,
+.academic-actions > .dp-select {
+  width: auto;
+  max-width: 100%;
+}
+
+.academic [aria-current="page"],
+.academic [aria-current] {
+  font-weight: 700;
+  background: var(--color-bronze-light, #F7F1E8) !important;
+  color: var(--color-bronze-dark, #704E24) !important;
+  border-color: var(--color-bronze-border, #DFCBB4) !important;
+}
+
+.academic [hidden],
+.academic-focus > :not(.academic-card),
+.academic-focus > .academic-card:last-child {
+  display: none !important;
+}
+
+.academic-focus textarea {
+  min-height: 65vh !important;
+}
+
+.academic-dialog {
+  margin: auto;
+  width: min(34rem, 94vw);
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.academic-dialog::backdrop {
+  background: rgba(28, 27, 24, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.academic p, .academic blockquote {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.academic code {
+  overflow-wrap: anywhere;
+}
+
+.academic h2, .academic h3, .academic h4 {
+  font-weight: 700;
+}
+
+.academic table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--color-border, #E5DED1);
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+}
+
+.academic td, .academic th {
+  border-bottom: 1px solid var(--color-border-subtle, #EFEAE0);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+}

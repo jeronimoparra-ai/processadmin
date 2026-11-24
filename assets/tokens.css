@@ -1,0 +1,549 @@
+/* =============================================================================
+   TOKENS.CSS — Antigravity/PRISM Design System
+   Sistema de diseño editorial académico contemporáneo
+   =============================================================================
+   
+   Paleta Editorial Cálida:
+   - Papel: #FAF9F6
+   - Superficie: #FFFDF9  
+   - Bronce: #8C6430
+   - Oliva: #6E7F5C
+   - Terracota: #A65B3A
+   - Tinta: #1C1B18
+   
+   ============================================================================= */
+
+/* =============================================================================
+   CAPA 0: FOUNDATION TOKENS (Tokens de base - Inmutables)
+   ============================================================================= */
+
+:root {
+  /* --- Paleta de Color Editorial --- */
+  
+  /* Colors - Light Theme (Default) */
+  --color-papel: #FAF9F6;
+  --color-superficie: #FFFDF9;
+  --color-superficie-2: #F4F0E8;
+  --color-superficie-3: #EAE4D8;
+  --color-superficie-4: #DFD9C8;
+  
+  /* Accent Colors - Editorial Warm Palette */
+  --color-bronce: #8C6430;
+  --color-bronce-light: #C9A96E;
+  --color-bronce-dark: #5A3F1D;
+  --color-bronce-subtle: rgba(140, 100, 48, 0.12);
+  
+  --color-oliva: #6E7F5C;
+  --color-oliva-light: #A8C68F;
+  --color-oliva-dark: #3A4D2E;
+  --color-oliva-subtle: rgba(110, 127, 92, 0.12);
+  
+  --color-terracota: #A65B3A;
+  --color-terracota-light: #D4A574;
+  --color-terracota-dark: #6D3A23;
+  --color-terracota-subtle: rgba(166, 91, 58, 0.12);
+  
+  --color-tinta: #1C1B18;
+  --color-tinta-soft: #5C5650;
+  --color-tinta-muted: #8A8175;
+  --color-tinta-subtle: #B7AE9F;
+  
+  /* Semantic Colors */
+  --color-primary: var(--color-bronce);
+  --color-secondary: var(--color-oliva);
+  --color-accent: var(--color-terracota);
+  
+  --color-success: #466E3D;
+  --color-success-light: #DCFCE7;
+  --color-success-border: #86EFAC;
+  --color-success-text: #166534;
+  
+  --color-warning: #946017;
+  --color-warning-light: #FEF3C7;
+  --color-warning-border: #FDE68A;
+  --color-warning-text: #78350F;
+  
+  --color-danger: #A33A32;
+  --color-danger-light: #FEE2E2;
+  --color-danger-border: #FECACA;
+  --color-danger-text: #7F1D1D;
+  
+  --color-info: var(--color-bronce);
+  --color-info-light: #FEF3C7;
+  --color-info-border: var(--color-bronce-light);
+  --color-info-text: var(--color-bronce-dark);
+  
+  /* --- Border Colors --- */
+  --color-border: #E5DED1;
+  --color-border-strong: #D2C7B4;
+  --color-border-subtle: #F0E9DD;
+  
+  /* --- Text Colors --- */
+  --color-text-primary: var(--color-tinta);
+  --color-text-secondary: var(--color-tinta-soft);
+  --color-text-muted: var(--color-tinta-muted);
+  --color-text-inverse: var(--color-superficie);
+  --color-text-link: var(--color-bronce);
+  --color-text-link-hover: var(--color-bronce-dark);
+  
+  /* --- Surface Colors --- */
+  --color-bg-primary: var(--color-papel);
+  --color-bg-secondary: var(--color-superficie);
+  --color-bg-tertiary: var(--color-superficie-2);
+  --color-bg-elevated: var(--color-superficie);
+  --color-bg-overlay: rgba(28, 27, 24, 0.85);
+  
+  /* =========================================================================
+     CAPA 1: TYPOGRAPHY TOKENS
+     =========================================================================
+  */
+  
+  /* Font Families */
+  --font-family-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-family-icon: system-ui, sans-serif;
+  
+  /* Font Sizes - Fluid Type Scale */
+  --font-size-xs: clamp(0.70rem, 0.68rem + 0.10vw, 0.75rem);
+  --font-size-sm: clamp(0.80rem, 0.76rem + 0.20vw, 0.875rem);
+  --font-size-base: clamp(0.90rem, 0.85rem + 0.25vw, 1rem);
+  --font-size-lg: clamp(1.05rem, 0.98rem + 0.35vw, 1.125rem);
+  --font-size-xl: clamp(1.20rem, 1.10rem + 0.5vw, 1.5rem);
+  --font-size-2xl: clamp(1.40rem, 1.25rem + 0.75vw, 2rem);
+  --font-size-3xl: clamp(1.75rem, 1.50rem + 1.25vw, 2.5rem);
+  --font-size-4xl: clamp(2.25rem, 2.00rem + 1.5vw, 3rem);
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose: 2;
+  
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  
+  /* Paragraph Spacing */
+  --paragraph-spacing: 1em;
+  
+  /* =========================================================================
+     CAPA 2: SPACING TOKENS
+     =========================================================================
+  */
+  
+  /* Base spacing unit: 4px */
+  --spacing-unit: 4px;
+  
+  --spacing-0: 0;
+  --spacing-1: calc(1 * var(--spacing-unit));
+  --spacing-2: calc(2 * var(--spacing-unit));
+  --spacing-3: calc(3 * var(--spacing-unit));
+  --spacing-4: calc(4 * var(--spacing-unit));
+  --spacing-5: calc(5 * var(--spacing-unit));
+  --spacing-6: calc(6 * var(--spacing-unit));
+  --spacing-7: calc(7 * var(--spacing-unit));
+  --spacing-8: calc(8 * var(--spacing-unit));
+  --spacing-9: calc(9 * var(--spacing-unit));
+  --spacing-10: calc(10 * var(--spacing-unit));
+  --spacing-12: calc(12 * var(--spacing-unit));
+  --spacing-14: calc(14 * var(--spacing-unit));
+  --spacing-16: calc(16 * var(--spacing-unit));
+  --spacing-20: calc(20 * var(--spacing-unit));
+  --spacing-24: calc(24 * var(--spacing-unit));
+  --spacing-28: calc(28 * var(--spacing-unit));
+  --spacing-32: calc(32 * var(--spacing-unit));
+  --spacing-36: calc(36 * var(--spacing-unit));
+  --spacing-40: calc(40 * var(--spacing-unit));
+  --spacing-48: calc(48 * var(--spacing-unit));
+  --spacing-56: calc(56 * var(--spacing-unit));
+  --spacing-64: calc(64 * var(--spacing-unit));
+  
+  /* Inset spacing (for padding/margin on all sides) */
+  --inset-0: 0;
+  --inset-1: var(--spacing-1);
+  --inset-2: var(--spacing-2);
+  --inset-3: var(--spacing-3);
+  --inset-4: var(--spacing-4);
+  --inset-5: var(--spacing-5);
+  --inset-6: var(--spacing-6);
+  
+  /* Squish spacing (vertical only) */
+  --squish-0: 0 var(--spacing-0);
+  --squish-1: 0 var(--spacing-1);
+  --squish-2: 0 var(--spacing-2);
+  --squish-3: 0 var(--spacing-3);
+  --squish-4: 0 var(--spacing-4);
+  
+  /* Stretch spacing (horizontal only) */
+  --stretch-0: var(--spacing-0) 0;
+  --stretch-1: var(--spacing-1) 0;
+  --stretch-2: var(--spacing-2) 0;
+  --stretch-3: var(--spacing-3) 0;
+  --stretch-4: var(--spacing-4) 0;
+  
+  /* =========================================================================
+     CAPA 3: BORDER & RADIUS TOKENS
+     =========================================================================
+  */
+  
+  /* Border Width */
+  --border-width-none: 0;
+  --border-width-sm: 1px;
+  --border-width-md: 2px;
+  --border-width-lg: 3px;
+  --border-width-xl: 4px;
+  
+  /* Border Radius */
+  --radius-none: 0;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+  
+  /* Border Styles */
+  --border-style-solid: solid;
+  --border-style-dashed: dashed;
+  --border-style-dotted: dotted;
+  
+  /* =========================================================================
+     CAPA 4: SHADOW TOKENS
+     =========================================================================
+  */
+  
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px 0 rgba(28, 27, 24, 0.04);
+  --shadow-sm: 0 2px 4px 0 rgba(28, 27, 24, 0.04), 0 1px 2px -1px rgba(28, 27, 24, 0.06);
+  --shadow-md: 0 6px 12px -2px rgba(28, 27, 24, 0.06), 0 3px 6px -3px rgba(28, 27, 24, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(28, 27, 24, 0.08), 0 6px 12px -6px rgba(28, 27, 24, 0.04);
+  --shadow-xl: 0 24px 48px -6px rgba(28, 27, 24, 0.1), 0 12px 24px -8px rgba(28, 27, 24, 0.04);
+  --shadow-2xl: 0 32px 64px -8px rgba(28, 27, 24, 0.12), 0 16px 32px -12px rgba(28, 27, 24, 0.06);
+  
+  /* Colored shadows for depth */
+  --shadow-bronce-sm: 0 2px 8px rgba(140, 100, 48, 0.15);
+  --shadow-bronce-md: 0 4px 16px rgba(140, 100, 48, 0.2);
+  --shadow-oliva-sm: 0 2px 8px rgba(110, 127, 92, 0.15);
+  --shadow-terracota-sm: 0 2px 8px rgba(166, 91, 58, 0.15);
+  
+  /* Inner shadows for inset effects */
+  --shadow-inner-sm: inset 0 1px 2px 0 rgba(28, 27, 24, 0.04);
+  --shadow-inner-md: inset 0 2px 4px 0 rgba(28, 27, 24, 0.06);
+  
+  /* =========================================================================
+     CAPA 5: OPACITY TOKENS
+     =========================================================================
+  */
+  
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-15: 0.15;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-85: 0.85;
+  --opacity-90: 0.9;
+  --opacity-95: 0.95;
+  --opacity-100: 1;
+  
+  /* =========================================================================
+     CAPA 6: TRANSITION & ANIMATION TOKENS
+     =========================================================================
+  */
+  
+  /* Transition Durations */
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --duration-slower: 500ms;
+  --duration-bounce: 400ms;
+  
+  /* Transition Timing Functions */
+  --easing-ease: ease;
+  --easing-ease-in: ease-in;
+  --easing-ease-out: ease-out;
+  --easing-ease-in-out: ease-in-out;
+  --easing-linear: linear;
+  --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --easing-spring: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  
+  /* Combined Transitions */
+  --transition-fast: var(--duration-fast) var(--easing-spring);
+  --transition-normal: var(--duration-normal) var(--easing-spring);
+  --transition-slow: var(--duration-slow) var(--easing-spring);
+  --transition-bounce: var(--duration-bounce) var(--easing-bounce);
+  --transition-smooth: var(--duration-normal) var(--easing-smooth);
+  
+  /* =========================================================================
+     CAPA 7: Z-INDEX TOKENS (Layering System)
+     =========================================================================
+  */
+  
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-toast: 800;
+  --z-max: 9999;
+  
+  /* =========================================================================
+     CAPA 8: LAYOUT TOKENS
+     =========================================================================
+  */
+  
+  /* Sidebar */
+  --sidebar-width: 280px;
+  --sidebar-width-collapsed: 80px;
+  --sidebar-bg: var(--color-tinta);
+  --sidebar-text: var(--color-tinta-subtle);
+  --sidebar-text-hover: var(--color-tinta-soft);
+  --sidebar-active-bg: rgba(201, 169, 110, 0.14);
+  --sidebar-active-text: var(--color-bronce-light);
+  --sidebar-border: var(--color-border-subtle);
+  
+  /* Header */
+  --header-height: 64px;
+  --header-bg: var(--color-superficie);
+  --header-border: var(--color-border);
+  
+  /* Main Content */
+  --main-max-width: 1400px;
+  --main-padding: var(--spacing-6);
+  
+  /* Card */
+  --card-bg: var(--color-superficie);
+  --card-border: var(--color-border);
+  --card-radius: var(--radius-lg);
+  --card-shadow: var(--shadow-sm);
+  --card-padding: var(--spacing-6);
+  
+  /* Form Elements */
+  --input-bg: var(--color-superficie);
+  --input-border: var(--color-border);
+  --input-border-hover: var(--color-border-strong);
+  --input-border-focus: var(--color-bronce);
+  --input-radius: var(--radius-md);
+  --input-padding: var(--spacing-3) var(--spacing-4);
+  --input-height: 40px;
+  
+  /* Buttons */
+  --btn-height: 40px;
+  --btn-padding: var(--spacing-3) var(--spacing-6);
+  --btn-radius: var(--radius-md);
+  --btn-font-weight: var(--font-weight-semibold);
+  
+  /* =========================================================================
+     CAPA 9: COMPONENT-SPECIFIC TOKENS
+     =========================================================================
+  */
+  
+  /* Editor */
+  --editor-bg: var(--color-papel);
+  --editor-text: var(--color-text-primary);
+  --editor-line-height: var(--line-height-relaxed);
+  --editor-padding: var(--spacing-6);
+  --editor-border: var(--color-border);
+  --editor-radius: var(--radius-md);
+  --editor-selection-bg: rgba(140, 100, 48, 0.2);
+  --editor-selection-text: var(--color-text-primary);
+  
+  /* Toolbar */
+  --toolbar-bg: var(--color-superficie-2);
+  --toolbar-border: var(--color-border);
+  --toolbar-height: 48px;
+  --toolbar-radius: var(--radius-md);
+  
+  /* Modal */
+  --modal-bg: var(--color-superficie);
+  --modal-border: var(--color-border);
+  --modal-radius: var(--radius-xl);
+  --modal-shadow: var(--shadow-xl);
+  --modal-padding: var(--spacing-6);
+  
+  /* Tooltip */
+  --tooltip-bg: var(--color-tinta);
+  --tooltip-text: var(--color-text-inverse);
+  --tooltip-radius: var(--radius-sm);
+  --tooltip-padding: var(--spacing-2) var(--spacing-3);
+  --tooltip-shadow: var(--shadow-md);
+  
+  /* Badge/Status */
+  --badge-height: 20px;
+  --badge-padding: var(--spacing-1) var(--spacing-3);
+  --badge-radius: var(--radius-full);
+  --badge-font-size: var(--font-size-xs);
+  --badge-font-weight: var(--font-weight-semibold);
+  
+  /* =========================================================================
+     CAPA 10: STATE TOKENS
+     =========================================================================
+  */
+  
+  /* Hover States */
+  --hover-opacity: var(--opacity-85);
+  --hover-scale: 1.02;
+  
+  /* Active States */
+  --active-opacity: var(--opacity-75);
+  --active-scale: 0.98;
+  
+  /* Focus States */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--color-bronce);
+  --focus-ring-opacity: 0.5;
+  
+  /* Disabled States */
+  --disabled-opacity: var(--opacity-50);
+  --disabled-cursor: not-allowed;
+  
+  /* Loading States */
+  --loading-opacity: var(--opacity-70);
+  
+  /* Success States */
+  --success-bg: var(--color-success-light);
+  --success-border: var(--color-success-border);
+  --success-text: var(--color-success-text);
+  
+  /* Warning States */
+  --warning-bg: var(--color-warning-light);
+  --warning-border: var(--color-warning-border);
+  --warning-text: var(--color-warning-text);
+  
+  /* Danger/Error States */
+  --danger-bg: var(--color-danger-light);
+  --danger-border: var(--color-danger-border);
+  --danger-text: var(--color-danger-text);
+  
+  /* Info States */
+  --info-bg: var(--color-info-light);
+  --info-border: var(--color-info-border);
+  --info-text: var(--color-info-text);
+}
+
+/* =============================================================================
+   DARK THEME TOKENS (Opcional - para futuro)
+   ============================================================================= */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-papel: #1C1B18;
+    --color-superficie: #292524;
+    --color-superficie-2: #393534;
+    --color-superficie-3: #494544;
+    
+    --color-tinta: #FAF9F6;
+    --color-tinta-soft: #CBC4BE;
+    --color-tinta-muted: #9B948E;
+    --color-tinta-subtle: #6B645E;
+    
+    --color-border: #393534;
+    --color-border-strong: #494544;
+    
+    --color-text-primary: var(--color-tinta);
+    --color-text-secondary: var(--color-tinta-soft);
+    --color-text-muted: var(--color-tinta-muted);
+    --color-text-inverse: var(--color-papel);
+    
+    --color-bg-primary: var(--color-papel);
+    --color-bg-secondary: var(--color-superficie);
+    
+    --sidebar-bg: var(--color-superficie);
+    --sidebar-text: var(--color-tinta-muted);
+    
+    --card-bg: var(--color-superficie);
+    --card-border: var(--color-border);
+    
+    --input-bg: var(--color-superficie-2);
+    --input-border: var(--color-border);
+  }
+}
+
+/* =============================================================================
+   PWA/OFFLINE VISUAL TOKENS
+   ============================================================================= */
+
+/* Offline indicator */
+--offline-indicator-bg: var(--color-warning-light);
+--offline-indicator-text: var(--color-warning-text);
+--offline-indicator-border: var(--color-warning-border);
+
+/* Install prompt */
+--install-prompt-bg: var(--color-superficie);
+--install-prompt-border: var(--color-border);
+--install-prompt-radius: var(--radius-lg);
+--install-prompt-shadow: var(--shadow-lg);
+
+/* Loading states for offline */
+--offline-loading-opacity: var(--opacity-60);
+--offline-blur: blur(2px);
+
+/* =============================================================================
+   ACCESSIBILITY TOKENS (WCAG 2.2 AA Compliance)
+   ============================================================================= */
+
+/* Focus visible for keyboard navigation */
+--focus-visible-ring: 3px solid var(--color-bronce);
+--focus-visible-offset: 2px;
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: var(--color-tinta);
+    --border-width-md: 3px;
+    --focus-ring-width: 4px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-normal: 0.01ms;
+    --duration-slow: 0.01ms;
+    --duration-bounce: 0.01ms;
+    --duration-slower: 0.01ms;
+  }
+}
+
+/* =============================================================================
+   PRINT TOKENS
+   ============================================================================= */
+
+@media print {
+  :root {
+    --color-papel: #FFFFFF;
+    --color-superficie: #FFFFFF;
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+    --color-border: #CCCCCC;
+    
+    --font-size-base: 12pt;
+    --font-size-lg: 14pt;
+    --font-size-xl: 16pt;
+    --line-height-normal: 1.6;
+  }
+}

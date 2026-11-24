@@ -155,7 +155,7 @@ function buildHistorial() {
           </div>
 
           <div class="flex flex-col sm:flex-row gap-3">
-            <button class="history-action dp-btn dp-btn-primary" data-action="open" data-id="${escapeHtml(entry.id)}">Abrir</button>
+            <button class="history-action dp-btn dp-btn-primary" title="Abrir en una copia del proyecto" data-action="open" data-id="${escapeHtml(entry.id)}">Abrir</button>
             <button class="history-action dp-btn dp-btn-ghost" data-action="download" data-id="${escapeHtml(entry.id)}">Descargar DOCX</button>
             <button class="history-action dp-btn dp-btn-ghost" style="color: var(--dp-danger)" data-action="delete" data-id="${escapeHtml(entry.id)}">Eliminar</button>
           </div>
@@ -171,14 +171,13 @@ function buildHistorial() {
         if (!entry) return;
 
         if (action === 'open') {
-          saveJSON('export_student_data', entry.data || {});
-          navigate('exportar');
+          openHistoryDocument(entry);
           return;
         }
 
         if (action === 'download') {
           const title = (entry.title || 'documento').replace(/\s+/g, '_');
-          downloadExportDocx(entry.data || {}, entry.snapshot || {}, `${title}_APA7.docx`);
+          downloadExportDocx(entry.data || {}, readHistorySnapshot(entry), `${title}_APA7.docx`);
           return;
         }
 

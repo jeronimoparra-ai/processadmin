@@ -1,0 +1,26 @@
+{
+  "name": "processadmin",
+  "version": "1.0.0",
+  "description": "ProcessAdmin - Redacción académica y APA 7",
+  "main": "src/app/main.js",
+  "scripts": {
+    "test:pwa": "playwright test tests/pwa/pwa.spec.js",
+    "test:pwa:headed": "playwright test tests/pwa/pwa.spec.js --headed",
+    "test:pwa:ui": "playwright test tests/pwa/pwa.spec.js --headed --slow",
+    "test:all": "playwright test",
+    "playwright:install": "playwright install",
+    "playwright:codegen": "playwright codegen"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  },
+  "keywords": [
+    "APA",
+    "academic",
+    "writing",
+    "PWA",
+    "offline"
+  ],
+  "author": "Andrés Jeronimo Parra",
+  "license": "MIT"
+}

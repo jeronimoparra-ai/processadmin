@@ -13,7 +13,7 @@ function buildPanel() {
     ? deliveryDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })
     : 'Sin fecha';
   const deliveryDateWarning = deliveryDate ? '' : 'Debes ingresar una fecha de entrega';
-  const formatProfile = state.exportFormatProfile;
+  const formatProfile = window.state.exportFormatProfile;
   const formatLabel = formatProfile?.name || 'Ningún formato cargado';
   const formatDetail = formatProfile?.description || 'Carga una plantilla Word .docx opcional para reutilizarla al exportar.';
   const history = typeof loadDocumentHistory === 'function' ? loadDocumentHistory() : [];
@@ -21,7 +21,7 @@ function buildPanel() {
   const redactorContent = safeStorageGet('redactor_content', '');
   const redactorWords = countWords(redactorContent);
   const redactorParagraphs = countParagraphs(redactorContent);
-  const citations = loadJSON('apa_generated_citations', state.generatedCitations || []);
+  const citations = window.state.generatedCitations;
   const organizerOutline = loadJSON('organizer_outline', {});
   const organizerValues = organizerOutline.values || organizerOutline;
   const organizerText = Object.values(organizerValues).flat().join('\n');
@@ -541,38 +541,16 @@ function buildPanel() {
     panelLoadFormatButton.addEventListener('click', () => panelLoadFormatInput.click());
     panelLoadFormatInput.addEventListener('change', async () => {
       const file = panelLoadFormatInput.files?.[0];
-      if (!file) return;
-
+      if (!file || window.state.pendingTemplate) return;
+      window.state.pendingTemplate = importExportFormatProfile(file);
       try {
-        const isDocx = /\.docx$/i.test(file.name) || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-        let normalized = null;
-
-        if (isDocx) {
-          const dataUrl = await readFileAsDataUrl(file);
-          normalized = saveExportFormatProfile({
-            kind: 'word-template',
-            name: file.name.replace(/\.docx$/i, ''),
-            description: 'Plantilla Word cargada desde un documento DOCX',
-            fileName: file.name,
-            templateDataUrl: dataUrl
-          });
-        } else {
-          const raw = await file.text();
-          const parsed = JSON.parse(raw);
-          const candidate = parsed.profile || parsed.formato || parsed;
-          normalized = saveExportFormatProfile({
-            ...candidate,
-            kind: 'legacy-json',
-            name: candidate.name || file.name.replace(/\.json$/i, ''),
-            description: candidate.description || 'Formato personalizado cargado desde el panel'
-          });
-        }
-
-        if (normalized) navigate('exportar');
+        const normalized = await window.state.pendingTemplate;
+        if (normalized && !window.state.afterTemplateSave) window.state.afterTemplateSave = () => navigate('exportar');
       } catch (err) {
         showToast('No se pudo cargar el formato. Verifica que sea una plantilla Word .docx válida o un JSON compatible.', 'error');
       } finally {
         panelLoadFormatInput.value = '';
+        finishTemplateSave();
       }
     });
   }
@@ -708,7 +686,7 @@ function updateSectionCompleteness() {
   if (statTime) statTime.textContent = workMinutes + ' min';
 
   const statCitations = document.getElementById('stat-citations');
-  if (statCitations) statCitations.textContent = loadJSON('apa_generated_citations', state.generatedCitations || []).length;
+  if (statCitations) statCitations.textContent = window.state.generatedCitations.length;
 
   const statSimulations = document.getElementById('stat-simulations');
   if (statSimulations) statSimulations.textContent = loadJSON('rubrica_current', []).length;

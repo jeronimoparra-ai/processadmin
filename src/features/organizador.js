@@ -111,7 +111,7 @@ function buildOrganizador() {
   const outlineForm = document.getElementById('outline-form');
   const notesList = document.getElementById('section-notes-list');
   const versionPreview = document.getElementById('version-preview');
-  const storedOutline = loadJSON('organizer_outline', {});
+
   let notesStore = loadJSON('organizer_notes', {});
 
   function getCurrentSteps() {
@@ -184,6 +184,7 @@ function buildOrganizador() {
 
   function renderForm() {
     const steps = getCurrentSteps();
+    const storedOutline = loadJSON('organizer_outline', {});
     const outlineValues = storedOutline.type === workTypeSelect.value ? (storedOutline.values || storedOutline) : {};
 
     outlineForm.innerHTML = steps.map((step, index) => {
@@ -206,39 +207,44 @@ function buildOrganizador() {
     renderNotes();
   }
 
-  function saveCurrentOutline(createVersion = false, source = 'manual') {
-    const snapshot = getSnapshotFromForm();
-    const payload = {
+  function outlinePayload(values, source) {
+    return {
       type: workTypeSelect.value,
-      values: snapshot.outline,
+      values,
       savedAt: new Date().toISOString(),
       source
     };
+  }
 
-    saveJSON('organizer_outline', payload);
+  function saveCurrentOutline(createVersion = false, source = 'manual') {
+    const snapshot = getSnapshotFromForm();
+    const payload = outlinePayload(snapshot.outline, source);
+    saveField('organizer_outline', JSON.stringify(payload));
+    if (!guardPendingFields()) return false;
     if (createVersion) {
-      state.organizerVersions.unshift({
+      window.state.organizerVersions.unshift({
         date: formatDateTimeValue(new Date()),
         type: workTypeSelect.value,
         content: payload.values,
         notes: snapshot.notes,
         source
       });
-      state.organizerVersions = state.organizerVersions.slice(0, 20);
-      saveJSON('organizer_versions', state.organizerVersions);
+      window.state.organizerVersions = window.state.organizerVersions.slice(0, 20);
+      saveJSON('organizer_versions', window.state.organizerVersions);
       renderVersions();
     }
+    return true;
   }
 
   function renderVersions() {
     const list = document.getElementById('versions-list');
-    if (state.organizerVersions.length === 0) {
+    if (window.state.organizerVersions.length === 0) {
       list.innerHTML = '<p class="text-[var(--dp-text-muted)] italic">Sin versiones guardadas</p>';
       versionPreview.classList.add('hidden');
       return;
     }
 
-    list.innerHTML = state.organizerVersions.map((version, index) => `
+    list.innerHTML = window.state.organizerVersions.map((version, index) => `
       <div class="dp-card p-2 text-xs font-semibold space-y-2">
         <div class="flex justify-between items-center gap-2">
           <div>
@@ -256,7 +262,7 @@ function buildOrganizador() {
 
     list.querySelectorAll('.preview-version').forEach(btn => {
       btn.addEventListener('click', () => {
-        const version = state.organizerVersions[parseInt(btn.dataset.idx, 10)];
+        const version = window.state.organizerVersions[parseInt(btn.dataset.idx, 10)];
         versionPreview.classList.remove('hidden');
         versionPreview.innerHTML = `
           <p class="font-bold text-purple-900 mb-2">Vista previa: ${escapeHtml(version.date)}</p>
@@ -267,7 +273,8 @@ function buildOrganizador() {
 
     list.querySelectorAll('.restore-version').forEach(btn => {
       btn.addEventListener('click', () => {
-        const version = state.organizerVersions[parseInt(btn.dataset.idx, 10)];
+        const version = window.state.organizerVersions[parseInt(btn.dataset.idx, 10)];
+        if (!guardPendingFields()) return;
         workTypeSelect.value = version.type || 'investigacion';
         saveJSON('organizer_outline', { type: workTypeSelect.value, values: version.content, savedAt: new Date().toISOString(), source: 'restore' });
         renderForm();
@@ -276,12 +283,13 @@ function buildOrganizador() {
   }
 
   document.getElementById('work-type').addEventListener('change', () => {
+    if (!guardPendingFields()) return;
     safeStorageSet('ws_document_type', workTypeSelect.value);
     renderForm();
   });
 
   document.getElementById('save-outline-btn').addEventListener('click', () => {
-    saveCurrentOutline(true, 'manual');
+    if (!saveCurrentOutline(false, null)) return;
     const btn = document.getElementById('save-outline-btn');
     btn.textContent = 'Guardado';
     setTimeout(() => {
@@ -290,7 +298,7 @@ function buildOrganizador() {
   });
 
   document.getElementById('create-version-btn').addEventListener('click', () => {
-    saveCurrentOutline(true, 'manual');
+    if (!saveCurrentOutline(true, 'manual')) return;
     const btn = document.getElementById('create-version-btn');
     btn.textContent = 'Versión guardada';
     setTimeout(() => {
@@ -299,6 +307,7 @@ function buildOrganizador() {
   });
 
   document.getElementById('outline-form').addEventListener('input', () => {
+    saveField('organizer_outline', JSON.stringify(outlinePayload(getOutlineData(), null)));
     renderProgress();
   });
 

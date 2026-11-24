@@ -3,6 +3,11 @@
 // ═══════════════════════════════════════════════════════════════════════
 
 const VIEW_META = {
+  planner: { title: 'Planificador académico', sub: 'Proyectos y cursos del espacio de trabajo' },
+  library: { title: 'Biblioteca de investigación', sub: 'Fuentes, notas y citas del proyecto' },
+  studio: { title: 'Estudio de escritura', sub: 'Contenido e historial por sección' },
+  review: { title: 'Centro de revisión', sub: 'Requisitos y evidencias del documento' },
+  publishing: { title: 'Estudio de publicación', sub: 'Vista previa y registro de descargas' },
   panel: { title: 'Panel de control', sub: 'Resumen del estado de tu documento y del guardado local' },
   redactor: { title: 'Redactor asistido', sub: 'Redacta cada sección con orientación APA 7' },
   apa: { title: 'Gestor APA 7', sub: 'Genera y gestiona tus referencias bibliográficas' },

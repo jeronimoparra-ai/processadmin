@@ -89,7 +89,8 @@ Dependencias CDN:
 | Librería | Propósito | Versión |
 |---|---|---|
 | CSS modular | Estilos utilitarios | Local |
-| Chart.js | Gráfico de rúbrica | CDN |
+| Chart.js | Gráfico de rúbrica | 4.4.8 (CDN y copia local) |
+| JSZip | Plantillas Word | 3.10.1 |
 | docx.js | Exportación Word real | 8.5.0 |
 | Plus Jakarta Sans | Tipografía sans | Google Fonts |
 | Lora | Tipografía serif | Google Fonts |

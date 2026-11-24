@@ -7,6 +7,13 @@
   <meta name="application-name"   content="ProcessAdmin">
   <meta name="author"             content="Andrés Jeronimo Parra">
   <meta name="theme-color"        content="#1C1B18">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ProcessAdmin">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+  <link rel="apple-touch-icon-precomposed" href="/assets/icons/icon-192.png">
   <meta name="robots"             content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 
   <!-- SEO -->
@@ -90,15 +97,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-
+  <link rel="stylesheet" href="assets/tokens.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/utilities.css">
+  <link rel="stylesheet" href="css/academic.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.js" integrity="sha384-sitkSLEO56SJYRloHWybrHos3JVvByQSlOZYJ1HiExytjxUlVOernDbpQcOgwtW8" crossorigin="anonymous" onerror="const fallback = document.createElement('script'); fallback.id = 'local-chart'; fallback.src = 'assets/vendor/chart-4.4.8.umd.js'; document.head.append(fallback)"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" integrity="sha384-+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js" integrity="sha384-4xaIisuLEy2lo2HkB2C4rEf7v8jbTb2kuogX6TkuEt9feTWKBSFSOzsqNNbV+sKh" crossorigin="anonymous"></script>
 </head>
 <body class="page-root">
   <a class="skip-link" href="#app-main">Saltar al contenido principal</a>
@@ -140,21 +148,37 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M8 6v12"></path></svg>
           <span class="hidden md:inline">Organizador de Ideas</span>
         </button>
+        <button class="nav-btn" data-view="planner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span class="hidden md:inline">Planificador Académico</span>
+        </button>
 
         <div class="nav-section">Redactar</div>
         <button class="nav-btn" data-view="redactor">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5z"></path></svg>
-          <span class="hidden md:inline">Redactor</span>
+          <span class="hidden md:inline">Redactor Asistido</span>
+        </button>
+        <button class="nav-btn" data-view="studio">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span class="hidden md:inline">Estudio de Escritura</span>
         </button>
         <button class="nav-btn" data-view="apa">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 5.5h16"></path><path d="M7 5.5v13"></path><path d="M17 5.5v13"></path><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
           <span class="hidden md:inline">Gestor APA 7</span>
+        </button>
+        <button class="nav-btn" data-view="library">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          <span class="hidden md:inline">Biblioteca de Fuentes</span>
         </button>
 
         <div class="nav-section">Revisar</div>
         <button class="nav-btn" data-view="simulador">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 19h16"></path><path d="M6 15h3V7H6z"></path><path d="M11 15h3V4h-3z"></path><path d="M16 15h3v-6h-3z"></path></svg>
           <span class="hidden md:inline">Rúbrica</span>
+        </button>
+        <button class="nav-btn" data-view="review">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+          <span class="hidden md:inline">Centro de Revisión</span>
         </button>
         <button class="nav-btn" data-view="checklist">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M7 12l3 3 7-7"></path></svg>
@@ -165,6 +189,10 @@
         <button class="nav-btn" data-view="exportar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M12 3v10"></path><path d="M8 9l4 4 4-4"></path><path d="M5 21h14"></path></svg>
           <span class="hidden md:inline">Exportar Word</span>
+        </button>
+        <button class="nav-btn" data-view="publishing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span class="hidden md:inline">Estudio de Publicación</span>
         </button>
         <button class="nav-btn" data-view="historial">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path><path d="M18 17v-6"></path><path d="M15 14l3 3 3-3"></path></svg>
@@ -186,9 +214,17 @@
             <span class="hidden md:inline">Acerca</span>
           </button>
         </div>
+        <div class="project-selector-wrap">
+          <label for="project-select" class="side-project-label">Proyecto activo</label>
+          <select id="project-select" class="dp-select side-project-select"></select>
+          <button type="button" id="create-project" class="dp-btn dp-btn-ghost side-new-project-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Nuevo proyecto
+          </button>
+        </div>
         <div class="side-meta">
+          <span class="side-meta-label">Docs guardados:</span>
           <span id="saved-document-count" class="side-meta-count">0</span>
-          <span class="side-meta-label">docs guardados</span>
         </div>
       </div>
     </aside>
@@ -206,6 +242,14 @@
             </div>
           </div>
           <div class="header-pills">
+            <div id="connection-pill" class="header-pill header-pill--offline" title="Modo local-first activo: 100% privado en tu navegador">
+              <svg class="header-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <span id="connection-text" class="hidden sm:inline">100% Local · Privado</span>
+            </div>
             <div class="header-pill header-pill--success" title="El documento está guardado en localStorage">
               <svg id="save-indicator" class="header-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
@@ -268,24 +312,57 @@
               No se pudo inicializar la aplicación. 
               Verifica tu conexión a internet y recarga la página.
             </p>
-            <p class="text-xs text-slate-400 font-mono bg-slate-100 p-3 rounded-lg max-w-lg break-all">
-              ${e.filename ? e.filename.split('/').pop() : 'script'}: ${e.message}
-            </p>
+            <p id="load-error-detail" class="text-xs text-slate-400 font-mono bg-slate-100 p-3 rounded-lg max-w-lg break-all"></p>
             <button onclick="location.reload()" 
               class="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
               Recargar página
             </button>
           </div>
         `;
+        workspace.querySelector('#load-error-detail').textContent =
+          `${e.filename ? e.filename.split('/').pop() : 'script'}: ${e.message}`;
       }
     });
   </script>
 
-  <!-- Módulos JS con defer: se descargan en paralelo y ejecutan en orden tras parsear el HTML -->
+  <!-- PWA Service Worker Registration -->
+  <script>
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Use the current path as the service worker scope
+        const swPath = '/sw.js';
+        
+        navigator.serviceWorker.register(swPath, { scope: '/' })
+          .then(registration => {
+            console.log('[PWA] ServiceWorker registration successful');
+            
+            // Check for updates periodically
+            setInterval(() => {
+              registration.update();
+            }, 24 * 60 * 60 * 1000); // Check every 24 hours
+            
+            // Listen for controller change (new SW activated)
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+              console.log('[PWA] Service Worker updated - new controller');
+              // Optionally reload the page to get the new version
+              if (confirm('Nueva versión disponible. ¿Recargar ahora?')) {
+                window.location.reload();
+              }
+            });
+          })
+          .catch(err => {
+            console.error('[PWA] ServiceWorker registration failed:', err);
+          });
+      });
+    }
+  </script>
+
+  <!-- Módulos JS con defer: Core y servicios críticos -->
   <!-- State and Config (persistence must load before config) -->
   <script src="src/state/persistence.js" defer></script>
-  <script src="src/state/store.js" defer></script>
   <script src="src/config/index.js" defer></script>
+  <script src="src/state/store.js" defer></script>
 
   <!-- Utils -->
   <script src="src/utils/helpers.js" defer></script>
@@ -300,17 +377,64 @@
   <script src="src/components/layout/sidebar.js" defer></script>
   <script src="src/components/ui/uiComponents.js" defer></script>
 
-  <!-- Views (Features) -->
-  <script src="src/features/panel.js" defer></script>
-  <script src="src/features/redactor.js" defer></script>
-  <script src="src/features/apa.js" defer></script>
-  <script src="src/features/rubrica.js" defer></script>
-  <script src="src/features/checklist.js" defer></script>
-  <script src="src/features/organizador.js" defer></script>
-  <script src="src/features/historial.js" defer></script>
-  <script src="src/features/legal.js" defer></script>
-  <script src="src/features/acerca.js" defer></script>
-  <script src="src/features/exportador.js" defer></script>
+  <!-- Preload recursos críticos -->
+  <link rel="preload" href="src/app/main.js" as="script">
+  <link rel="preload" href="src/features/panel.js" as="script">
+  
+  <!-- Cargar vistas de forma lazy (on-demand) -->
+  <!-- Estas se cargarán dinámicamente cuando se navegue a cada vista -->
+  
+  <!-- Main app - carga los módulos core -->
   <script src="src/app/main.js" defer></script>
+
+  <!-- Lazy loader para vistas -->
+  <script>
+    // Lazy loading de vistas - cargar solo cuando se necesiten
+    const viewLoaders = {
+      panel: () => import('./src/features/panel.js'),
+      redactor: () => import('./src/features/redactor.js'),
+      apa: () => import('./src/features/apa.js'),
+      rubrica: () => import('./src/features/rubrica.js'),
+      checklist: () => import('./src/features/checklist.js'),
+      organizador: () => import('./src/features/organizador.js'),
+      historial: () => import('./src/features/historial.js'),
+      legal: () => import('./src/features/legal.js'),
+      acerca: () => import('./src/features/acerca.js'),
+      exportar: () => import('./src/features/exportador.js'),
+      planner: () => import('./src/features/academico/planner.js'),
+      library: () => import('./src/features/academico/library.js'),
+      studio: () => import('./src/features/academico/studio.js'),
+      review: () => import('./src/features/academico/review.js'),
+      publishing: () => import('./src/features/academico/publishing.js')
+    };
+    
+    // Persistencia lazy - cargar datos solo cuando se necesiten
+    const lazyPersistence = {
+      loaded: new Set(),
+      async load(viewId) {
+        if (this.loaded.has(viewId)) return;
+        
+        switch(viewId) {
+          case 'planner':
+            await import('./src/features/academico/planner.js');
+            break;
+          case 'library':
+            await import('./src/features/academico/library.js');
+            break;
+          // Add more as needed
+        }
+        
+        this.loaded.add(viewId);
+      }
+    };
+    
+    // Preload vistas comunes
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        // Preload panel (vista por defecto)
+        viewLoaders.panel().catch(() => {});
+      });
+    }
+  </script>
 </body>
 </html>
